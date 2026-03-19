@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: lumenstack-ai
+    runtime: node
+    plan: free
+    autoDeployTrigger: commit
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5-mini
+      - key: GITHUB_WEBHOOK_SECRET
+        generateValue: true
