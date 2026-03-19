@@ -1,0 +1,27 @@
+{
+  "name": "lumenstack-ai",
+  "version": "1.0.0",
+  "description": "LumenStack AI is a cinematic architecture intelligence suite for repositories and uploaded codebases.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --env-file-if-exists=.env --watch server.js",
+    "smoke": "node --env-file-if-exists=.env scripts/smoke-test.js",
+    "openai:check": "node --env-file-if-exists=.env scripts/openai-check.js"
+  },
+  "keywords": [
+    "architecture",
+    "analysis",
+    "mermaid",
+    "openai",
+    "express"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "express": "^4.21.2",
+    "mermaid": "^11.12.0",
+    "multer": "^2.0.2",
+    "openai": "^4.104.0"
+  }
+}

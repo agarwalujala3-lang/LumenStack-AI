@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LumenStack AI</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="scroll-progress" aria-hidden="true">
+      <span id="scroll-progress-bar"></span>
+    </div>
+
+    <div class="ambient-layer" aria-hidden="true">
+      <div class="ambient-orb orb-a"></div>
+      <div class="ambient-orb orb-b"></div>
+      <div class="ambient-grid"></div>
+      <div id="ambient-particles" class="ambient-particles"></div>
+      <div class="ambient-beam beam-a"></div>
+      <div class="ambient-beam beam-b"></div>
+    </div>
+
+    <div id="analysis-overlay" class="analysis-overlay" aria-hidden="true">
+      <div class="overlay-panels" aria-hidden="true">
+        <div class="overlay-panel"></div>
+        <div class="overlay-panel"></div>
+        <div class="overlay-panel"></div>
+        <div class="overlay-panel"></div>
+        <div class="overlay-panel"></div>
+      </div>
+      <div class="overlay-copy">
+        <p class="eyebrow">LumenStack AI</p>
+        <h2>Reading system signals...</h2>
+        <p id="overlay-status" class="overlay-text">
+          Parsing structure, comparing modules, and opening the architecture window.
+        </p>
+      </div>
+    </div>
+
+    <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
+    <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
+    <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
+
+    <div class="page-shell">
+      <header class="topbar motion-target" data-parallax="0.025">
+        <div class="brand-lockup">
+          <div class="brand-mark">LS</div>
+          <div>
+            <p class="eyebrow">LumenStack AI</p>
+            <strong>Architectural Intelligence Suite</strong>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="topbar-pills">
+            <span class="top-pill">Glow UI</span>
+            <span class="top-pill">Review Mode</span>
+            <span class="top-pill">Code Chat</span>
+            <span class="top-pill">Mermaid Maps</span>
+          </div>
+
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+            <span class="theme-toggle-track" aria-hidden="true">
+              <span class="theme-toggle-thumb"></span>
+            </span>
+            <span id="theme-toggle-label">Dark Mode</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="hero-stage">
+        <article class="hero-panel motion-target spotlight-card" data-parallax="0.08">
+          <div class="hero-ribbon">Neural architecture lens</div>
+          <p class="eyebrow">Repository Intelligence</p>
+          <h1>Map, question, compare, and review any codebase.</h1>
+          <p class="hero-text">
+            LumenStack AI turns raw repositories into a cinematic architecture story with
+            diagrams, quality signals, compare-mode review, exports, and codebase chat.
+          </p>
+
+          <div class="hero-actions">
+            <a class="ghost-button" href="#analyze-panel">Launch Analysis</a>
+            <span class="hero-caption">Designed to impress technical reviewers and non-technical stakeholders together.</span>
+          </div>
+
+          <div class="hero-showcase">
+            <article class="showcase-card spotlight-card">
+              <div class="showcase-header">
+                <p class="eyebrow">Live Scan Feed</p>
+                <span class="showcase-pill">Realtime feel</span>
+              </div>
+              <div class="scan-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="scan-stats">
+                <div>
+                  <strong>4</strong>
+                  <span>Diagram modes</span>
+                </div>
+                <div>
+                  <strong>3</strong>
+                  <span>Review layers</span>
+                </div>
+                <div>
+                  <strong>1</strong>
+                  <span>Shareable brief</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="showcase-card spotlight-card">
+              <div class="showcase-header">
+                <p class="eyebrow">Suggested Prompt</p>
+                <span class="showcase-pill">Demo friendly</span>
+              </div>
+              <div class="prompt-cycler">
+                <span id="prompt-rotator">Which files look risky first?</span>
+              </div>
+              <div class="prompt-tags">
+                <span>Routing</span>
+                <span>Hotspots</span>
+                <span>Auth</span>
+                <span>Entrypoints</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="hero-spectrum" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="hero-schematic" aria-hidden="true">
+            <div class="schematic-ring ring-a"></div>
+            <div class="schematic-ring ring-b"></div>
+            <div class="schematic-ring ring-c"></div>
+            <span class="schematic-node node-a"></span>
+            <span class="schematic-node node-b"></span>
+            <span class="schematic-node node-c"></span>
+            <span class="schematic-node node-d"></span>
+            <span class="schematic-link link-a"></span>
+            <span class="schematic-link link-b"></span>
+          </div>
+        </article>
+
+        <aside class="signal-board motion-target" data-parallax="0.04">
+          <div class="signal-header">
+            <p class="eyebrow">Pipeline</p>
+            <h2>Expanded intelligence loop</h2>
+          </div>
+
+          <div class="signal-stack">
+            <article class="signal-card">
+              <span>01</span>
+              <strong>Ingest</strong>
+              <p>Clone repos, unpack uploads, and accept compare baselines or webhook events.</p>
+            </article>
+            <article class="signal-card">
+              <span>02</span>
+              <strong>Analyze</strong>
+              <p>Infer modules, hotspots, dependencies, classes, and risk-bearing edges.</p>
+            </article>
+            <article class="signal-card">
+              <span>03</span>
+              <strong>Visualize</strong>
+              <p>Open architecture, sequence, class, and dependency windows through Mermaid.</p>
+            </article>
+            <article class="signal-card">
+              <span>04</span>
+              <strong>Interact</strong>
+              <p>Question the codebase, compare revisions, and export polished architecture briefs.</p>
+            </article>
+          </div>
+        </aside>
+      </section>
+
+      <section class="feature-marquee motion-target" data-parallax="0.02" aria-label="Feature Highlights">
+        <div class="marquee-track">
+          <span>Architecture Maps</span>
+          <span>Sequence View</span>
+          <span>Class Diagrams</span>
+          <span>Dependency Lenses</span>
+          <span>Codebase Chat</span>
+          <span>Compare Reviews</span>
+          <span>Risk Findings</span>
+          <span>Hotspot Files</span>
+          <span>Markdown Export</span>
+          <span>Webhook Ready</span>
+          <span>Architecture Maps</span>
+          <span>Sequence View</span>
+          <span>Class Diagrams</span>
+          <span>Dependency Lenses</span>
+          <span>Codebase Chat</span>
+          <span>Compare Reviews</span>
+          <span>Risk Findings</span>
+          <span>Hotspot Files</span>
+          <span>Markdown Export</span>
+          <span>Webhook Ready</span>
+        </div>
+      </section>
+
+      <main class="main-grid">
+        <section id="analyze-panel" class="panel intake-panel motion-target spotlight-card" data-parallax="0.03">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Analyze</p>
+              <h2>Primary repository</h2>
+            </div>
+            <span class="panel-badge">Multi-mode</span>
+          </div>
+
+          <form id="analyze-form" class="analyze-form">
+            <label class="field">
+              <span>Public GitHub repository URL</span>
+              <input
+                id="repo-url"
+                type="url"
+                name="repoUrl"
+                placeholder="https://github.com/owner/repo"
+              />
+            </label>
+
+            <label class="field">
+              <span>Optional branch or ref</span>
+              <input
+                id="repo-ref"
+                type="text"
+                name="repoRef"
+                placeholder="main"
+              />
+            </label>
+
+            <div class="divider"><span>or</span></div>
+
+            <label id="dropzone" class="upload-surface" for="upload-input">
+              <input id="upload-input" type="file" name="codebase" accept=".zip" />
+              <span class="upload-icon">+</span>
+              <strong>Drop the primary ZIP archive here</strong>
+              <p id="upload-caption">No file selected.</p>
+            </label>
+
+            <label class="toggle-row">
+              <input id="compare-toggle" type="checkbox" />
+              <span>Enable compare and review mode</span>
+            </label>
+
+            <section id="compare-fields" class="compare-fields hidden">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Baseline</p>
+                  <h2>Comparison repository</h2>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>Baseline GitHub repository URL</span>
+                <input
+                  id="baseline-repo-url"
+                  type="url"
+                  name="baselineRepoUrl"
+                  placeholder="https://github.com/owner/repo"
+                />
+              </label>
+
+              <label class="field">
+                <span>Baseline branch or ref</span>
+                <input
+                  id="baseline-repo-ref"
+                  type="text"
+                  name="baselineRepoRef"
+                  placeholder="main"
+                />
+              </label>
+
+              <div class="divider"><span>or</span></div>
+
+              <label id="baseline-dropzone" class="upload-surface compact-upload" for="baseline-upload-input">
+                <input id="baseline-upload-input" type="file" name="baselineCodebase" accept=".zip" />
+                <span class="upload-icon small">+</span>
+                <strong>Drop the baseline ZIP here</strong>
+                <p id="baseline-upload-caption">No baseline selected.</p>
+              </label>
+            </section>
+
+            <div class="action-row">
+              <button class="primary-button" type="submit">Run Analysis</button>
+              <button id="clear-form" class="secondary-button" type="button">Clear</button>
+            </div>
+          </form>
+
+          <div id="status" class="status-panel" data-state="idle">
+            <div class="status-dot"></div>
+            <div>
+              <strong>Status</strong>
+              <p>Waiting for a repository, ZIP upload, or compare baseline.</p>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel preview-panel motion-target spotlight-card" data-parallax="0.02">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Capability Stack</p>
+              <h2>What this version adds</h2>
+            </div>
+          </div>
+
+          <div class="preview-grid">
+            <article class="preview-card">
+              <span>Ask</span>
+              <strong>Codebase chat</strong>
+              <p>Query modules, files, entrypoints, and relationships after an analysis run.</p>
+            </article>
+            <article class="preview-card">
+              <span>Compare</span>
+              <strong>Review mode</strong>
+              <p>Analyze a baseline and current version together to surface structural change risks.</p>
+            </article>
+            <article class="preview-card">
+              <span>Visualize</span>
+              <strong>Four diagram types</strong>
+              <p>Switch between architecture, sequence, class, and dependency views.</p>
+            </article>
+            <article class="preview-card">
+              <span>Export</span>
+              <strong>Shareable reports</strong>
+              <p>Download markdown or JSON output for documentation, demos, and repo publishing.</p>
+            </article>
+          </div>
+        </aside>
+
+        <section id="results" class="results hidden">
+          <article class="panel result-banner motion-target" data-parallax="0.03">
+            <div>
+              <p class="eyebrow">Analysis Ready</p>
+              <h2 id="result-title">Repository intelligence brief</h2>
+            </div>
+            <div class="result-banner-meta">
+              <span id="source-pill" class="result-pill">Source</span>
+              <span id="ai-badge" class="result-pill">Fallback</span>
+              <span id="analysis-time" class="result-time">Just now</span>
+            </div>
+          </article>
+
+          <section class="metric-grid six-grid reveal-grid">
+            <article class="panel metric-card spotlight-card">
+              <span>Primary Language</span>
+              <strong id="primary-language">-</strong>
+            </article>
+            <article class="panel metric-card spotlight-card">
+              <span>Code Files</span>
+              <strong id="code-files">-</strong>
+            </article>
+            <article class="panel metric-card spotlight-card">
+              <span>Dependencies</span>
+              <strong id="dependency-count">-</strong>
+            </article>
+            <article class="panel metric-card spotlight-card">
+              <span>Modules</span>
+              <strong id="module-count">-</strong>
+            </article>
+            <article class="panel metric-card spotlight-card">
+              <span>Connections</span>
+              <strong id="relationship-count">-</strong>
+            </article>
+            <article class="panel metric-card spotlight-card">
+              <span>Quality Score</span>
+              <strong id="quality-score">-</strong>
+            </article>
+          </section>
+
+          <section class="overview-grid">
+            <article class="panel narrative-panel motion-target spotlight-card" data-parallax="0.018">
+              <div class="section-title-row">
+                <div>
+                  <p class="eyebrow">Executive Summary</p>
+                  <h2>Architecture explanation</h2>
+                </div>
+              </div>
+              <pre id="explanation" class="text-block content-stream"></pre>
+            </article>
+
+            <article class="panel signal-panel motion-target spotlight-card" data-parallax="0.016">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Signals</p>
+                  <h2>Stack fingerprint</h2>
+                </div>
+              </div>
+
+              <div class="signal-groups">
+                <section>
+                  <span class="group-label">Frameworks</span>
+                  <div id="frameworks" class="chip-row"></div>
+                </section>
+
+                <section>
+                  <span class="group-label">Entrypoints</span>
+                  <div id="entrypoints" class="stack-list"></div>
+                </section>
+
+                <section>
+                  <span class="group-label">Language Mix</span>
+                  <div id="languages" class="language-bars"></div>
+                </section>
+              </div>
+            </article>
+          </section>
+
+          <section class="advisor-grid">
+            <article class="panel quality-panel motion-target spotlight-card" data-parallax="0.012">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Quality Review</p>
+                  <h2>Health, hotspots, and risk findings</h2>
+                </div>
+              </div>
+              <p id="quality-summary" class="body-copy"></p>
+              <div id="findings" class="finding-list"></div>
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Hotspots</p>
+                  <h2>Files to inspect first</h2>
+                </div>
+              </div>
+              <div id="hotspots" class="stack-list"></div>
+            </article>
+
+            <article id="comparison-panel" class="panel hidden motion-target spotlight-card" data-parallax="0.012">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Compare Mode</p>
+                  <h2>Structural review summary</h2>
+                </div>
+              </div>
+              <p id="comparison-summary" class="body-copy"></p>
+              <div id="comparison-stats" class="chip-row"></div>
+              <div id="comparison-findings" class="finding-list"></div>
+            </article>
+
+            <article class="panel chat-panel motion-target spotlight-card" data-parallax="0.012">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Ask</p>
+                  <h2>Chat with this codebase</h2>
+                </div>
+              </div>
+              <div id="chat-messages" class="chat-messages">
+                <article class="chat-bubble system">
+                  Ask about architecture, files, modules, dependencies, or where logic lives.
+                </article>
+              </div>
+              <form id="chat-form" class="chat-form">
+                <input id="chat-question" type="text" placeholder="Where is auth handled?" />
+                <button class="primary-button compact-button" type="submit">Ask</button>
+              </form>
+            </article>
+          </section>
+
+          <section class="diagram-grid wide-first">
+            <article class="panel diagram-panel motion-target spotlight-card" data-parallax="0.014">
+              <div class="section-title-row">
+                <div>
+                  <p class="eyebrow">System Maps</p>
+                  <h2>Switch between generated Mermaid diagrams</h2>
+                </div>
+                <div class="action-row tight">
+                  <button id="copy-mermaid" class="secondary-button" type="button">Copy Diagram</button>
+                  <button id="download-report" class="secondary-button" type="button">Download MD</button>
+                  <button id="download-json" class="secondary-button" type="button">Download JSON</button>
+                </div>
+              </div>
+              <div id="diagram-tabs" class="diagram-tabs">
+                <button type="button" class="diagram-tab active" data-diagram="architecture">Architecture</button>
+                <button type="button" class="diagram-tab" data-diagram="sequence">Sequence</button>
+                <button type="button" class="diagram-tab" data-diagram="classes">Classes</button>
+                <button type="button" class="diagram-tab" data-diagram="dependencies">Dependencies</button>
+              </div>
+              <div id="diagram" class="diagram-surface content-stream"></div>
+            </article>
+
+            <article class="panel docs-panel motion-target spotlight-card" data-parallax="0.012">
+              <div class="section-title-row">
+                <div>
+                  <p class="eyebrow">Generated Notes</p>
+                  <h2>Documentation report</h2>
+                </div>
+                <button id="copy-docs" class="secondary-button" type="button">Copy Notes</button>
+              </div>
+              <pre id="documentation" class="text-block content-stream"></pre>
+            </article>
+          </section>
+
+          <section class="intel-grid reveal-grid">
+            <article class="panel spotlight-card">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Modules</p>
+                  <h2>Detected architectural zones</h2>
+                </div>
+              </div>
+              <div id="modules" class="module-grid"></div>
+            </article>
+
+            <article class="panel spotlight-card">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Dependencies</p>
+                  <h2>Manifest packages</h2>
+                </div>
+              </div>
+              <div id="dependencies" class="dependency-grid"></div>
+            </article>
+
+            <article class="panel spotlight-card">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Relationships</p>
+                  <h2>Module connections</h2>
+                </div>
+              </div>
+              <div id="relationships" class="relationship-list"></div>
+            </article>
+          </section>
+
+          <section class="panel motion-target spotlight-card" data-parallax="0.01">
+            <div class="panel-header compact">
+              <div>
+                <p class="eyebrow">Highlights</p>
+                <h2>High-signal files to inspect first</h2>
+              </div>
+            </div>
+            <div id="files" class="file-grid"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

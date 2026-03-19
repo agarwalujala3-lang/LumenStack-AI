@@ -1,0 +1,336 @@
+const crypto = require("crypto");
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
+const { prepareSource } = require("./services/sourceService");
+const { analyzeCodebase } = require("./services/analyzerService");
+const { generateInsights } = require("./services/aiService");
+const { compareAnalyses } = require("./services/comparisonService");
+const { answerQuestion } = require("./services/chatService");
+const {
+  createAnalysisSession,
+  getAnalysisSession,
+  saveWebhookReport,
+  getWebhookReport
+} = require("./services/sessionStore");
+
+const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
+
+function createUploadMiddleware() {
+  return multer({
+    dest: uploadRoot,
+    limits: {
+      fileSize: 50 * 1024 * 1024
+    }
+  });
+}
+
+function getUploadedFile(files, fieldName) {
+  return files?.[fieldName]?.[0] || null;
+}
+
+function serializeAnalysis(analysis, insights) {
+  return {
+    summary: analysis.summary,
+    modules: analysis.modules,
+    dependencies: analysis.dependencies,
+    relationships: analysis.relationships,
+    fileHighlights: analysis.fileHighlights,
+    quality: analysis.quality,
+    diagrams: analysis.diagrams,
+    mermaidDiagram: analysis.mermaidDiagram,
+    reportMarkdown: analysis.reportMarkdown,
+    explanation: insights.explanation,
+    documentation: insights.documentation,
+    aiStatus: insights.aiStatus
+  };
+}
+
+function buildExportMarkdown(session) {
+  if (session.comparison) {
+    return `${session.analysis.reportMarkdown}\n\n${session.comparison.reviewMarkdown}`;
+  }
+
+  return session.analysis.reportMarkdown;
+}
+
+function verifyGitHubSignature(rawBody, signatureHeader, secret) {
+  if (!secret) {
+    return true;
+  }
+
+  if (!signatureHeader) {
+    return false;
+  }
+
+  const expected = `sha256=${crypto
+    .createHmac("sha256", secret)
+    .update(rawBody)
+    .digest("hex")}`;
+
+  const expectedBuffer = Buffer.from(expected);
+  const actualBuffer = Buffer.from(signatureHeader);
+
+  if (expectedBuffer.length !== actualBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expectedBuffer, actualBuffer);
+}
+
+async function runAnalysisForSource(preparedSource) {
+  const analysis = await analyzeCodebase(preparedSource.rootPath, {
+    sourceName: preparedSource.sourceName,
+    sourceType: preparedSource.sourceType
+  });
+  const insights = await generateInsights(analysis);
+
+  return {
+    analysis,
+    insights
+  };
+}
+
+function createApp() {
+  const app = express();
+  const upload = createUploadMiddleware();
+
+  fs.mkdirSync(uploadRoot, { recursive: true });
+
+  app.post("/api/github/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    const secret = process.env.GITHUB_WEBHOOK_SECRET || "";
+    const signature = req.headers["x-hub-signature-256"];
+
+    if (!verifyGitHubSignature(req.body, signature, secret)) {
+      return res.status(401).json({
+        error: "Webhook signature validation failed."
+      });
+    }
+
+    let payload;
+    try {
+      payload = JSON.parse(req.body.toString("utf8"));
+    } catch {
+      return res.status(400).json({
+        error: "Webhook payload was not valid JSON."
+      });
+    }
+
+    const eventName = req.headers["x-github-event"];
+    const repository = payload.repository;
+
+    if (!repository?.clone_url || !repository?.full_name) {
+      return res.status(400).json({
+        error: "Webhook payload is missing repository information."
+      });
+    }
+
+    if (!["push", "pull_request"].includes(eventName)) {
+      return res.status(202).json({
+        status: "ignored"
+      });
+    }
+
+    const ref = eventName === "push"
+      ? (payload.ref || "").replace("refs/heads/", "")
+      : payload.pull_request?.head?.ref || "";
+
+    let preparedSource;
+
+    try {
+      preparedSource = await prepareSource({
+        repoUrl: repository.clone_url,
+        ref
+      });
+
+      const { analysis, insights } = await runAnalysisForSource(preparedSource);
+      saveWebhookReport(repository.full_name, {
+        repository: repository.full_name,
+        ref,
+        analysis: serializeAnalysis(analysis, insights)
+      });
+    } finally {
+      if (preparedSource?.cleanup) {
+        await preparedSource.cleanup();
+      }
+    }
+
+    return res.status(202).json({
+      status: "accepted",
+      repository: repository.full_name,
+      ref
+    });
+  });
+
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.static(path.join(process.cwd(), "public")));
+  app.use(
+    "/vendor/mermaid",
+    express.static(path.join(process.cwd(), "node_modules", "mermaid", "dist"))
+  );
+
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok" });
+  });
+
+  app.get("/api/github/reports/:owner/:repo", (req, res) => {
+    const report = getWebhookReport(`${req.params.owner}/${req.params.repo}`);
+
+    if (!report) {
+      return res.status(404).json({
+        error: "No stored webhook report found for that repository."
+      });
+    }
+
+    return res.json(report);
+  });
+
+  app.post(
+    "/api/analyze",
+    upload.fields([
+      { name: "codebase", maxCount: 1 },
+      { name: "baselineCodebase", maxCount: 1 }
+    ]),
+    async (req, res) => {
+      let preparedSource;
+      let baselineSource;
+
+      try {
+        const repoUrl = String(req.body.repoUrl || "").trim();
+        const repoRef = String(req.body.repoRef || "").trim();
+        const baselineRepoUrl = String(req.body.baselineRepoUrl || "").trim();
+        const baselineRepoRef = String(req.body.baselineRepoRef || "").trim();
+        const uploadedFile = getUploadedFile(req.files, "codebase");
+        const baselineFile = getUploadedFile(req.files, "baselineCodebase");
+
+        if (!repoUrl && !uploadedFile) {
+          return res.status(400).json({
+            error: "Provide either a GitHub repository URL or a ZIP file."
+          });
+        }
+
+        preparedSource = await prepareSource({
+          repoUrl,
+          uploadedFile,
+          ref: repoRef
+        });
+
+        const { analysis, insights } = await runAnalysisForSource(preparedSource);
+        let comparison = null;
+        let baselineAnalysis = null;
+
+        if (baselineRepoUrl || baselineFile) {
+          baselineSource = await prepareSource({
+            repoUrl: baselineRepoUrl,
+            uploadedFile: baselineFile,
+            ref: baselineRepoRef
+          });
+
+          const baselineResult = await runAnalysisForSource(baselineSource);
+          baselineAnalysis = baselineResult.analysis;
+          comparison = compareAnalyses(baselineAnalysis, analysis);
+        }
+
+        const analysisId = createAnalysisSession({
+          analysis,
+          baselineAnalysis,
+          comparison,
+          source: {
+            name: preparedSource.sourceName,
+            type: preparedSource.sourceType
+          }
+        });
+
+        res.json({
+          analysisId,
+          source: {
+            name: preparedSource.sourceName,
+            type: preparedSource.sourceType
+          },
+          analysis: serializeAnalysis(analysis, insights),
+          comparison,
+          exportUrls: {
+            markdown: `/api/export/${analysisId}?format=markdown`,
+            json: `/api/export/${analysisId}?format=json`
+          }
+        });
+      } catch (error) {
+        res.status(500).json({
+          error: error.message || "Analysis failed."
+        });
+      } finally {
+        if (preparedSource?.cleanup) {
+          await preparedSource.cleanup();
+        }
+
+        if (baselineSource?.cleanup) {
+          await baselineSource.cleanup();
+        }
+      }
+    }
+  );
+
+  app.post("/api/chat", async (req, res) => {
+    const analysisId = String(req.body.analysisId || "").trim();
+    const question = String(req.body.question || "").trim();
+
+    if (!analysisId || !question) {
+      return res.status(400).json({
+        error: "analysisId and question are required."
+      });
+    }
+
+    const session = getAnalysisSession(analysisId);
+
+    if (!session) {
+      return res.status(404).json({
+        error: "Analysis session not found."
+      });
+    }
+
+    try {
+      const answer = await answerQuestion(session.analysis, question);
+      res.json(answer);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Unable to answer the question."
+      });
+    }
+  });
+
+  app.get("/api/export/:analysisId", (req, res) => {
+    const session = getAnalysisSession(req.params.analysisId);
+
+    if (!session) {
+      return res.status(404).json({
+        error: "Analysis session not found."
+      });
+    }
+
+    const format = String(req.query.format || "markdown");
+
+    if (format === "json") {
+      return res.json({
+        source: session.source,
+        analysis: session.analysis,
+        comparison: session.comparison || null
+      });
+    }
+
+    res.type("text/markdown");
+    return res.send(buildExportMarkdown(session));
+  });
+
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(process.cwd(), "public", "index.html"));
+  });
+
+  return app;
+}
+
+module.exports = {
+  createApp
+};
