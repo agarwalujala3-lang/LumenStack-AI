@@ -345,7 +345,9 @@ strong,
 
 .cursor-trace,
 .cursor-flow,
-.cursor-wave {
+.cursor-wave,
+.touch-ripple,
+.touch-wake {
   position: absolute;
   left: 0;
   top: 0;
@@ -379,6 +381,27 @@ strong,
   background: radial-gradient(circle, rgba(83, 213, 199, 0.16), rgba(83, 213, 199, 0));
   box-shadow: 0 0 26px rgba(83, 213, 199, 0.12);
   animation: waveFade 820ms ease-out forwards;
+}
+
+.touch-ripple {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(83, 213, 199, 0.34);
+  background: radial-gradient(circle, rgba(83, 213, 199, 0.22), rgba(83, 213, 199, 0));
+  box-shadow: 0 0 26px rgba(83, 213, 199, 0.16);
+  animation: touchRippleFade 820ms ease-out forwards;
+}
+
+.touch-wake {
+  width: 96px;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(83, 213, 199, 0), rgba(83, 213, 199, 0.72), rgba(217, 123, 72, 0.18), rgba(83, 213, 199, 0));
+  box-shadow: 0 0 20px rgba(83, 213, 199, 0.12);
+  transform: translate3d(-50%, -50%, 0) rotate(var(--wake-rotation, 0deg));
+  transform-origin: center;
+  animation: touchWakeFade 560ms ease-out forwards;
 }
 
 .page-shell {
@@ -1155,6 +1178,31 @@ body[data-theme="dark"] .analysis-overlay::before {
   background: rgba(3, 9, 12, 0.62);
 }
 
+body[data-theme="dark"] .touch-ripple,
+body[data-theme="dark"] .cursor-wave {
+  border-color: rgba(124, 231, 216, 0.34);
+  background: radial-gradient(circle, rgba(124, 231, 216, 0.18), rgba(124, 231, 216, 0));
+}
+
+body[data-theme="dark"] .touch-wake,
+body[data-theme="dark"] .cursor-flow {
+  background: linear-gradient(90deg, rgba(124, 231, 216, 0), rgba(124, 231, 216, 0.74), rgba(73, 111, 206, 0.18), rgba(124, 231, 216, 0));
+}
+
+body[data-theme="dark"] .spotlight-card.touch-active,
+body[data-theme="dark"] .preview-card.touch-active,
+body[data-theme="dark"] .stack-item.touch-active,
+body[data-theme="dark"] .relationship-item.touch-active,
+body[data-theme="dark"] .dependency-item.touch-active,
+body[data-theme="dark"] .file-card.touch-active,
+body[data-theme="dark"] .module-card.touch-active,
+body[data-theme="dark"] .finding-card.touch-active,
+body[data-theme="dark"] .chat-bubble.touch-active,
+body[data-theme="dark"] .signal-card.touch-active {
+  border-color: rgba(124, 231, 216, 0.2);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.28);
+}
+
 .signal-board .eyebrow,
 .signal-board .group-label,
 .signal-board p {
@@ -1251,10 +1299,38 @@ body[data-theme="dark"] .analysis-overlay::before {
   opacity: 1;
 }
 
+.spotlight-card.touch-active::before {
+  opacity: 1;
+}
+
 .spotlight-card:hover {
   transform: translateY(-4px);
   border-color: rgba(15, 102, 99, 0.18);
   box-shadow: 0 24px 54px rgba(17, 67, 71, 0.12);
+}
+
+.spotlight-card.touch-active,
+.preview-card.touch-active,
+.stack-item.touch-active,
+.relationship-item.touch-active,
+.dependency-item.touch-active,
+.file-card.touch-active,
+.module-card.touch-active,
+.finding-card.touch-active,
+.chat-bubble.touch-active,
+.signal-card.touch-active {
+  transform: translateY(-3px) scale(0.992);
+  border-color: rgba(15, 102, 99, 0.22);
+  box-shadow: 0 20px 44px rgba(17, 67, 71, 0.12);
+}
+
+.primary-button.touch-active,
+.secondary-button.touch-active,
+.ghost-button.touch-active,
+.diagram-tab.touch-active,
+.upload-surface.touch-active {
+  transform: scale(0.985);
+  box-shadow: 0 12px 24px rgba(17, 67, 71, 0.14);
 }
 
 .analyze-form,
@@ -1780,6 +1856,10 @@ body.js-motion .reveal-grid > *.is-visible {
   display: none;
 }
 
+body.touch-enhanced .cursor-trail {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1950,6 +2030,30 @@ body.js-motion .reveal-grid > *.is-visible {
   100% {
     opacity: 0;
     transform: translate3d(-50%, -50%, 0) scale(var(--wave-scale, 1.6));
+  }
+}
+
+@keyframes touchRippleFade {
+  0% {
+    opacity: 0.76;
+    transform: translate3d(-50%, -50%, 0) scale(0.42);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 0) scale(2.2);
+  }
+}
+
+@keyframes touchWakeFade {
+  0% {
+    opacity: 0.72;
+    transform: translate3d(-50%, -50%, 0) rotate(var(--wake-rotation, 0deg)) scaleX(0.7);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, 0) rotate(var(--wake-rotation, 0deg)) scaleX(1.2);
   }
 }
 

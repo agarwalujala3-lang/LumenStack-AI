@@ -71,6 +71,7 @@ let pointerHot = false;
 let promptTimer = 0;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const themePreferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const themeStorageKey = "lumenstack-theme";
 let currentTheme = "light";
 
@@ -426,7 +427,7 @@ function setupPromptRotator() {
 }
 
 function setupMagneticButtons() {
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
     return;
   }
 
@@ -443,6 +444,122 @@ function setupMagneticButtons() {
     button.addEventListener("pointerleave", () => {
       button.style.transform = "";
     });
+  });
+}
+
+function setupTouchEffects() {
+  if (prefersReducedMotion || !coarsePointerQuery.matches) {
+    return;
+  }
+
+  body.classList.add("touch-enhanced");
+
+  let activePointerId = null;
+  let pressedElement = null;
+  let lastPoint = null;
+  let lastWakeAt = 0;
+
+  function spawnTouchRipple(x, y) {
+    const ripple = createElement("span", "touch-ripple");
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    cursorTrail.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+  }
+
+  function spawnTouchWake(x, y, angle, strength) {
+    const wake = createElement("span", "touch-wake");
+    wake.style.left = `${x}px`;
+    wake.style.top = `${y}px`;
+    wake.style.width = `${Math.min(180, 56 + strength * 1.1)}px`;
+    wake.style.setProperty("--wake-rotation", `${angle}deg`);
+    cursorTrail.appendChild(wake);
+    wake.addEventListener("animationend", () => wake.remove(), { once: true });
+  }
+
+  function updatePressedElement(target, clientX, clientY) {
+    if (pressedElement && pressedElement !== target) {
+      pressedElement.classList.remove("touch-active");
+    }
+
+    pressedElement = target;
+
+    if (!pressedElement) {
+      return;
+    }
+
+    const rect = pressedElement.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
+    pressedElement.style.setProperty("--mx", `${x}%`);
+    pressedElement.style.setProperty("--my", `${y}%`);
+    pressedElement.classList.add("touch-active");
+  }
+
+  function clearPressedElement() {
+    if (!pressedElement) {
+      return;
+    }
+
+    pressedElement.classList.remove("touch-active");
+    pressedElement = null;
+  }
+
+  window.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    activePointerId = event.pointerId;
+    lastPoint = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    lastWakeAt = performance.now();
+    spawnTouchRipple(event.clientX, event.clientY);
+    updatePressedElement(
+      event.target.closest(
+        ".spotlight-card, .preview-card, .metric-card, .finding-card, .module-card, .dependency-item, .file-card, .relationship-item, .chat-bubble, .primary-button, .secondary-button, .ghost-button, .diagram-tab, .upload-surface, .signal-card"
+      ),
+      event.clientX,
+      event.clientY
+    );
+  }, { passive: true });
+
+  window.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "touch" || event.pointerId !== activePointerId || !lastPoint) {
+      return;
+    }
+
+    const dx = event.clientX - lastPoint.x;
+    const dy = event.clientY - lastPoint.y;
+    const distance = Math.hypot(dx, dy);
+    const now = performance.now();
+
+    if (pressedElement) {
+      updatePressedElement(pressedElement, event.clientX, event.clientY);
+    }
+
+    if (distance > 14 && now - lastWakeAt > 42) {
+      spawnTouchWake(event.clientX, event.clientY, Math.atan2(dy, dx) * (180 / Math.PI), distance);
+      lastWakeAt = now;
+      lastPoint = {
+        x: event.clientX,
+        y: event.clientY
+      };
+    }
+  }, { passive: true });
+
+  ["pointerup", "pointercancel"].forEach((eventName) => {
+    window.addEventListener(eventName, (event) => {
+      if (event.pointerType !== "touch" || event.pointerId !== activePointerId) {
+        return;
+      }
+
+      activePointerId = null;
+      lastPoint = null;
+      clearPressedElement();
+    }, { passive: true });
   });
 }
 
@@ -912,6 +1029,7 @@ setupScrollProgress();
 setupAmbientParticles();
 setupPromptRotator();
 setupMagneticButtons();
+setupTouchEffects();
 setupCursorSystem();
 refreshSpotlights(document);
 resetChat();
