@@ -1,37 +1,36 @@
 # LumenStack AI
 
-LumenStack AI is an AI-powered codebase architecture analyzer built with Node.js, Express, and vanilla JavaScript. It turns a GitHub repository or ZIP upload into an interactive architecture brief with diagrams, quality signals, compare-mode review, exports, and codebase chat.
+LumenStack AI is a full-stack Node.js and Express application that turns a repository into an interactive architecture intelligence workspace.
 
-## Live App
+It supports:
 
-- Live deployment: [https://lumenstack-ai.onrender.com](https://lumenstack-ai.onrender.com)
-- Health check: [https://lumenstack-ai.onrender.com/health](https://lumenstack-ai.onrender.com/health)
-
-## Highlights
-
-- Analyze a public GitHub repository or uploaded ZIP archive
-- Detect languages, entrypoints, manifests, frameworks, dependencies, modules, and relationships
-- Generate architecture, sequence, class, and dependency diagrams with Mermaid
-- Run compare mode against a baseline repo or ZIP for review-style structural diffs
-- Ask follow-up questions with retrieval-backed codebase chat
-- Export markdown and JSON architecture reports
-- Accept GitHub webhook events and store repository analysis snapshots
-- Present results in a cinematic AI-style interface with dark mode, custom cursor effects, and mobile touch interactions
-
-## Frontend Experience
-
-- Desktop: glowing cursor, motion reveal, parallax, spotlight hover effects, cinematic loading overlay
-- Mobile: tap ripple, swipe wake trail, and touch press glow instead of a fake cursor
-- Theme system: light mode and dark mode toggle with persisted preference
+- repository analysis from a public GitHub URL or ZIP upload
+- compare mode for baseline-vs-current structural review
+- dependency and module detection
+- quality scoring, hotspot detection, and review findings
+- multiple Mermaid diagram types
+- retrieval-backed codebase chat
+- markdown and JSON exports
+- webhook-ready GitHub ingestion
 
 ## Stack
 
 - Node.js
 - Express
-- Vanilla JavaScript
+- Vanilla JavaScript frontend
 - Mermaid.js
-- OpenAI API with fallback mode
-- Render Blueprint deployment
+- OpenAI API with local fallback mode
+
+## Features
+
+- Analyze uploaded ZIP archives or public GitHub repositories
+- Detect languages, entrypoints, framework hints, and dependency manifests
+- Infer modules, cross-module relationships, and hotspot files
+- Generate Mermaid architecture, sequence, class, and dependency diagrams
+- Run compare mode against a baseline repo or ZIP for review-style summaries
+- Ask follow-up questions against the analyzed codebase
+- Export markdown and JSON reports
+- Accept GitHub webhook events and store the latest analyzed report per repository
 
 ## Local Setup
 
@@ -41,92 +40,64 @@ LumenStack AI is an AI-powered codebase architecture analyzer built with Node.js
    npm install
    ```
 
-2. Create a local env file:
+2. Fill in environment variables if you want live AI output or webhook signature verification:
 
    ```bash
    copy .env.example .env
    ```
 
-3. Add variables to `.env` if you want live AI output:
-
-   ```env
-   OPENAI_API_KEY=your_key_here
-   OPENAI_MODEL=gpt-5-mini
-   PORT=3000
-   GITHUB_WEBHOOK_SECRET=your_secret_here
-   ```
-
-4. Start the app:
+3. Start the server:
 
    ```bash
    npm start
    ```
 
-5. Open `http://localhost:3000`
-
-## Scripts
-
-- `npm start`: start the production server
-- `npm run dev`: run the server in watch mode
-- `npm run smoke`: run the local smoke test
-- `npm run openai:check`: verify OpenAI connectivity and model access
-
-## API Endpoints
-
-- `POST /api/analyze`: analyze a repo or ZIP, with optional comparison baseline
-- `POST /api/chat`: ask questions against a saved analysis session
-- `GET /api/export/:analysisId?format=markdown|json`: export the report
-- `POST /api/github/webhook`: receive GitHub webhook-triggered analysis requests
-- `GET /api/github/reports/:owner/:repo`: fetch the latest stored webhook report
-- `GET /health`: service health check
-
-## Render Deployment
-
-This repo includes a [render.yaml](render.yaml) Blueprint for Render.
-
-1. Push the repo to GitHub
-2. Create a new Render Blueprint
-3. Connect the `LumenStack-AI` repository
-4. Leave Blueprint Path empty
-5. Add `OPENAI_API_KEY` in Render service settings
-6. Deploy
-
-Render uses:
-
-- `npm install` as the build command
-- `npm start` as the start command
-- `/health` as the health check path
+4. Open `http://localhost:3000`.
 
 ## Environment Variables
 
-- `OPENAI_API_KEY`: enables live AI explanation and chat
-- `OPENAI_MODEL`: defaults to `gpt-5-mini`
-- `PORT`: local server port, defaults to `3000`
-- `GITHUB_WEBHOOK_SECRET`: verifies webhook signatures
+- `OPENAI_API_KEY`: optional, enables live AI explanation and chat answers
+- `OPENAI_MODEL`: optional, defaults to `gpt-5-mini`
+- `PORT`: optional, defaults to `3000`
+- `GITHUB_WEBHOOK_SECRET`: optional, verifies GitHub webhook signatures
+
+## Scripts
+
+- `npm start`: start the app
+- `npm run dev`: start the app in watch mode
+- `npm run smoke`: run a local analysis against the current workspace
+- `npm run openai:check`: confirm that your OpenAI key and model work
+
+## Main Endpoints
+
+- `POST /api/analyze`: analyze a repo or ZIP, optionally with a comparison baseline
+- `POST /api/chat`: ask questions against a stored analysis session
+- `GET /api/export/:analysisId?format=markdown|json`: export the current report
+- `POST /api/github/webhook`: accept webhook-triggered analyses
+- `GET /api/github/reports/:owner/:repo`: fetch the latest stored webhook report
 
 ## Project Structure
 
-- `server.js`: app entrypoint
-- `src/app.js`: Express app and routes
+- `server.js`: server entrypoint
+- `src/app.js`: Express routes and orchestration
 - `src/services/sourceService.js`: GitHub clone and ZIP extraction
-- `src/services/analyzerService.js`: architecture analysis and Mermaid generation
-- `src/services/aiService.js`: explanation and documentation generation
-- `src/services/chatService.js`: retrieval-backed chat
-- `src/services/comparisonService.js`: compare-mode review logic
-- `src/services/sessionStore.js`: analysis session and webhook report storage
-- `public/`: UI, motion system, diagrams, and interactions
-- `render.yaml`: Render Blueprint definition
-- `.github/workflows/smoke.yml`: smoke workflow
+- `src/services/analyzerService.js`: static analysis, quality scoring, and Mermaid generation
+- `src/services/aiService.js`: AI explanation and documentation generation
+- `src/services/chatService.js`: retrieval-backed codebase chat
+- `src/services/comparisonService.js`: compare mode and review findings
+- `src/services/sessionStore.js`: in-memory analysis session storage
+- `public/`: frontend files
+- `.github/workflows/smoke.yml`: GitHub Actions smoke test
 
 ## Verification
 
-Run the local smoke test:
+Smoke-test the local analysis path:
 
 ```bash
 npm run smoke
 ```
 
-Check OpenAI access:
+Verify OpenAI connectivity:
 
 ```bash
 npm run openai:check

@@ -1,0 +1,115 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="170" y1="84" x2="1399" y2="857" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071521"/>
+      <stop offset="0.45" stop-color="#0B2234"/>
+      <stop offset="1" stop-color="#102538"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(338 160) rotate(43.041) scale(559.265 428.665)">
+      <stop stop-color="#3AD4FF" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#3AD4FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1237 675) rotate(136.637) scale(469.662 298.684)">
+      <stop stop-color="#8CF6C3" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#8CF6C3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="930" y1="142" x2="1453" y2="667" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3AD4FF"/>
+      <stop offset="1" stop-color="#8CF6C3"/>
+    </linearGradient>
+    <linearGradient id="card" x1="830" y1="138" x2="1392" y2="743" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1724" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#0A121B" stop-opacity="0.88"/>
+    </linearGradient>
+    <filter id="blur" x="-200" y="-200" width="2000" height="1300" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+    <filter id="shadow" x="772" y="98" width="706" height="686" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="24"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.0627451 0 0 0 0 0.101961 0 0 0 0.48 0"/>
+      <feBlend in2="SourceGraphic" result="shape"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="40" fill="url(#bg)"/>
+  <g filter="url(#blur)">
+    <ellipse cx="334" cy="173" rx="261" ry="177" fill="url(#glowA)"/>
+    <ellipse cx="1268" cy="670" rx="248" ry="164" fill="url(#glowB)"/>
+  </g>
+
+  <g opacity="0.18">
+    <path d="M92 172H648" stroke="#7EC8FF"/>
+    <path d="M92 227H648" stroke="#7EC8FF"/>
+    <path d="M92 282H648" stroke="#7EC8FF"/>
+    <path d="M92 337H648" stroke="#7EC8FF"/>
+    <path d="M92 392H648" stroke="#7EC8FF"/>
+    <path d="M92 447H648" stroke="#7EC8FF"/>
+    <path d="M92 502H648" stroke="#7EC8FF"/>
+    <path d="M92 557H648" stroke="#7EC8FF"/>
+    <path d="M92 612H648" stroke="#7EC8FF"/>
+    <path d="M92 667H648" stroke="#7EC8FF"/>
+  </g>
+
+  <text x="92" y="96" fill="#92E8FF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="0.24em">LIVE AI PRODUCT</text>
+  <text x="92" y="226" fill="#F3F7FB" font-family="Segoe UI, Arial, sans-serif" font-size="90" font-weight="800">LumenStack AI</text>
+  <text x="92" y="296" fill="#AEC4D6" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="500">AI-powered codebase architecture analyzer</text>
+
+  <text x="92" y="396" fill="#E7F0F7" font-family="Segoe UI, Arial, sans-serif" font-size="29" font-weight="600">Analyze repositories, explain architecture, and generate</text>
+  <text x="92" y="438" fill="#E7F0F7" font-family="Segoe UI, Arial, sans-serif" font-size="29" font-weight="600">Mermaid diagrams through a polished web interface.</text>
+
+  <g>
+    <rect x="92" y="503" width="190" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="132" y="540" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo parsing</text>
+
+    <rect x="300" y="503" width="222" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="341" y="540" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid diagrams</text>
+
+    <rect x="541" y="503" width="175" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="587" y="540" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
+  </g>
+
+  <g>
+    <rect x="92" y="593" width="178" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="144" y="630" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Codebase chat</text>
+
+    <rect x="289" y="593" width="174" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="337" y="630" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Exports</text>
+
+    <rect x="481" y="593" width="207" height="58" rx="29" fill="#122537" stroke="#2A536F"/>
+    <text x="529" y="630" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">GitHub analysis</text>
+  </g>
+
+  <text x="92" y="797" fill="#8FB2C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
+  <text x="92" y="840" fill="#BBD5E5" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
+
+  <g filter="url(#shadow)">
+    <rect x="820" y="122" width="610" height="590" rx="34" fill="url(#card)" stroke="#244357"/>
+    <rect x="862" y="164" width="526" height="68" rx="18" fill="#0E2333" stroke="#234861"/>
+    <circle cx="900" cy="198" r="9" fill="#8CF6C3"/>
+    <text x="926" y="208" fill="#DFF5FF" font-family="Consolas, monospace" font-size="26" font-weight="700">Architecture analysis session</text>
+
+    <rect x="862" y="270" width="152" height="88" rx="20" fill="#11263A" stroke="#29536F"/>
+    <text x="893" y="308" fill="#91E9FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">INPUT</text>
+    <text x="886" y="338" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Repository</text>
+
+    <rect x="1110" y="270" width="240" height="88" rx="20" fill="#11263A" stroke="#29536F"/>
+    <text x="1141" y="308" fill="#91E9FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">PROCESS</text>
+    <text x="1135" y="338" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Structure mapping</text>
+
+    <rect x="973" y="434" width="194" height="102" rx="22" fill="#10283B" stroke="#2A5672"/>
+    <text x="1020" y="476" fill="#91E9FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">OUTPUT</text>
+    <text x="1016" y="512" fill="#F4FAFF" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Mermaid</text>
+
+    <path d="M1014 314H1104" stroke="url(#accent)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1230 358V427" stroke="url(#accent)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1111 486H1172" stroke="url(#accent)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="1110" cy="314" r="10" fill="#3AD4FF"/>
+    <circle cx="1230" cy="430" r="10" fill="#8CF6C3"/>
+    <circle cx="1178" cy="486" r="10" fill="#3AD4FF"/>
+
+    <rect x="872" y="578" width="508" height="96" rx="22" fill="#0F1F2C" stroke="#24465A"/>
+    <text x="908" y="619" fill="#91E9FF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">FEATURES</text>
+    <text x="908" y="652" fill="#EAF6FF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">Dependency detection • Compare mode • Chat • Exports</text>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: IAM roles and instance profile for LumenStack AI Elastic Beanstalk
+
+Resources:
+  LumenStackElasticBeanstalkServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lumenstack-eb-service-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - elasticbeanstalk.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService
+        - arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth
+
+  LumenStackElasticBeanstalkEc2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lumenstack-eb-ec2-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  LumenStackElasticBeanstalkInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: lumenstack-eb-ec2-role
+      Roles:
+        - !Ref LumenStackElasticBeanstalkEc2Role
+
+Outputs:
+  ServiceRoleName:
+    Value: !Ref LumenStackElasticBeanstalkServiceRole
+
+  Ec2RoleName:
+    Value: !Ref LumenStackElasticBeanstalkEc2Role
+
+  InstanceProfileName:
+    Value: !Ref LumenStackElasticBeanstalkInstanceProfile
