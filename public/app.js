@@ -575,7 +575,11 @@ function refreshSpotlights(root) {
 }
 
 function setupParallax() {
-  if (prefersReducedMotion) {
+  if (
+    prefersReducedMotion ||
+    !window.matchMedia("(pointer: fine)").matches ||
+    !window.matchMedia("(min-width: 1180px)").matches
+  ) {
     return;
   }
 
@@ -588,7 +592,7 @@ function setupParallax() {
       const factor = Number(target.dataset.parallax || "0");
       const rect = target.getBoundingClientRect();
       const distanceFromCenter = rect.top + rect.height / 2 - viewport / 2;
-      const shift = distanceFromCenter * factor * -0.12;
+      const shift = distanceFromCenter * factor * -0.035;
       target.style.setProperty("--parallax-shift", `${shift}px`);
     }
   }
@@ -1139,6 +1143,12 @@ chatForm.addEventListener("submit", async (event) => {
     }
 
     appendChatBubble("system", payload.answer, payload.citations || []);
+    setStatus(
+      payload.aiStatus === "live"
+        ? "Chat answered with live AI support and repository evidence."
+        : "Chat answered from the indexed repository context.",
+      "success"
+    );
   } catch (error) {
     appendChatBubble("system", error.message || "Chat failed.");
     setStatus(error.message || "Chat failed.", "error");

@@ -139,7 +139,7 @@ strong,
   top: -10rem;
   right: -6rem;
   background: radial-gradient(circle, rgba(15, 102, 99, 0.22), transparent 68%);
-  animation: floatSlow 18s ease-in-out infinite;
+  animation: floatSlow 28s ease-in-out infinite;
 }
 
 .orb-b {
@@ -148,7 +148,7 @@ strong,
   left: -5rem;
   bottom: 8rem;
   background: radial-gradient(circle, rgba(217, 123, 72, 0.2), transparent 70%);
-  animation: floatSlow 24s ease-in-out infinite reverse;
+  animation: floatSlow 34s ease-in-out infinite reverse;
 }
 
 .ambient-grid {
@@ -185,9 +185,9 @@ strong,
   top: -10vh;
   background: linear-gradient(180deg, rgba(131, 247, 234, 0), rgba(131, 247, 234, 0.18), rgba(131, 247, 234, 0));
   filter: blur(28px);
-  opacity: 0.26;
+  opacity: 0.16;
   transform: rotate(18deg);
-  animation: driftBeam 22s linear infinite;
+  animation: driftBeam 30s ease-in-out infinite;
 }
 
 .beam-a {
@@ -735,11 +735,14 @@ body[data-theme="dark"] .theme-toggle-thumb {
   position: relative;
   margin-top: 16px;
   padding: 18px 16px;
-  min-height: 88px;
+  min-height: 92px;
+  display: grid;
+  align-items: center;
   border-radius: 18px;
   background: linear-gradient(145deg, rgba(18, 58, 62, 0.96), rgba(14, 44, 48, 0.9));
   color: #eff8f5;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  overflow: hidden;
 }
 
 .prompt-cycler::before {
@@ -1901,11 +1904,11 @@ body.touch-enhanced .cursor-trail {
 @keyframes floatSlow {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
   50% {
-    transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 6px, 0) scale(1.015);
   }
 }
 
@@ -1915,7 +1918,7 @@ body.touch-enhanced .cursor-trail {
   }
 
   50% {
-    transform: translate3d(46px, 0, 0) rotate(18deg);
+    transform: translate3d(12px, 0, 0) rotate(18deg);
   }
 
   100% {
