@@ -575,31 +575,9 @@ function refreshSpotlights(root) {
 }
 
 function setupParallax() {
-  if (
-    prefersReducedMotion ||
-    !window.matchMedia("(pointer: fine)").matches ||
-    !window.matchMedia("(min-width: 1180px)").matches
-  ) {
-    return;
-  }
-
-  const parallaxTargets = [...document.querySelectorAll("[data-parallax]")];
-
-  function update() {
-    const viewport = window.innerHeight || 1;
-
-    for (const target of parallaxTargets) {
-      const factor = Number(target.dataset.parallax || "0");
-      const rect = target.getBoundingClientRect();
-      const distanceFromCenter = rect.top + rect.height / 2 - viewport / 2;
-      const shift = distanceFromCenter * factor * -0.035;
-      target.style.setProperty("--parallax-shift", `${shift}px`);
-    }
-  }
-
-  update();
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update);
+  document.querySelectorAll("[data-parallax]").forEach((target) => {
+    target.style.setProperty("--parallax-shift", "0px");
+  });
 }
 
 function setupCursorSystem() {
@@ -933,7 +911,9 @@ function appendChatBubble(kind, text, citations = []) {
 
   chatMessagesElement.appendChild(bubble);
   refreshSpotlights(chatMessagesElement);
-  chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+  window.requestAnimationFrame(() => {
+    chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+  });
 }
 
 function resetChat() {
@@ -1210,7 +1190,14 @@ form.addEventListener("submit", async (event) => {
     );
 
     setStatus("Analysis complete. Review, compare, chat, and export are now available.", "success");
-    resultsElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    const resultBounds = resultsElement.getBoundingClientRect();
+    const needsReveal = resultBounds.top < 0 || resultBounds.top > window.innerHeight * 0.45;
+    if (needsReveal) {
+      resultsElement.scrollIntoView({
+        behavior: window.matchMedia("(max-width: 760px)").matches ? "auto" : "smooth",
+        block: "start"
+      });
+    }
     hideOverlay("Architecture window opened.");
   } catch (error) {
     setStatus(error.message || "Analysis failed.", "error");

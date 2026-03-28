@@ -1,40 +1,203 @@
 const OpenAI = require("openai");
 
+const QUESTION_STOPWORDS = new Set([
+  "a",
+  "about",
+  "an",
+  "and",
+  "are",
+  "can",
+  "code",
+  "does",
+  "explain",
+  "for",
+  "from",
+  "give",
+  "how",
+  "i",
+  "in",
+  "is",
+  "it",
+  "me",
+  "of",
+  "or",
+  "please",
+  "show",
+  "tell",
+  "the",
+  "this",
+  "to",
+  "what",
+  "where",
+  "which",
+  "who",
+  "why"
+]);
+
+const CONCEPT_HINTS = {
+  lambda:
+    "In this repo, Lambda most likely means AWS Lambda serverless functions, which run backend logic on demand instead of keeping a long-running server alive.",
+  auth:
+    "In this repo, auth usually means the code that verifies identity, sessions, tokens, or sign-in flow before protected logic runs.",
+  authentication:
+    "In this repo, authentication usually means the code that verifies identity, sessions, tokens, or sign-in flow before protected logic runs.",
+  authorization:
+    "In this repo, authorization usually means the rules that decide what an authenticated user is allowed to do.",
+  dashboard:
+    "In this repo, the dashboard is likely the user-facing UI layer that displays analysis, controls, or workflow state.",
+  api:
+    "In this repo, the API layer is the request-handling surface that receives client calls and forwards them into backend logic.",
+  backend:
+    "In this repo, the backend is the server-side or function-side logic that processes requests, data, and integrations.",
+  frontend:
+    "In this repo, the frontend is the UI layer that renders screens and sends requests to the backend or analysis APIs.",
+  database:
+    "In this repo, database-related code is the part that stores or retrieves persistent application data.",
+  dynamodb:
+    "In this repo, DynamoDB-related code would be the persistence layer that stores structured application records in AWS.",
+  s3:
+    "In this repo, S3-related code would handle file storage, uploads, or object retrieval in AWS.",
+  textract:
+    "In this repo, Textract-related code would be the OCR or document extraction layer used to read structured data from files.",
+  chat:
+    "In this repo, chat is the question-answering layer that uses indexed repository context to explain the codebase."
+};
+
 function tokenize(value) {
   return String(value || "")
     .toLowerCase()
-    .split(/[^a-z0-9_/.-]+/)
-    .filter((token) => token.length > 2);
+    .split(/[^a-z0-9_/@.-]+/)
+    .map((token) => token.replace(/^[-./@]+|[-./@]+$/g, ""))
+    .filter((token) => token.length > 1 && !QUESTION_STOPWORDS.has(token));
+}
+
+function extractQuestionFocus(question) {
+  const normalized = String(question || "").toLowerCase().trim();
+  const explicitMatch = normalized.match(
+    /(?:tell me about|what is|what does|explain|describe|where is|where are|how does|how is)\s+([a-z0-9_/@.-]+(?:\s+[a-z0-9_/@.-]+){0,3})/
+  );
+
+  if (explicitMatch) {
+    return explicitMatch[1].trim();
+  }
+
+  return tokenize(normalized)[0] || "";
+}
+
+function toTokenSet(value) {
+  return new Set(tokenize(value));
+}
+
+function normalizeRole(role) {
+  if (!role) {
+    return "";
+  }
+
+  const trimmed = role.replace(/\.$/, "");
+  return trimmed.charAt(0).toLowerCase() + trimmed.slice(1);
+}
+
+function describeEvidence(matches, limit = 2) {
+  return matches.slice(0, limit).map((match) => `${match.path} where it ${normalizeRole(match.role)}`);
+}
+
+function pickEvidenceMatches(matches, limit = 3) {
+  const directMatches = matches.filter((match) => match.pathHit || match.moduleHit || match.roleHit);
+  return (directMatches.length ? directMatches : matches).slice(0, limit);
 }
 
 function retrieveRelevantDocuments(analysis, question, limit = 4) {
-  const questionTokens = tokenize(question);
+  const focus = extractQuestionFocus(question);
+  const questionTokens = [...new Set([...tokenize(question), ...tokenize(focus)])];
 
   return (analysis.searchIndex || [])
     .map((document) => {
-      const haystack = tokenize(
-        `${document.path} ${document.module} ${document.language} ${document.role} ${document.content}`
-      );
-      const haystackSet = new Set(haystack);
-      const score = questionTokens.reduce((total, token) => {
-        if (haystackSet.has(token)) {
-          return total + 3;
+      const pathLower = String(document.path || "").toLowerCase();
+      const moduleLower = String(document.module || "").toLowerCase();
+      const roleLower = String(document.role || "").toLowerCase();
+      const pathTokens = toTokenSet(document.path);
+      const moduleTokens = toTokenSet(document.module);
+      const roleTokens = toTokenSet(document.role);
+      const contentTokens = toTokenSet(document.content);
+      let score = 0;
+      let pathHit = false;
+      let moduleHit = false;
+      let roleHit = false;
+      let contentHit = false;
+
+      for (const token of questionTokens) {
+        if (pathTokens.has(token)) {
+          score += 18;
+          pathHit = true;
         }
 
-        if (document.path.toLowerCase().includes(token)) {
-          return total + 4;
+        if (moduleTokens.has(token)) {
+          score += 14;
+          moduleHit = true;
         }
 
-        return total;
-      }, 0);
+        if (roleTokens.has(token)) {
+          score += 10;
+          roleHit = true;
+        }
+
+        if (contentTokens.has(token)) {
+          score += pathHit || moduleHit || roleHit ? 2 : 4;
+          contentHit = true;
+        }
+
+        if (
+          pathLower.includes(`/${token}/`) ||
+          pathLower.startsWith(`${token}/`) ||
+          pathLower.endsWith(`/${token}`) ||
+          pathLower.includes(`${token}.`)
+        ) {
+          score += 10;
+          pathHit = true;
+        }
+
+        if (moduleLower === token) {
+          score += 8;
+          moduleHit = true;
+        }
+
+        if (roleLower.includes(token)) {
+          score += 5;
+          roleHit = true;
+        }
+      }
+
+      if (focus) {
+        const normalizedFocus = focus.replace(/\s+/g, "-");
+        if (
+          pathLower.includes(`/${focus}/`) ||
+          pathLower.startsWith(`${focus}/`) ||
+          pathLower.includes(normalizedFocus) ||
+          moduleLower === focus
+        ) {
+          score += 16;
+          pathHit = true;
+        }
+      }
 
       return {
         ...document,
-        score
+        score,
+        pathHit,
+        moduleHit,
+        roleHit,
+        contentHit
       };
     })
     .filter((document) => document.score > 0)
-    .sort((a, b) => b.score - a.score || a.path.localeCompare(b.path))
+    .sort(
+      (a, b) =>
+        Number(b.pathHit) - Number(a.pathHit) ||
+        Number(b.moduleHit) - Number(a.moduleHit) ||
+        Number(b.roleHit) - Number(a.roleHit) ||
+        b.score - a.score ||
+        a.path.localeCompare(b.path)
+    )
     .slice(0, limit);
 }
 
@@ -81,7 +244,7 @@ function buildHighLevelAnswer(analysis, question, matches) {
   const summary = analysis.summary || {};
   const moduleNames = topModuleNames(analysis);
   const entrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
-  const evidence = summarizeMatches(matches);
+  const evidence = summarizeMatches(pickEvidenceMatches(matches));
 
   return {
     answer: [
@@ -99,6 +262,7 @@ function buildHighLevelAnswer(analysis, question, matches) {
 
 function buildFallbackAnswer(analysis, question, matches) {
   const prompt = String(question || "").toLowerCase();
+  const focus = extractQuestionFocus(question);
   const summary = analysis.summary || {};
   const quality = analysis.quality || {};
   const preferredEntrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
@@ -107,12 +271,51 @@ function buildFallbackAnswer(analysis, question, matches) {
   const dependencyNames = topDependencyNames(analysis);
   const hotspotPaths = topHotspotPaths(analysis);
   const findingSummary = topFindingSummary(analysis);
-  const matchPaths = summarizeMatches(matches);
-  const matchModules = [...new Set(matches.map((match) => match.module).filter(Boolean))];
+  const evidenceMatches = pickEvidenceMatches(matches);
+  const matchPaths = summarizeMatches(evidenceMatches);
+  const matchModules = [...new Set(evidenceMatches.map((match) => match.module).filter(Boolean))];
+  const evidenceDescriptions = describeEvidence(evidenceMatches);
   const citations = buildCitations(matches);
 
   if (!matches.length) {
     return buildHighLevelAnswer(analysis, question, matches);
+  }
+
+  if (
+    prompt.includes("tell me about") ||
+    prompt.startsWith("what is") ||
+    prompt.startsWith("what does") ||
+    prompt.startsWith("explain") ||
+    prompt.startsWith("describe")
+  ) {
+    const directLambdaMatches = evidenceMatches.filter(
+      (match) => match.path.includes("lambda/") || match.module === "lambda" || match.path.toLowerCase().includes("lambda")
+    );
+    const uiMentions = matches.filter((match) =>
+      /dashboard|public|frontend|client|ui/i.test(`${match.path} ${match.module}`)
+    );
+
+    return {
+      answer: [
+        CONCEPT_HINTS[focus] ||
+          `In this codebase, ${focus || "that area"} appears to be implemented through a specific set of files and modules rather than a single central definition.`,
+        evidenceDescriptions.length
+          ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
+          : "",
+        focus === "lambda" && directLambdaMatches.length
+          ? `The actual Lambda-side implementation is strongest in ${formatList(directLambdaMatches.map((match) => match.path))}.`
+          : "",
+        focus === "lambda" && uiMentions.length
+          ? "Some dashboard or UI files also mention Lambda because they trigger or describe that backend flow, but they are not the main implementation."
+          : "",
+        preferredEntrypoints.length && !["lambda", "auth", "authentication", "authorization"].includes(focus)
+          ? `The main entrypoints are ${formatList(preferredEntrypoints)}.`
+          : ""
+      ]
+        .filter(Boolean)
+        .join(" "),
+      citations
+    };
   }
 
   if (
@@ -127,7 +330,7 @@ function buildFallbackAnswer(analysis, question, matches) {
       answer: [
         `The request flow most likely starts around ${formatList(preferredEntrypoints.length ? preferredEntrypoints : (summary.entrypoints || matchPaths), "the main application entrypoints")}.`,
         matchModules.length ? `The strongest routing or request-handling signals are in the ${formatList(matchModules)} area.` : "",
-        matchPaths.length ? `The clearest supporting files are ${formatList(matchPaths)}.` : ""
+        evidenceDescriptions.length ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.` : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -165,7 +368,8 @@ function buildFallbackAnswer(analysis, question, matches) {
       answer: [
         `The main framework and dependency picture is ${formatList(summary.frameworks || [], summary.primaryLanguage || "not obvious from the current analysis")}.`,
         dependencyNames.length ? `The most visible dependencies are ${formatList(dependencyNames)}.` : "",
-        relationshipSummary.length ? `The strongest module links are ${formatList(relationshipSummary)}.` : ""
+        relationshipSummary.length ? `The strongest module links are ${formatList(relationshipSummary)}.` : "",
+        evidenceDescriptions.length ? `The clearest supporting files are ${formatList(evidenceDescriptions)}.` : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -185,7 +389,7 @@ function buildFallbackAnswer(analysis, question, matches) {
       answer: [
         `The codebase is mainly organized around ${formatList(moduleNames)}.`,
         relationshipSummary.length ? `The clearest cross-module links are ${formatList(relationshipSummary)}.` : "",
-        matchPaths.length ? `For your question, the most relevant implementation files are ${formatList(matchPaths)}.` : ""
+        evidenceDescriptions.length ? `For your question, the most relevant implementation files are ${formatList(evidenceDescriptions)}.` : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -200,16 +404,31 @@ function buildFallbackAnswer(analysis, question, matches) {
     prompt.includes("token") ||
     prompt.includes("security")
   ) {
+    const frontendAuthMatches = evidenceMatches.filter((match) =>
+      /dashboard|public|client|frontend|components|pages/i.test(match.path)
+    );
+    const backendAuthMatches = evidenceMatches.filter((match) =>
+      /lambda|server|api|middleware|session|token|cognito/i.test(match.path)
+    );
+
     return {
       answer: [
-        matchModules.length
-          ? `The best local signal for authentication or session handling is in the ${formatList(matchModules)} area.`
-          : "I do not see a dedicated authentication module in the strongest local matches.",
-        matchPaths.length ? `The closest implementation evidence is ${formatList(matchPaths)}.` : "",
-        preferredEntrypoints.length
-          ? `The main request entrypoints are ${formatList(preferredEntrypoints)}.`
-          : summary.entrypoints?.length
-            ? `The main request entrypoints are ${formatList(summary.entrypoints)}.`
+        frontendAuthMatches.length && backendAuthMatches.length
+          ? "Authentication appears to be split between the UI sign-in flow and backend validation logic."
+          : matchModules.length
+            ? `The best local signal for authentication or session handling is in the ${formatList(matchModules)} area.`
+            : "I do not see a dedicated authentication module in the strongest local matches.",
+        frontendAuthMatches.length
+          ? `On the frontend side, the clearest files are ${formatList(
+              frontendAuthMatches.map((match) => `${match.path} where it ${normalizeRole(match.role)}`)
+            )}.`
+          : "",
+        backendAuthMatches.length
+          ? `On the backend side, the clearest files are ${formatList(
+              backendAuthMatches.map((match) => `${match.path} where it ${normalizeRole(match.role)}`)
+            )}.`
+          : evidenceDescriptions.length
+            ? `The closest implementation evidence is ${formatList(evidenceDescriptions)}.`
             : ""
       ]
         .filter(Boolean)
@@ -220,16 +439,18 @@ function buildFallbackAnswer(analysis, question, matches) {
 
   return {
     answer: [
-      matchModules.length
-        ? `This question maps most strongly to the ${formatList(matchModules)} area.`
-        : `I could not isolate a single dedicated module for "${question}", but I can still explain the likely implementation area.`,
-      matchPaths.length ? `The best local evidence comes from ${formatList(matchPaths)}.` : "",
+      focus
+        ? `In this codebase, ${focus} appears to live mostly in the ${formatList(matchModules, "relevant")} area.`
+        : matchModules.length
+          ? `This question is best answered from the ${formatList(matchModules)} area of the codebase.`
+          : `I could not isolate a single dedicated module for "${question}", but I can still explain the likely implementation area.`,
+      evidenceDescriptions.length ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.` : "",
       preferredEntrypoints.length
         ? `The main entrypoints are ${formatList(preferredEntrypoints)}.`
         : summary.entrypoints?.length
           ? `The main entrypoints are ${formatList(summary.entrypoints)}.`
           : "",
-      quality.summary ? `Overall architecture signal: ${quality.summary}` : ""
+      CONCEPT_HINTS[focus] && !prompt.includes("risk") ? CONCEPT_HINTS[focus] : ""
     ]
       .filter(Boolean)
       .join(" "),

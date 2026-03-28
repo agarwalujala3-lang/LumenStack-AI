@@ -171,6 +171,18 @@ function normalizePackageName(value) {
 function summarizeRole(relativePath, sample) {
   const fileName = path.posix.basename(relativePath).toLowerCase();
 
+  if (/lambda|handler/.test(fileName)) {
+    return "Implements serverless handler logic.";
+  }
+
+  if (/api|endpoint/.test(fileName)) {
+    return "Handles API requests or response shaping.";
+  }
+
+  if (/auth|login|signup|signin|cognito|session|token/.test(fileName)) {
+    return "Handles authentication or sign-in related flow.";
+  }
+
   if (/route|router/.test(fileName)) {
     return "Defines request routing.";
   }
