@@ -1,5 +1,36 @@
+const INTRO_SEEN_KEY = "lumenstack-intro-seen";
+const ROUTE_TRANSITION_KEY = "lumenstack-route-transition";
+
 function shouldSkipIntro() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function safeSessionStorage(action, fallback = null) {
+  try {
+    return action();
+  } catch {
+    return fallback;
+  }
+}
+
+function hasSeenIntro() {
+  return safeSessionStorage(() => window.sessionStorage.getItem(INTRO_SEEN_KEY) === "1", false);
+}
+
+function markIntroSeen() {
+  safeSessionStorage(() => window.sessionStorage.setItem(INTRO_SEEN_KEY, "1"));
+}
+
+function queueRouteTransition() {
+  safeSessionStorage(() => window.sessionStorage.setItem(ROUTE_TRANSITION_KEY, "1"));
+}
+
+function consumeRouteTransition() {
+  return safeSessionStorage(() => {
+    const shouldTransition = window.sessionStorage.getItem(ROUTE_TRANSITION_KEY) === "1";
+    window.sessionStorage.removeItem(ROUTE_TRANSITION_KEY);
+    return shouldTransition;
+  }, false);
 }
 
 function escapeHtml(value) {
@@ -33,8 +64,8 @@ function getIntroCopy() {
 }
 
 function getIntroGrid() {
-  const columns = Math.max(12, Math.min(22, Math.ceil(window.innerWidth / 94)));
-  const rows = Math.max(7, Math.min(12, Math.ceil(window.innerHeight / 108)));
+  const columns = Math.max(10, Math.min(16, Math.ceil(window.innerWidth / 128)));
+  const rows = Math.max(6, Math.min(9, Math.ceil(window.innerHeight / 146)));
   return { columns, rows };
 }
 
@@ -46,15 +77,15 @@ function buildIntroPanels(panels, columns, rows) {
       const pane = document.createElement("span");
       const distanceFromCenter = Math.abs(col - centerColumn);
       const horizontalDirection = col < centerColumn ? -1 : 1;
-      const shift = Math.round((24 + distanceFromCenter * 6) * horizontalDirection);
-      const delay = Math.round(distanceFromCenter * 44 + row * 16);
+      const shift = Math.round((22 + distanceFromCenter * 5) * horizontalDirection);
+      const delay = Math.round(distanceFromCenter * 38 + row * 12);
 
       pane.className = "page-intro-pane";
       pane.style.setProperty("--intro-delay", `${delay}ms`);
       pane.style.setProperty("--intro-shift", `${shift}px`);
       pane.style.setProperty(
         "--intro-lift",
-        `${(row % 2 === 0 ? -1 : 1) * Math.round(8 + distanceFromCenter * 1.4)}px`
+        `${(row % 2 === 0 ? -1 : 1) * Math.round(6 + distanceFromCenter * 1.1)}px`
       );
       pane.style.setProperty("--intro-tilt", `${horizontalDirection * (2 + (row % 3))}deg`);
       panels.appendChild(pane);
@@ -154,7 +185,7 @@ function runPageIntro() {
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 1620);
+    }, 1380);
   };
 
   document.body.classList.add("intro-active");
@@ -164,10 +195,100 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(settleIntro, 1260);
-  window.setTimeout(finishIntro, 2420);
+  window.setTimeout(settleIntro, 1080);
+  window.setTimeout(finishIntro, 1980);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }
 
-runPageIntro();
+function runRouteTransition() {
+  if (!document.body || shouldSkipIntro()) {
+    return;
+  }
+
+  const routeGlass = document.createElement("div");
+  routeGlass.className = "page-route-glass";
+  routeGlass.setAttribute("aria-hidden", "true");
+  document.body.classList.add("route-enter");
+  document.body.appendChild(routeGlass);
+
+  window.requestAnimationFrame(() => {
+    document.body.classList.add("route-enter-active");
+    routeGlass.classList.add("is-active");
+  });
+
+  window.setTimeout(() => {
+    document.body.classList.remove("route-enter", "route-enter-active");
+    routeGlass.classList.add("is-leaving");
+    window.setTimeout(() => {
+      routeGlass.remove();
+    }, 360);
+  }, 720);
+}
+
+function isInternalAppLink(anchor) {
+  if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) {
+    return false;
+  }
+
+  let url;
+
+  try {
+    url = new URL(anchor.href, window.location.href);
+  } catch {
+    return false;
+  }
+
+  if (url.origin !== window.location.origin) {
+    return false;
+  }
+
+  if (url.pathname === window.location.pathname && url.search === window.location.search) {
+    return false;
+  }
+
+  return true;
+}
+
+function bindNavigationIntent() {
+  document.addEventListener("click", (event) => {
+    const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+
+    if (!anchor || event.defaultPrevented) {
+      return;
+    }
+
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    if (!isInternalAppLink(anchor)) {
+      return;
+    }
+
+    queueRouteTransition();
+  });
+}
+
+function initPageFx() {
+  bindNavigationIntent();
+
+  if (!document.body) {
+    return;
+  }
+
+  const shouldRunIntro = !shouldSkipIntro() && !hasSeenIntro();
+  const shouldRunRouteTransition = consumeRouteTransition();
+
+  if (shouldRunIntro) {
+    markIntroSeen();
+    runPageIntro();
+    return;
+  }
+
+  if (shouldRunRouteTransition) {
+    runRouteTransition();
+  }
+}
+
+initPageFx();
