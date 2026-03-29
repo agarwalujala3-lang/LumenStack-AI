@@ -42,7 +42,7 @@ LumenStack AI is a full-stack Node.js and Express application that turns a repos
 - Analyzer surface for repo intake, structure maps, findings, and AI summaries
 - Dedicated Workspaces page for preset review lanes such as GitHub review, GitLab delivery, and offline ZIP mode
 - Integrations page that reflects live provider coverage from the backend
-- Brand-led startup intro, lighter internal page transitions, and dark/light themes
+- Prism-led startup intro, lighter internal page transitions, and dark/light themes
 
 ## Stack
 

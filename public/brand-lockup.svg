@@ -1,58 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
-  <title id="title">LumenStack AI Logo</title>
-  <desc id="desc">The LumenStack AI logo combining a glowing cyan neural flower symbol with the LumenStack AI wordmark.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 220" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI Prism Logo</title>
+  <desc id="desc">A luminous stacked prism icon paired with a futuristic LumenStack AI wordmark.</desc>
   <defs>
-    <radialGradient id="lockupCoreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#e8ffff"/>
-      <stop offset="48%" stop-color="#7ef9ff"/>
-      <stop offset="100%" stop-color="#2bc4d8"/>
+    <linearGradient id="lockupEdge" x1="32" y1="28" x2="176" y2="154" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2FFFF"/>
+      <stop offset="0.42" stop-color="#74F1FF"/>
+      <stop offset="1" stop-color="#6784FF"/>
+    </linearGradient>
+    <linearGradient id="lockupGlass" x1="54" y1="36" x2="156" y2="154" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17384F" stop-opacity="0.84"/>
+      <stop offset="0.56" stop-color="#0F2738" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#081623" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="lockupCore" x1="74" y1="30" x2="120" y2="146" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FCFFFF"/>
+      <stop offset="0.44" stop-color="#93F8FF"/>
+      <stop offset="1" stop-color="#6985FF"/>
+    </linearGradient>
+    <radialGradient id="lockupAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#74EFFF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#74EFFF" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="lockupLoopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6bfff7"/>
-      <stop offset="55%" stop-color="#45dee7"/>
-      <stop offset="100%" stop-color="#1aa7c2"/>
+    <linearGradient id="lockupTextFill" x1="236" y1="46" x2="830" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EAFDFF"/>
+      <stop offset="0.2" stop-color="#BFFBFF"/>
+      <stop offset="0.56" stop-color="#6FE8FF"/>
+      <stop offset="1" stop-color="#8F9EFF"/>
     </linearGradient>
-    <linearGradient id="lockupText" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#baf7ff"/>
-      <stop offset="45%" stop-color="#7defff"/>
-      <stop offset="100%" stop-color="#5bd8ff"/>
+    <linearGradient id="lockupTrace" x1="228" y1="166" x2="794" y2="166" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6FE8FF" stop-opacity="0"/>
+      <stop offset="0.34" stop-color="#6FE8FF" stop-opacity="0.56"/>
+      <stop offset="0.82" stop-color="#8A99FF" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#8A99FF" stop-opacity="0"/>
     </linearGradient>
-    <filter id="lockupGlow" x="-80%" y="-80%" width="260%" height="260%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#65f7ff" flood-opacity="0.6"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#1ab8d5" flood-opacity="0.34"/>
+    <filter id="lockupBloom" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#73F2FF" flood-opacity="0.44"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#6887FF" flood-opacity="0.18"/>
     </filter>
-    <filter id="textGlow" x="-20%" y="-120%" width="160%" height="300%">
-      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#4cdcff" flood-opacity="0.18"/>
+    <filter id="lockupTextGlow" x="-20%" y="-140%" width="150%" height="320%">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#73F2FF" flood-opacity="0.16"/>
     </filter>
   </defs>
 
-  <g transform="translate(20 10)" filter="url(#lockupGlow)">
-    <circle cx="70" cy="80" r="34" fill="#5df4ff" opacity="0.14"/>
+  <g transform="translate(26 24)" filter="url(#lockupBloom)">
+    <ellipse cx="82" cy="84" rx="64" ry="52" fill="url(#lockupAura)"/>
 
-    <g fill="none" stroke="url(#lockupLoopGlow)" stroke-linecap="round" stroke-width="10.5" opacity="0.92">
-      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(0 70 80)"/>
-      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(60 70 80)"/>
-      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(120 70 80)"/>
-      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(30 70 80)" opacity="0.82"/>
-      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(90 70 80)" opacity="0.82"/>
-      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(150 70 80)" opacity="0.82"/>
-    </g>
+    <path d="M39 44H101L141 72H79Z" fill="url(#lockupGlass)" stroke="url(#lockupEdge)" stroke-width="3.6" stroke-linejoin="round" opacity="0.78"/>
+    <path d="M26 82H88L128 110H66Z" fill="url(#lockupGlass)" stroke="url(#lockupEdge)" stroke-width="3.6" stroke-linejoin="round" opacity="0.92"/>
+    <path d="M43 120H105L145 148H83Z" fill="url(#lockupGlass)" stroke="url(#lockupEdge)" stroke-width="3.6" stroke-linejoin="round"/>
 
-    <g fill="#8dffff" opacity="0.82">
-      <circle cx="111" cy="80" r="4.4"/>
-      <circle cx="90.5" cy="115.5" r="4.2"/>
-      <circle cx="49.5" cy="115.5" r="4.2"/>
-      <circle cx="29" cy="80" r="4.4"/>
-      <circle cx="49.5" cy="44.5" r="4.2"/>
-      <circle cx="90.5" cy="44.5" r="4.2"/>
-    </g>
+    <path d="M83 26L112 46V118L83 138L54 118V46Z" fill="url(#lockupCore)" opacity="0.95"/>
+    <path d="M91 40L104 49V115L91 124L78 115V49Z" fill="#F3FFFF" opacity="0.88"/>
 
-    <circle cx="70" cy="80" r="19" fill="url(#lockupCoreGlow)"/>
-    <circle cx="70" cy="80" r="10.5" fill="#dffcff" opacity="0.9"/>
-    <circle cx="70" cy="80" r="5.2" fill="#8ef8ff"/>
+    <path d="M112 46L138 61" stroke="#C3FFFF" stroke-width="3.4" stroke-linecap="round" opacity="0.74"/>
+    <path d="M112 118L136 132" stroke="#8FEBFF" stroke-width="3.4" stroke-linecap="round" opacity="0.62"/>
+    <path d="M54 46L30 60" stroke="#8FEBFF" stroke-width="3.4" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="141" cy="63" r="4.6" fill="#D3FFFF"/>
+    <circle cx="139" cy="130" r="4.2" fill="#90ECFF"/>
+    <circle cx="27" cy="60" r="4" fill="#9CEEFF" opacity="0.76"/>
   </g>
 
-  <g filter="url(#textGlow)">
-    <text x="170" y="108" fill="url(#lockupText)" font-family="Bahnschrift, 'Segoe UI', Arial, sans-serif" font-size="78" font-weight="600" letter-spacing="4">LumenStack AI</text>
+  <g filter="url(#lockupTextGlow)">
+    <text x="220" y="112" fill="url(#lockupTextFill)" font-family="Bahnschrift, 'Aptos Display', 'Segoe UI', Arial, sans-serif" font-size="84" font-weight="600" letter-spacing="5">LumenStack AI</text>
   </g>
+  <path d="M228 160H792" stroke="url(#lockupTrace)" stroke-width="4" stroke-linecap="round"/>
 </svg>

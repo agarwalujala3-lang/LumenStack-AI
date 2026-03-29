@@ -59,11 +59,12 @@ function getIntroCopy() {
 }
 
 function createIntroShutters(container) {
-  for (let index = 0; index < 6; index += 1) {
+  for (let index = 0; index < 8; index += 1) {
     const shutter = document.createElement("span");
-    shutter.className = "page-intro-shutter";
-    shutter.style.setProperty("--shutter-delay", `${index * 70}ms`);
-    shutter.style.setProperty("--shutter-shift", `${index < 3 ? -100 : 100}%`);
+    shutter.className = "prism-intro-shutter";
+    shutter.style.setProperty("--shutter-delay", `${index * 55}ms`);
+    shutter.style.setProperty("--shutter-shift-x", `${index % 2 === 0 ? -120 : 120}%`);
+    shutter.style.setProperty("--shutter-shift-y", `${index < 4 ? -16 : 16}%`);
     container.appendChild(shutter);
   }
 }
@@ -71,41 +72,45 @@ function createIntroShutters(container) {
 function createIntroElement() {
   const { badge, title, text } = getIntroCopy();
   const intro = document.createElement("div");
-  intro.className = "page-intro";
+  intro.className = "page-intro prism-intro";
   intro.setAttribute("aria-hidden", "true");
 
   const shutters = document.createElement("div");
-  shutters.className = "page-intro-shutters";
+  shutters.className = "prism-intro-shutters";
   shutters.setAttribute("aria-hidden", "true");
   createIntroShutters(shutters);
 
   const scan = document.createElement("div");
-  scan.className = "page-intro-scan";
+  scan.className = "prism-intro-sweep";
   scan.setAttribute("aria-hidden", "true");
 
   const core = document.createElement("div");
-  core.className = "page-intro-core";
+  core.className = "prism-intro-core";
   core.innerHTML = `
-    <div class="page-intro-bloom" aria-hidden="true">
-      <span class="page-intro-seed"></span>
-      <span class="page-intro-orbit orbit-a"></span>
-      <span class="page-intro-orbit orbit-b"></span>
-      <span class="page-intro-orbit orbit-c"></span>
-      <span class="page-intro-node node-a"></span>
-      <span class="page-intro-node node-b"></span>
-      <span class="page-intro-node node-c"></span>
-      <span class="page-intro-node node-d"></span>
+    <div class="prism-intro-orbit" aria-hidden="true">
+      <span class="prism-intro-ring ring-a"></span>
+      <span class="prism-intro-ring ring-b"></span>
+      <span class="prism-intro-ring ring-c"></span>
+      <span class="prism-intro-trace trace-a"></span>
+      <span class="prism-intro-trace trace-b"></span>
+      <span class="prism-intro-trace trace-c"></span>
+      <span class="prism-intro-node node-a"></span>
+      <span class="prism-intro-node node-b"></span>
+      <span class="prism-intro-node node-c"></span>
+      <span class="prism-intro-node node-d"></span>
     </div>
 
-    <div class="page-intro-logo-copy">
-      <span class="page-intro-badge">${escapeHtml(badge)}</span>
-      <div class="page-intro-logo-lockup">
-        <img class="page-intro-logo-lockup-image" src="/brand-lockup.svg" alt="" />
+    <div class="prism-intro-logo-copy">
+      <span class="prism-intro-badge">${escapeHtml(badge)}</span>
+      <div class="prism-intro-mark-stage">
+        <span class="prism-intro-core-dot"></span>
+        <img class="prism-intro-mark" src="/brand-mark.svg" alt="" />
       </div>
-      <p class="page-intro-text">${escapeHtml(title)}</p>
+      <img class="prism-intro-lockup" src="/brand-lockup.svg" alt="" />
+      <p class="prism-intro-text">${escapeHtml(title)}</p>
     </div>
 
-    <p class="page-intro-subcopy">${escapeHtml(text)}</p>
+    <p class="prism-intro-subcopy">${escapeHtml(text)}</p>
   `;
 
   intro.appendChild(shutters);
@@ -153,8 +158,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(settleIntro, 1700);
-  window.setTimeout(finishIntro, 3300);
+  window.setTimeout(settleIntro, 2300);
+  window.setTimeout(finishIntro, 4700);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }

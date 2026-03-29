@@ -3845,3 +3845,542 @@ body.touch-enhanced .cursor-trail {
   }
 }
 
+.prism-intro {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(96, 233, 255, 0.18), transparent 22%),
+    radial-gradient(circle at 18% 14%, rgba(125, 143, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(96, 233, 255, 0.1), transparent 30%),
+    linear-gradient(180deg, #040912 0%, #07111d 48%, #0a1828 100%);
+}
+
+.prism-intro::before {
+  background:
+    linear-gradient(rgba(116, 239, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 239, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 36%, rgba(116, 239, 255, 0.14), transparent 48%);
+  background-size: 42px 42px, 42px 42px, auto;
+  opacity: 0.8;
+}
+
+.prism-intro-shutters {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
+
+.prism-intro-shutter {
+  border-radius: 18px;
+  border: 1px solid rgba(116, 239, 255, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+    linear-gradient(135deg, rgba(116, 239, 255, 0.08), rgba(103, 132, 255, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 20px 44px rgba(0, 0, 0, 0.24);
+  transform: scale(1.02);
+  opacity: 0.92;
+  transition:
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 900ms ease,
+    filter 900ms ease;
+}
+
+.prism-intro.is-entered .prism-intro-shutter {
+  transform: scale(1);
+}
+
+.prism-intro-sweep {
+  position: absolute;
+  inset: 0 auto 0 -18%;
+  width: 22%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(166, 244, 255, 0.08), rgba(116, 239, 255, 0.42), rgba(255, 255, 255, 0));
+  filter: blur(16px);
+  animation: prismIntroSweep 1600ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
+  pointer-events: none;
+}
+
+.prism-intro-core {
+  position: relative;
+  z-index: 1;
+  width: min(780px, calc(100vw - 52px));
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: 34px 34px 30px;
+  border-radius: 38px;
+  border: 1px solid rgba(116, 239, 255, 0.14);
+  background:
+    radial-gradient(circle at top, rgba(23, 73, 109, 0.34), transparent 42%),
+    linear-gradient(180deg, rgba(6, 18, 30, 0.9), rgba(8, 19, 31, 0.74));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 34px 96px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(22px);
+  transform: translateY(22px) scale(0.965);
+  opacity: 0;
+  transition:
+    transform 820ms cubic-bezier(0.16, 1, 0.3, 1) 150ms,
+    opacity 560ms ease 150ms,
+    filter 820ms ease 150ms;
+}
+
+.prism-intro-core::before,
+.prism-intro-core::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.prism-intro-core::before {
+  inset: 18px;
+  border-radius: 28px;
+  border: 1px solid rgba(116, 239, 255, 0.08);
+}
+
+.prism-intro-core::after {
+  inset: auto 28px 24px 28px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(116, 239, 255, 0), rgba(116, 239, 255, 0.48), rgba(125, 143, 255, 0));
+  opacity: 0.5;
+}
+
+.prism-intro.is-entered .prism-intro-core {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.prism-intro-orbit {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.prism-intro-ring,
+.prism-intro-trace,
+.prism-intro-node,
+.prism-intro-core-dot {
+  position: absolute;
+}
+
+.prism-intro-ring {
+  inset: 50%;
+  border-radius: 999px;
+  border: 1.5px solid rgba(116, 239, 255, 0.28);
+  transform: translate(-50%, -50%) scale(0.38);
+  opacity: 0;
+  box-shadow: 0 0 18px rgba(116, 239, 255, 0.14);
+}
+
+.prism-intro-ring.ring-a {
+  width: 126px;
+  height: 126px;
+  animation: prismIntroRingA 1350ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+
+.prism-intro-ring.ring-b {
+  width: 164px;
+  height: 164px;
+  animation: prismIntroRingB 1500ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
+}
+
+.prism-intro-ring.ring-c {
+  width: 206px;
+  height: 206px;
+  border-color: rgba(125, 143, 255, 0.2);
+  animation: prismIntroRingC 1640ms cubic-bezier(0.16, 1, 0.3, 1) 320ms both;
+}
+
+.prism-intro-trace {
+  inset: 50%;
+  width: 124px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(116, 239, 255, 0), rgba(116, 239, 255, 0.88), rgba(255, 255, 255, 0));
+  transform-origin: center;
+  opacity: 0;
+}
+
+.prism-intro-trace.trace-a {
+  --trace-rotation: 0deg;
+  transform: translate(-50%, -50%) rotate(0deg) scaleX(0.2);
+  animation: prismIntroTrace 920ms ease-out 420ms both;
+}
+
+.prism-intro-trace.trace-b {
+  --trace-rotation: 60deg;
+  transform: translate(-50%, -50%) rotate(60deg) scaleX(0.2);
+  animation: prismIntroTrace 920ms ease-out 520ms both;
+}
+
+.prism-intro-trace.trace-c {
+  --trace-rotation: 120deg;
+  transform: translate(-50%, -50%) rotate(120deg) scaleX(0.2);
+  animation: prismIntroTrace 920ms ease-out 620ms both;
+}
+
+.prism-intro-node {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fbffff 0%, #88f7ff 52%, #6d88ff 100%);
+  box-shadow: 0 0 18px rgba(116, 239, 255, 0.54);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.24);
+}
+
+.prism-intro-node.node-a {
+  top: 50%;
+  left: 86%;
+  animation: prismIntroNode 520ms ease-out 760ms forwards;
+}
+
+.prism-intro-node.node-b {
+  top: 24%;
+  left: 63%;
+  animation: prismIntroNode 520ms ease-out 860ms forwards;
+}
+
+.prism-intro-node.node-c {
+  top: 76%;
+  left: 37%;
+  animation: prismIntroNode 520ms ease-out 960ms forwards;
+}
+
+.prism-intro-node.node-d {
+  top: 50%;
+  left: 14%;
+  animation: prismIntroNode 520ms ease-out 1060ms forwards;
+}
+
+.prism-intro-logo-copy {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: min(560px, 100%);
+}
+
+.prism-intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(236, 247, 255, 0.07);
+  border: 1px solid rgba(116, 239, 255, 0.12);
+  color: #a8f5ff;
+  font-family: "Bahnschrift", "Aptos Display", "Arial Narrow", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 420ms ease 740ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 740ms;
+}
+
+.prism-intro-badge::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #74efff, #7d8fff);
+  box-shadow: 0 0 18px rgba(116, 239, 255, 0.4);
+}
+
+.prism-intro-mark-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 170px;
+  height: 170px;
+}
+
+.prism-intro-mark-stage::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border-radius: 36px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    linear-gradient(135deg, rgba(116, 239, 255, 0.1), rgba(125, 143, 255, 0.05));
+  border: 1px solid rgba(116, 239, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  transform: scale(0.78) rotate(-8deg);
+  transition: opacity 520ms ease 860ms, transform 820ms cubic-bezier(0.16, 1, 0.3, 1) 860ms;
+}
+
+.prism-intro-core-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #ffffff 0%, #abfdff 46%, rgba(116, 239, 255, 0) 100%);
+  box-shadow:
+    0 0 0 18px rgba(116, 239, 255, 0.08),
+    0 0 32px rgba(116, 239, 255, 0.78);
+  animation: prismIntroCoreDot 980ms cubic-bezier(0.16, 1, 0.3, 1) 140ms both;
+}
+
+.prism-intro-mark {
+  position: relative;
+  z-index: 1;
+  width: 116px;
+  height: 116px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.5) rotate(-18deg);
+  filter: blur(10px) drop-shadow(0 0 24px rgba(116, 239, 255, 0.3));
+  transition:
+    opacity 460ms ease 900ms,
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 900ms,
+    filter 900ms ease 900ms;
+}
+
+.prism-intro-lockup {
+  width: min(100%, 500px);
+  height: auto;
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  filter: drop-shadow(0 0 20px rgba(116, 239, 255, 0.14));
+  transition:
+    opacity 520ms ease 1250ms,
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 1250ms;
+}
+
+.prism-intro-text,
+.prism-intro-subcopy {
+  margin: 0;
+  text-align: center;
+}
+
+.prism-intro-text {
+  color: rgba(236, 247, 255, 0.88);
+  font-size: 1.02rem;
+  line-height: 1.62;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 420ms ease 1500ms, transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 1500ms;
+}
+
+.prism-intro-subcopy {
+  max-width: 46rem;
+  color: rgba(236, 247, 255, 0.62);
+  font-size: 0.96rem;
+  line-height: 1.8;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 420ms ease 1670ms, transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 1670ms;
+}
+
+.prism-intro.is-entered .prism-intro-badge,
+.prism-intro.is-entered .prism-intro-text,
+.prism-intro.is-entered .prism-intro-subcopy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prism-intro.is-entered .prism-intro-mark-stage::before,
+.prism-intro.is-entered .prism-intro-mark,
+.prism-intro.is-entered .prism-intro-lockup {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(0deg);
+  filter: blur(0) drop-shadow(0 0 24px rgba(116, 239, 255, 0.24));
+}
+
+.prism-intro.is-settled .prism-intro-orbit {
+  opacity: 0.22;
+  transform: scale(0.9);
+  filter: blur(2px);
+  transition: opacity 620ms ease, transform 760ms ease, filter 760ms ease;
+}
+
+.prism-intro.is-settled .prism-intro-lockup {
+  filter: drop-shadow(0 0 22px rgba(116, 239, 255, 0.22));
+}
+
+.prism-intro.is-leaving .prism-intro-core {
+  transform: translateY(-12px) scale(0.96);
+  opacity: 0;
+  filter: blur(8px);
+}
+
+.prism-intro.is-leaving .prism-intro-shutter {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translate3d(var(--shutter-shift-x, 0), var(--shutter-shift-y, 0), 0) scale(0.96);
+  transition-delay: var(--shutter-delay, 0ms);
+}
+
+.prism-intro.is-leaving .prism-intro-sweep {
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+body[data-theme="dark"] .brand-lockup-image {
+  filter: drop-shadow(0 0 18px rgba(116, 239, 255, 0.18));
+}
+
+.brand-mark {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(116, 239, 255, 0.18), transparent 44%),
+    linear-gradient(180deg, #05101a, #0b1b29);
+  border-color: rgba(116, 239, 255, 0.18);
+}
+
+.brand-mark::before {
+  background-image:
+    linear-gradient(rgba(116, 239, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 239, 255, 0.05) 1px, transparent 1px);
+}
+
+@keyframes prismIntroSweep {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(560%, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes prismIntroCoreDot {
+  0% {
+    opacity: 0;
+    transform: scale(0.12);
+    filter: blur(12px);
+  }
+
+  42% {
+    opacity: 1;
+    transform: scale(2.4);
+    filter: blur(3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes prismIntroRingA {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.28);
+  }
+
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes prismIntroRingB {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.26);
+  }
+
+  100% {
+    opacity: 0.42;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes prismIntroRingC {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.22);
+  }
+
+  100% {
+    opacity: 0.22;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes prismIntroTrace {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--trace-rotation, 0deg)) scaleX(0.12);
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) rotate(var(--trace-rotation, 0deg)) scaleX(1);
+  }
+}
+
+@keyframes prismIntroNode {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.34);
+  }
+
+  100% {
+    opacity: 0.88;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media (max-width: 760px) {
+  .prism-intro-shutters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  .prism-intro-core {
+    width: min(100vw - 24px, 430px);
+    padding: 26px 16px 22px;
+    gap: 14px;
+  }
+
+  .prism-intro-orbit {
+    width: 184px;
+    height: 184px;
+  }
+
+  .prism-intro-mark-stage {
+    width: 146px;
+    height: 146px;
+  }
+
+  .prism-intro-mark {
+    width: 98px;
+    height: 98px;
+  }
+
+  .prism-intro-lockup {
+    width: min(100%, 320px);
+  }
+
+  .prism-intro-subcopy {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+}
+
