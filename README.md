@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/brand-mark.svg" alt="LumenStack AI" width="170" />
+  <img src="public/brand-lockup.svg" alt="LumenStack AI" width="440" />
 </p>
 
 <p align="center">

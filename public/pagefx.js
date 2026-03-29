@@ -97,15 +97,12 @@ function createIntroElement() {
       <span class="page-intro-node node-d"></span>
     </div>
 
-    <div class="page-intro-logo-lockup">
-      <div class="page-intro-logo-shell" aria-hidden="true">
-        <img class="page-intro-logo-mark" src="/brand-mark.svg" alt="" />
+    <div class="page-intro-logo-copy">
+      <span class="page-intro-badge">${escapeHtml(badge)}</span>
+      <div class="page-intro-logo-lockup">
+        <img class="page-intro-logo-lockup-image" src="/brand-lockup.svg" alt="" />
       </div>
-      <div class="page-intro-logo-copy">
-        <span class="page-intro-badge">${escapeHtml(badge)}</span>
-        <strong class="page-intro-title">LumenStack AI</strong>
-        <p class="page-intro-text">${escapeHtml(title)}</p>
-      </div>
+      <p class="page-intro-text">${escapeHtml(title)}</p>
     </div>
 
     <p class="page-intro-subcopy">${escapeHtml(text)}</p>
@@ -156,8 +153,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(settleIntro, 1500);
-  window.setTimeout(finishIntro, 2900);
+  window.setTimeout(settleIntro, 1700);
+  window.setTimeout(finishIntro, 3300);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }
