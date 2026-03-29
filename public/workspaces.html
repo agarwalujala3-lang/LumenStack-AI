@@ -31,9 +31,18 @@
           <a href="/integrations.html">Integrations</a>
         </nav>
 
-        <div class="topbar-pills">
-          <span class="top-pill">Guided Flows</span>
-          <span class="top-pill">Cross-platform</span>
+        <div class="topbar-actions">
+          <div class="topbar-pills">
+            <span class="top-pill">Guided Flows</span>
+            <span class="top-pill">Cross-platform</span>
+          </div>
+
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+            <span class="theme-toggle-track" aria-hidden="true">
+              <span class="theme-toggle-thumb"></span>
+            </span>
+            <span id="theme-toggle-label">Dark Mode</span>
+          </button>
         </div>
       </header>
 
@@ -121,5 +130,6 @@
         </section>
       </main>
     </div>
+    <script src="/theme.js"></script>
   </body>
 </html>

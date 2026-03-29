@@ -31,9 +31,18 @@
           <a href="/integrations.html" aria-current="page">Integrations</a>
         </nav>
 
-        <div class="topbar-pills">
-          <span class="top-pill">Provider Radar</span>
-          <span class="top-pill">Webhook-aware</span>
+        <div class="topbar-actions">
+          <div class="topbar-pills">
+            <span class="top-pill">Provider Radar</span>
+            <span class="top-pill">Webhook-aware</span>
+          </div>
+
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+            <span class="theme-toggle-track" aria-hidden="true">
+              <span class="theme-toggle-thumb"></span>
+            </span>
+            <span id="theme-toggle-label">Dark Mode</span>
+          </button>
         </div>
       </header>
 
@@ -43,7 +52,7 @@
           <p class="eyebrow">Supported Routes</p>
           <h1>See what the backend can ingest right now.</h1>
           <p class="hero-text">
-            This page reflects the server’s current provider catalog so the product can explain its
+            This page reflects the server's current provider catalog so the product can explain its
             actual intake coverage instead of relying on static marketing copy.
           </p>
           <div class="hero-actions">
@@ -115,6 +124,7 @@
       </main>
     </div>
 
+    <script src="/theme.js"></script>
     <script src="/integrations.js"></script>
   </body>
 </html>
