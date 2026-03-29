@@ -3,6 +3,24 @@ const themeToggleLabel = document.getElementById("theme-toggle-label");
 const themeStorageKey = "lumenstack-theme";
 const themePreferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+function bindMediaQueryChange(query, listener) {
+  if (!query || typeof listener !== "function") {
+    return () => {};
+  }
+
+  if (typeof query.addEventListener === "function") {
+    query.addEventListener("change", listener);
+    return () => query.removeEventListener("change", listener);
+  }
+
+  if (typeof query.addListener === "function") {
+    query.addListener(listener);
+    return () => query.removeListener(listener);
+  }
+
+  return () => {};
+}
+
 function getStoredTheme() {
   try {
     return window.localStorage.getItem(themeStorageKey) || "";
@@ -56,7 +74,7 @@ themeToggleButton?.addEventListener("click", () => {
   applyTheme(document.body.dataset.theme === "dark" ? "light" : "dark");
 });
 
-themePreferenceQuery.addEventListener("change", (event) => {
+bindMediaQueryChange(themePreferenceQuery, (event) => {
   if (getStoredTheme()) {
     return;
   }

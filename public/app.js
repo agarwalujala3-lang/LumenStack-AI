@@ -86,6 +86,24 @@ const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const themeStorageKey = "lumenstack-theme";
 let currentTheme = "light";
 
+function bindMediaQueryChange(query, listener) {
+  if (!query || typeof listener !== "function") {
+    return () => {};
+  }
+
+  if (typeof query.addEventListener === "function") {
+    query.addEventListener("change", listener);
+    return () => query.removeEventListener("change", listener);
+  }
+
+  if (typeof query.addListener === "function") {
+    query.addListener(listener);
+    return () => query.removeListener(listener);
+  }
+
+  return () => {};
+}
+
 const contentStreams = [explanationElement, documentationElement, diagramElement];
 const loadingMessages = [
   "Reading directory structure, imports, and dependency signatures.",
@@ -606,7 +624,10 @@ function setupPromptRotator() {
 
   stabilizePromptRotatorHeight();
   window.addEventListener("resize", stabilizePromptRotatorHeight);
-  document.fonts?.ready.then(stabilizePromptRotatorHeight).catch(() => {});
+  const fontReady = document.fonts?.ready;
+  if (fontReady?.then) {
+    fontReady.then(stabilizePromptRotatorHeight).catch(() => {});
+  }
 
   let index = 0;
 
@@ -1312,7 +1333,7 @@ themeToggleButton?.addEventListener("click", async () => {
   await applyTheme(currentTheme === "dark" ? "light" : "dark");
 });
 
-themePreferenceQuery.addEventListener("change", async (event) => {
+bindMediaQueryChange(themePreferenceQuery, async (event) => {
   if (getStoredTheme()) {
     return;
   }
