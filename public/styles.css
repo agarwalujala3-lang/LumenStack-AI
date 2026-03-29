@@ -1885,6 +1885,296 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
   border-color: rgba(88, 214, 255, 0.18);
 }
 
+.page-intro {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(88, 214, 255, 0.14), transparent 18%),
+    linear-gradient(180deg, #02060c 0%, #07111a 52%, #091622 100%);
+}
+
+.page-intro::before {
+  background:
+    linear-gradient(rgba(88, 214, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 214, 255, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(88, 214, 255, 0.08), transparent 56%);
+  background-size: 48px 48px, 48px 48px, auto;
+  opacity: 0.58;
+}
+
+.page-intro-shutters {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 2px;
+  pointer-events: none;
+}
+
+.page-intro-shutter {
+  background:
+    linear-gradient(180deg, rgba(13, 28, 45, 0.98), rgba(6, 14, 24, 0.96)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 40%);
+  border-right: 1px solid rgba(166, 232, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  opacity: 0.94;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 860ms cubic-bezier(0.16, 1, 0.3, 1) var(--shutter-delay, 0ms),
+    opacity 860ms ease var(--shutter-delay, 0ms);
+}
+
+.page-intro-scan {
+  inset: 0 auto 0 -10%;
+  width: 14%;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(166, 244, 255, 0.06), rgba(88, 214, 255, 0.24), rgba(255, 255, 255, 0));
+  filter: blur(10px);
+  animation: introScanSweep 1640ms cubic-bezier(0.16, 1, 0.3, 1) 260ms both;
+}
+
+.page-intro-core {
+  width: min(580px, calc(100vw - 48px));
+  gap: 14px;
+  padding: 0 22px;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.page-intro-core::before,
+.page-intro-core::after,
+.page-intro-logo-shell::before,
+.page-intro-logo-shell::after {
+  content: none;
+}
+
+.page-intro-bloom {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 196px;
+  height: 196px;
+  transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1), opacity 520ms ease, filter 620ms ease;
+}
+
+.page-intro-bloom::before {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 126px;
+  height: 126px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(88, 214, 255, 0.2), rgba(88, 214, 255, 0));
+  transform: translate(-50%, -50%) scale(0.22);
+  opacity: 0;
+  filter: blur(12px);
+  transition: transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 60ms, opacity 520ms ease 60ms;
+}
+
+.page-intro.is-entered .page-intro-bloom::before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.page-intro-seed {
+  position: absolute;
+  inset: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #f4ffff 0%, #8bf8ff 48%, #2ab7d0 100%);
+  box-shadow:
+    0 0 0 10px rgba(88, 214, 255, 0.06),
+    0 0 24px rgba(88, 214, 255, 0.6);
+  transform: translate(-50%, -50%);
+  animation: introSeedIgnite 980ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-intro-orbit {
+  top: 50%;
+  left: 50%;
+  border-width: 1.5px;
+  box-shadow: none;
+  animation: introOrbitBuild 1200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-intro-orbit.orbit-a {
+  width: 132px;
+  height: 48px;
+  --orbit-angle: 0deg;
+  --orbit-delay: 180ms;
+}
+
+.page-intro-orbit.orbit-b {
+  width: 132px;
+  height: 48px;
+  --orbit-angle: 60deg;
+  --orbit-delay: 300ms;
+}
+
+.page-intro-orbit.orbit-c {
+  width: 132px;
+  height: 48px;
+  --orbit-angle: 120deg;
+  --orbit-delay: 420ms;
+}
+
+.page-intro-orbit.orbit-d,
+.page-intro-orbit.orbit-e,
+.page-intro-orbit.orbit-f {
+  display: none;
+}
+
+.page-intro-node {
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 10px rgba(88, 214, 255, 0.5);
+  animation: introNodeBlink 640ms ease-out forwards;
+  animation-delay: calc(520ms + var(--node-delay, 0ms));
+}
+
+.page-intro-node.node-a {
+  top: 50%;
+  left: 84%;
+  --node-delay: 0ms;
+}
+
+.page-intro-node.node-b {
+  top: 25%;
+  left: 50%;
+  --node-delay: 90ms;
+}
+
+.page-intro-node.node-c {
+  top: 50%;
+  left: 16%;
+  --node-delay: 180ms;
+}
+
+.page-intro-node.node-d {
+  top: 75%;
+  left: 50%;
+  --node-delay: 270ms;
+}
+
+.page-intro-node.node-e,
+.page-intro-node.node-f {
+  display: none;
+}
+
+.page-intro-logo-shell {
+  position: absolute;
+  inset: 50%;
+  width: 116px;
+  height: 116px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(88, 214, 255, 0.16), transparent 44%),
+    linear-gradient(180deg, rgba(10, 25, 40, 0.96), rgba(6, 16, 28, 0.9));
+  border: 1px solid rgba(88, 214, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 22px 44px rgba(0, 0, 0, 0.28);
+  transform: translate(-50%, -50%) scale(0.54);
+  opacity: 0;
+  transition:
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 900ms,
+    opacity 560ms ease 900ms;
+}
+
+.page-intro.is-entered .page-intro-logo-shell {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.page-intro-logo-mark {
+  width: 88px;
+  height: 88px;
+  filter: drop-shadow(0 0 20px rgba(88, 214, 255, 0.24));
+}
+
+.page-intro-logo-copy {
+  max-width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    transform 720ms cubic-bezier(0.16, 1, 0.3, 1) 1160ms,
+    opacity 540ms ease 1160ms;
+}
+
+.page-intro.is-entered .page-intro-logo-copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-intro-badge {
+  background: rgba(236, 247, 255, 0.06);
+  border-color: rgba(88, 214, 255, 0.12);
+  color: #a8efff;
+}
+
+.page-intro-title {
+  margin-top: 12px;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 0.94;
+  text-align: center;
+}
+
+.page-intro-text {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.page-intro-subcopy {
+  max-width: 34rem;
+  margin-top: 2px;
+  font-size: 0.96rem;
+  line-height: 1.75;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 520ms ease 1440ms,
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 1440ms;
+}
+
+.page-intro.is-entered .page-intro-subcopy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-intro.is-settled .page-intro-bloom {
+  transform: translateY(-8px) scale(0.94);
+}
+
+.page-intro.is-settled .page-intro-orbit,
+.page-intro.is-settled .page-intro-node {
+  opacity: 0.16;
+  transition: opacity 420ms ease;
+}
+
+.page-intro.is-leaving .page-intro-core {
+  transform: translateY(-10px) scale(0.97);
+  opacity: 0;
+  filter: blur(8px);
+  transition: transform 520ms ease, opacity 360ms ease, filter 520ms ease;
+}
+
+.page-intro.is-leaving .page-intro-shutter {
+  opacity: 0;
+  transform: translate3d(var(--shutter-shift, 100%), 0, 0);
+}
+
+body[data-theme="dark"] .page-intro-badge {
+  background: rgba(236, 247, 255, 0.06);
+  border-color: rgba(88, 214, 255, 0.12);
+  color: #baf6ff;
+}
+
+body[data-theme="dark"] .page-intro-logo-shell {
+  border-color: rgba(88, 214, 255, 0.18);
+}
+
 body[data-theme="dark"] .ambient-grid {
   background-image:
     linear-gradient(rgba(236, 247, 255, 0.04) 1px, transparent 1px),
@@ -3089,19 +3379,19 @@ body.touch-enhanced .cursor-trail {
 @keyframes introSeedIgnite {
   0% {
     opacity: 0;
-    transform: scale(0.18);
+    transform: translate(-50%, -50%) scale(0.18);
     filter: blur(10px);
   }
 
   45% {
     opacity: 1;
-    transform: scale(1.8);
+    transform: translate(-50%, -50%) scale(1.8);
     filter: blur(2px);
   }
 
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
     filter: blur(0);
   }
 }
@@ -3370,39 +3660,30 @@ body.touch-enhanced .cursor-trail {
     padding-top: 18px;
   }
 
-  .page-intro-panels {
-    gap: 4px;
-    inset: 6px;
+  .page-intro-shutters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .page-intro-core {
-    width: min(100vw - 24px, 460px);
-    padding: 22px 18px 20px;
-    border-radius: 26px;
-    gap: 14px;
+    width: min(100vw - 24px, 420px);
+    padding: 0 14px;
+    gap: 12px;
   }
 
-  .page-intro-neural {
-    width: 148px;
-    height: 148px;
-  }
-
-  .page-intro-logo-lockup {
-    flex-direction: column;
-    gap: 14px;
-    margin-top: -6px;
-    text-align: center;
+  .page-intro-bloom {
+    width: 158px;
+    height: 158px;
   }
 
   .page-intro-logo-shell {
-    width: 78px;
-    height: 78px;
-    border-radius: 22px;
+    width: 92px;
+    height: 92px;
+    border-radius: 24px;
   }
 
   .page-intro-logo-mark {
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
   }
 
   .page-intro-title {

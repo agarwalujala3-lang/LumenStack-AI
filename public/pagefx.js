@@ -49,63 +49,35 @@ function escapeHtml(value) {
 
 function getIntroCopy() {
   const dataset = document.body?.dataset || {};
-  const metaItems = String(dataset.introTags || "")
-    .split("|")
-    .map((item) => item.trim())
-    .filter(Boolean);
 
   return {
     badge: dataset.introBadge || "LumenStack AI",
     title: dataset.introTitle || "Opening the architecture window",
     text:
-      dataset.introCopy || "Calibrating repo signals, review layers, and interactive system views.",
-    metaItems: metaItems.length ? metaItems : ["Cross-platform intake", "Compare mode", "Codebase chat"]
+      dataset.introCopy || "Calibrating repo signals, review layers, and interactive system views."
   };
 }
 
-function getIntroGrid() {
-  const columns = Math.max(10, Math.min(16, Math.ceil(window.innerWidth / 128)));
-  const rows = Math.max(6, Math.min(9, Math.ceil(window.innerHeight / 146)));
-  return { columns, rows };
-}
-
-function buildIntroPanels(panels, columns, rows) {
-  const centerColumn = (columns - 1) / 2;
-
-  for (let row = 0; row < rows; row += 1) {
-    for (let col = 0; col < columns; col += 1) {
-      const pane = document.createElement("span");
-      const distanceFromCenter = Math.abs(col - centerColumn);
-      const horizontalDirection = col < centerColumn ? -1 : 1;
-      const shift = Math.round((22 + distanceFromCenter * 5) * horizontalDirection);
-      const delay = Math.round(distanceFromCenter * 38 + row * 12);
-
-      pane.className = "page-intro-pane";
-      pane.style.setProperty("--intro-delay", `${delay}ms`);
-      pane.style.setProperty("--intro-shift", `${shift}px`);
-      pane.style.setProperty(
-        "--intro-lift",
-        `${(row % 2 === 0 ? -1 : 1) * Math.round(6 + distanceFromCenter * 1.1)}px`
-      );
-      pane.style.setProperty("--intro-tilt", `${horizontalDirection * (2 + (row % 3))}deg`);
-      panels.appendChild(pane);
-    }
+function createIntroShutters(container) {
+  for (let index = 0; index < 6; index += 1) {
+    const shutter = document.createElement("span");
+    shutter.className = "page-intro-shutter";
+    shutter.style.setProperty("--shutter-delay", `${index * 70}ms`);
+    shutter.style.setProperty("--shutter-shift", `${index < 3 ? -100 : 100}%`);
+    container.appendChild(shutter);
   }
 }
 
 function createIntroElement() {
-  const { badge, title, text, metaItems } = getIntroCopy();
-  const { columns, rows } = getIntroGrid();
+  const { badge, title, text } = getIntroCopy();
   const intro = document.createElement("div");
   intro.className = "page-intro";
   intro.setAttribute("aria-hidden", "true");
-  intro.style.setProperty("--intro-columns", String(columns));
-  intro.style.setProperty("--intro-rows", String(rows));
 
-  const panels = document.createElement("div");
-  panels.className = "page-intro-panels";
-  panels.setAttribute("aria-hidden", "true");
-  buildIntroPanels(panels, columns, rows);
+  const shutters = document.createElement("div");
+  shutters.className = "page-intro-shutters";
+  shutters.setAttribute("aria-hidden", "true");
+  createIntroShutters(shutters);
 
   const scan = document.createElement("div");
   scan.className = "page-intro-scan";
@@ -114,43 +86,30 @@ function createIntroElement() {
   const core = document.createElement("div");
   core.className = "page-intro-core";
   core.innerHTML = `
-    <div class="page-intro-neural" aria-hidden="true">
-      <span class="page-intro-pulse"></span>
+    <div class="page-intro-bloom" aria-hidden="true">
       <span class="page-intro-seed"></span>
-      <div class="page-intro-network">
-        <span class="page-intro-orbit orbit-a"></span>
-        <span class="page-intro-orbit orbit-b"></span>
-        <span class="page-intro-orbit orbit-c"></span>
-        <span class="page-intro-orbit orbit-d"></span>
-        <span class="page-intro-orbit orbit-e"></span>
-        <span class="page-intro-orbit orbit-f"></span>
-        <span class="page-intro-node node-a"></span>
-        <span class="page-intro-node node-b"></span>
-        <span class="page-intro-node node-c"></span>
-        <span class="page-intro-node node-d"></span>
-        <span class="page-intro-node node-e"></span>
-        <span class="page-intro-node node-f"></span>
+      <span class="page-intro-orbit orbit-a"></span>
+      <span class="page-intro-orbit orbit-b"></span>
+      <span class="page-intro-orbit orbit-c"></span>
+      <span class="page-intro-node node-a"></span>
+      <span class="page-intro-node node-b"></span>
+      <span class="page-intro-node node-c"></span>
+      <span class="page-intro-node node-d"></span>
+      <div class="page-intro-logo-shell">
+        <img class="page-intro-logo-mark" src="/brand-mark.svg" alt="" />
       </div>
     </div>
 
-    <div class="page-intro-logo-lockup">
-      <div class="page-intro-logo-shell" aria-hidden="true">
-        <img class="page-intro-logo-mark" src="/brand-mark.svg" alt="" />
-      </div>
-      <div class="page-intro-logo-copy">
-        <span class="page-intro-badge">${escapeHtml(badge)}</span>
-        <strong class="page-intro-title">LumenStack AI</strong>
-        <p class="page-intro-text">${escapeHtml(title)}</p>
-      </div>
+    <div class="page-intro-logo-copy">
+      <span class="page-intro-badge">${escapeHtml(badge)}</span>
+      <strong class="page-intro-title">LumenStack AI</strong>
+      <p class="page-intro-text">${escapeHtml(title)}</p>
     </div>
 
     <p class="page-intro-subcopy">${escapeHtml(text)}</p>
-    <div class="page-intro-meta" aria-hidden="true">
-      ${metaItems.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-    </div>
   `;
 
-  intro.appendChild(panels);
+  intro.appendChild(shutters);
   intro.appendChild(scan);
   intro.appendChild(core);
   return intro;
@@ -185,7 +144,7 @@ function runPageIntro() {
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 1380);
+    }, 1100);
   };
 
   document.body.classList.add("intro-active");
@@ -195,8 +154,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(settleIntro, 1080);
-  window.setTimeout(finishIntro, 1980);
+  window.setTimeout(settleIntro, 1500);
+  window.setTimeout(finishIntro, 2900);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }
