@@ -1965,8 +1965,8 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
   position: relative;
   display: grid;
   place-items: center;
-  width: 196px;
-  height: 196px;
+  width: 208px;
+  height: 208px;
   transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1), opacity 520ms ease, filter 620ms ease;
 }
 
@@ -2078,21 +2078,24 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
 .page-intro-logo-shell {
   position: absolute;
   inset: 50%;
-  width: 116px;
-  height: 116px;
-  border-radius: 30px;
+  width: 124px;
+  height: 124px;
+  border-radius: 999px;
   background:
-    radial-gradient(circle at 50% 28%, rgba(88, 214, 255, 0.16), transparent 44%),
-    linear-gradient(180deg, rgba(10, 25, 40, 0.96), rgba(6, 16, 28, 0.9));
-  border: 1px solid rgba(88, 214, 255, 0.14);
+    radial-gradient(circle at 50% 34%, rgba(219, 252, 255, 0.14), rgba(88, 214, 255, 0.08) 30%, rgba(88, 214, 255, 0) 72%),
+    linear-gradient(180deg, rgba(9, 26, 39, 0.82), rgba(4, 13, 23, 0.54));
+  border: 1px solid rgba(88, 214, 255, 0.16);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 22px 44px rgba(0, 0, 0, 0.28);
-  transform: translate(-50%, -50%) scale(0.54);
+    0 0 0 1px rgba(166, 244, 255, 0.04),
+    0 22px 44px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
+  transform: translate(-50%, -50%) scale(0.5);
   opacity: 0;
   transition:
-    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 900ms,
-    opacity 560ms ease 900ms;
+    transform 820ms cubic-bezier(0.16, 1, 0.3, 1) 820ms,
+    opacity 600ms ease 820ms,
+    box-shadow 520ms ease 980ms;
 }
 
 .page-intro.is-entered .page-intro-logo-shell {
@@ -2101,24 +2104,34 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
 }
 
 .page-intro-logo-mark {
-  width: 88px;
-  height: 88px;
-  filter: drop-shadow(0 0 20px rgba(88, 214, 255, 0.24));
+  width: 92px;
+  height: 92px;
+  filter: drop-shadow(0 0 16px rgba(88, 214, 255, 0.22));
 }
 
 .page-intro-logo-copy {
   max-width: 100%;
   text-align: center;
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(20px);
   transition:
-    transform 720ms cubic-bezier(0.16, 1, 0.3, 1) 1160ms,
-    opacity 540ms ease 1160ms;
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 1100ms,
+    opacity 560ms ease 1100ms;
 }
 
 .page-intro.is-entered .page-intro-logo-copy {
   opacity: 1;
   transform: translateY(0);
+}
+
+.page-intro-logo-lockup {
+  display: block;
+  width: min(100%, 440px);
+  height: auto;
+  margin: 14px auto 0;
+  filter:
+    drop-shadow(0 0 22px rgba(88, 214, 255, 0.16))
+    drop-shadow(0 12px 28px rgba(5, 14, 25, 0.34));
 }
 
 .page-intro-badge {
@@ -2135,7 +2148,7 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
 }
 
 .page-intro-text {
-  margin-top: 12px;
+  margin-top: 16px;
   text-align: center;
 }
 
@@ -2157,13 +2170,21 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
 }
 
 .page-intro.is-settled .page-intro-bloom {
-  transform: translateY(-8px) scale(0.94);
+  transform: translateY(-6px) scale(0.97);
 }
 
 .page-intro.is-settled .page-intro-orbit,
 .page-intro.is-settled .page-intro-node {
-  opacity: 0.16;
+  opacity: 0.1;
   transition: opacity 420ms ease;
+}
+
+.page-intro.is-settled .page-intro-logo-shell {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(166, 244, 255, 0.05),
+    0 0 42px rgba(88, 214, 255, 0.16),
+    0 18px 38px rgba(0, 0, 0, 0.22);
 }
 
 .page-intro.is-leaving .page-intro-core {
@@ -2186,6 +2207,9 @@ body[data-theme="dark"] .page-intro-badge {
 
 body[data-theme="dark"] .page-intro-logo-shell {
   border-color: rgba(88, 214, 255, 0.18);
+  background:
+    radial-gradient(circle at 50% 34%, rgba(219, 252, 255, 0.14), rgba(88, 214, 255, 0.08) 30%, rgba(88, 214, 255, 0) 72%),
+    linear-gradient(180deg, rgba(8, 23, 38, 0.88), rgba(3, 10, 19, 0.6));
 }
 
 body[data-theme="dark"] .ambient-grid {
@@ -3710,7 +3734,17 @@ body.touch-enhanced .cursor-trail {
   .page-intro-logo-shell {
     width: 92px;
     height: 92px;
-    border-radius: 24px;
+    border-radius: 999px;
+  }
+
+  .page-intro-logo-mark {
+    width: 70px;
+    height: 70px;
+  }
+
+  .page-intro-logo-lockup {
+    width: min(100%, 320px);
+    margin-top: 12px;
   }
 
   .page-intro-logo-mark {

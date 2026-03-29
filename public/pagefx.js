@@ -102,7 +102,7 @@ function createIntroElement() {
 
     <div class="page-intro-logo-copy">
       <span class="page-intro-badge">${escapeHtml(badge)}</span>
-      <strong class="page-intro-title">LumenStack AI</strong>
+      <img class="page-intro-logo-lockup" src="/brand-lockup.svg" alt="" />
       <p class="page-intro-text">${escapeHtml(title)}</p>
     </div>
 
