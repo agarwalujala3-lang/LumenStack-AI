@@ -1,8 +1,30 @@
+<p align="center">
+  <img src="public/brand-lockup.svg" alt="LumenStack AI" width="440" />
+</p>
+
+<p align="center">
+  Cinematic repo intelligence for architecture review, compare-mode analysis, platform signals, and codebase chat.
+</p>
+
+<p align="center">
+  <a href="https://lumenstack-ai.onrender.com/">Live App</a>
+  ·
+  <a href="https://lumenstack-ai.onrender.com/workspaces.html">Workspaces</a>
+  ·
+  <a href="https://lumenstack-ai.onrender.com/integrations.html">Integrations</a>
+  ·
+  <a href="public/lumenstack-linkedin-thumbnail.svg">Brand Preview</a>
+</p>
+
+<p align="center">
+  <img src="public/lumenstack-linkedin-thumbnail.svg" alt="LumenStack AI preview" width="920" />
+</p>
+
 # LumenStack AI
 
 LumenStack AI is a full-stack Node.js and Express application that turns a repository into an interactive architecture intelligence workspace.
 
-It supports:
+## What It Does
 
 - repository analysis from GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic HTTPS Git URLs, or ZIP upload
 - compare mode for baseline-vs-current structural review
@@ -14,6 +36,13 @@ It supports:
 - markdown and JSON exports
 - workspace presets and extra static pages for provider-focused flows
 - webhook-ready GitHub ingestion with generic stored workspace report routes
+
+## Experience
+
+- Analyzer surface for repo intake, structure maps, findings, and AI summaries
+- Dedicated Workspaces page for preset review lanes such as GitHub review, GitLab delivery, and offline ZIP mode
+- Integrations page that reflects live provider coverage from the backend
+- Brand-led startup intro, lighter internal page transitions, and dark/light themes
 
 ## Stack
 
