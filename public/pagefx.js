@@ -97,10 +97,15 @@ function createIntroElement() {
       <span class="page-intro-node node-d"></span>
     </div>
 
-    <div class="page-intro-logo-copy">
-      <span class="page-intro-badge">${escapeHtml(badge)}</span>
-      <img class="page-intro-logo-lockup" src="/brand-lockup.svg" alt="" />
-      <p class="page-intro-text">${escapeHtml(title)}</p>
+    <div class="page-intro-logo-lockup">
+      <div class="page-intro-logo-shell" aria-hidden="true">
+        <img class="page-intro-logo-mark" src="/brand-mark.svg" alt="" />
+      </div>
+      <div class="page-intro-logo-copy">
+        <span class="page-intro-badge">${escapeHtml(badge)}</span>
+        <strong class="page-intro-title">LumenStack AI</strong>
+        <p class="page-intro-text">${escapeHtml(title)}</p>
+      </div>
     </div>
 
     <p class="page-intro-subcopy">${escapeHtml(text)}</p>

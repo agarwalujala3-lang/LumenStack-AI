@@ -2053,29 +2053,31 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
   display: none;
 }
 
-.page-intro-logo-copy {
-  max-width: 100%;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 1100ms,
-    opacity 560ms ease 1100ms;
-}
-
-.page-intro.is-entered .page-intro-logo-copy {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .page-intro-logo-lockup {
-  display: block;
-  width: min(100%, 440px);
-  height: auto;
-  margin: 14px auto 0;
-  filter:
-    drop-shadow(0 0 12px rgba(88, 214, 255, 0.14))
-    drop-shadow(0 10px 24px rgba(5, 14, 25, 0.28));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+  max-width: 100%;
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  filter: blur(10px);
+  transition:
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 1040ms,
+    opacity 560ms ease 1040ms,
+    filter 760ms ease 1040ms;
+}
+
+.page-intro.is-entered .page-intro-logo-lockup {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.page-intro-logo-copy {
+  max-width: min(420px, 100%);
+  text-align: left;
 }
 
 .page-intro-badge {
@@ -2085,8 +2087,8 @@ body[data-theme="dark"] .page-intro-logo-shell::after {
 }
 
 .page-intro-text {
-  margin-top: 16px;
-  text-align: center;
+  margin-top: 10px;
+  text-align: left;
 }
 
 .page-intro-subcopy {
@@ -3660,28 +3662,29 @@ body.touch-enhanced .cursor-trail {
   }
 
   .page-intro-logo-lockup {
+    gap: 12px;
     width: min(100%, 320px);
     margin-top: 12px;
   }
 
   .page-intro-logo-shell {
-    width: 92px;
-    height: 92px;
-    border-radius: 999px;
+    width: 76px;
+    height: 76px;
+    border-radius: 22px;
   }
 
   .page-intro-logo-mark {
-    width: 70px;
-    height: 70px;
-  }
-
-  .page-intro-logo-mark {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
   }
 
   .page-intro-title {
     font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .page-intro-logo-copy,
+  .page-intro-text {
+    text-align: left;
   }
 
   .page-intro-subcopy {
