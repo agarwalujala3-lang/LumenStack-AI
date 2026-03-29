@@ -1157,8 +1157,10 @@ function renderComparison(comparison) {
 
   clearChildren(comparisonStatsElement);
   const stats = [
+    `Changed ${comparison.stats.changedCodeFiles || 0}`,
+    `Total ${comparison.stats.totalFilesDelta >= 0 ? "+" : ""}${comparison.stats.totalFilesDelta || 0}`,
     `Quality ${comparison.stats.scoreDelta >= 0 ? "+" : ""}${comparison.stats.scoreDelta}`,
-    `Files ${comparison.stats.codeFilesDelta >= 0 ? "+" : ""}${comparison.stats.codeFilesDelta}`,
+    `Code ${comparison.stats.codeFilesDelta >= 0 ? "+" : ""}${comparison.stats.codeFilesDelta}`,
     `Modules ${comparison.stats.moduleDelta >= 0 ? "+" : ""}${comparison.stats.moduleDelta}`,
     `Deps ${comparison.stats.dependencyDelta >= 0 ? "+" : ""}${comparison.stats.dependencyDelta}`
   ];
