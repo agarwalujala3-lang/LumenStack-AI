@@ -95,9 +95,6 @@ function createIntroElement() {
       <span class="page-intro-node node-b"></span>
       <span class="page-intro-node node-c"></span>
       <span class="page-intro-node node-d"></span>
-      <div class="page-intro-logo-shell">
-        <img class="page-intro-logo-mark" src="/brand-mark.svg" alt="" />
-      </div>
     </div>
 
     <div class="page-intro-logo-copy">
