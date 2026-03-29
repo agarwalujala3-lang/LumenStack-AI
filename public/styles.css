@@ -1220,6 +1220,12 @@ body[data-theme="dark"] .signal-board {
     var(--panel-dark);
 }
 
+body[data-theme="dark"] .signal-board .eyebrow,
+body[data-theme="dark"] .signal-board .group-label,
+body[data-theme="dark"] .signal-board p {
+  color: rgba(237, 245, 242, 0.78);
+}
+
 body[data-theme="dark"] .brand-mark {
   background: linear-gradient(145deg, #0c6661, #2baea1);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 14px 32px rgba(0, 0, 0, 0.22);
@@ -1321,6 +1327,20 @@ body[data-theme="dark"] .upload-surface {
     linear-gradient(180deg, rgba(11, 27, 31, 0.88), rgba(8, 19, 23, 0.94));
 }
 
+body[data-theme="dark"] .signal-card {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+body[data-theme="dark"] .signal-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+body[data-theme="dark"] .signal-card span {
+  color: rgba(237, 245, 242, 0.48);
+}
+
 body[data-theme="dark"] .prompt-cycler {
   background: linear-gradient(145deg, rgba(7, 19, 23, 0.98), rgba(10, 31, 35, 0.92));
 }
@@ -1388,7 +1408,7 @@ body[data-theme="dark"] .signal-card.touch-active {
 .signal-board .eyebrow,
 .signal-board .group-label,
 .signal-board p {
-  color: rgba(237, 245, 242, 0.78);
+  color: var(--muted);
 }
 
 .signal-header h2 {
@@ -1406,22 +1426,24 @@ body[data-theme="dark"] .signal-card.touch-active {
 .signal-card {
   position: relative;
   padding: 18px 18px 18px 54px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(15, 102, 99, 0.12);
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.06);
-  transition: transform 220ms ease, background 220ms ease;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(239, 248, 244, 0.8));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
 }
 
 .signal-card:hover {
   transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(15, 102, 99, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(233, 247, 242, 0.92));
 }
 
 .signal-card span {
   position: absolute;
   top: 18px;
   left: 18px;
-  color: rgba(237, 245, 242, 0.48);
+  color: rgba(15, 102, 99, 0.44);
 }
 
 .signal-card strong {
