@@ -216,25 +216,25 @@ function configureMermaid(theme) {
     theme: "base",
     themeVariables: isDark
       ? {
-          primaryColor: "#16363c",
-          primaryTextColor: "#ecf8f5",
-          primaryBorderColor: "#53d5c7",
-          lineColor: "#53d5c7",
-          secondaryColor: "#102328",
-          tertiaryColor: "#0b181c",
-          background: "#0b181c",
-          mainBkg: "#11262b",
+          primaryColor: "#0f2537",
+          primaryTextColor: "#ecf7ff",
+          primaryBorderColor: "#58d6ff",
+          lineColor: "#58d6ff",
+          secondaryColor: "#0a1721",
+          tertiaryColor: "#06111a",
+          background: "#06111a",
+          mainBkg: "#0c1f2d",
           fontFamily: "Bahnschrift, Aptos Display, Arial Narrow, sans-serif"
         }
       : {
-          primaryColor: "#d9efec",
-          primaryTextColor: "#132326",
-          primaryBorderColor: "#0f6663",
-          lineColor: "#0f6663",
-          secondaryColor: "#fffdf8",
-          tertiaryColor: "#f4efe6",
-          background: "#f4efe6",
-          mainBkg: "#fffdf8",
+          primaryColor: "#d9eefc",
+          primaryTextColor: "#0d1b25",
+          primaryBorderColor: "#1677b7",
+          lineColor: "#1677b7",
+          secondaryColor: "#fcfeff",
+          tertiaryColor: "#e8f0f8",
+          background: "#e8f0f8",
+          mainBkg: "#fcfeff",
           fontFamily: "Bahnschrift, Aptos Display, Arial Narrow, sans-serif"
         }
   });
