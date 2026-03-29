@@ -46,13 +46,16 @@ function buildIntroPanels(panels, columns, rows) {
       const pane = document.createElement("span");
       const distanceFromCenter = Math.abs(col - centerColumn);
       const horizontalDirection = col < centerColumn ? -1 : 1;
-      const shift = Math.round((18 + distanceFromCenter * 5) * horizontalDirection);
-      const delay = Math.round(distanceFromCenter * 34 + row * 10);
+      const shift = Math.round((24 + distanceFromCenter * 6) * horizontalDirection);
+      const delay = Math.round(distanceFromCenter * 44 + row * 16);
 
       pane.className = "page-intro-pane";
       pane.style.setProperty("--intro-delay", `${delay}ms`);
       pane.style.setProperty("--intro-shift", `${shift}px`);
-      pane.style.setProperty("--intro-lift", `${(row % 2 === 0 ? -1 : 1) * (6 + distanceFromCenter)}px`);
+      pane.style.setProperty(
+        "--intro-lift",
+        `${(row % 2 === 0 ? -1 : 1) * Math.round(8 + distanceFromCenter * 1.4)}px`
+      );
       pane.style.setProperty("--intro-tilt", `${horizontalDirection * (2 + (row % 3))}deg`);
       panels.appendChild(pane);
     }
@@ -129,6 +132,16 @@ function runPageIntro() {
 
   const intro = createIntroElement();
   let finished = false;
+  let settled = false;
+
+  const settleIntro = () => {
+    if (finished || settled) {
+      return;
+    }
+
+    settled = true;
+    intro.classList.add("is-settled");
+  };
 
   const finishIntro = () => {
     if (finished) {
@@ -136,11 +149,12 @@ function runPageIntro() {
     }
 
     finished = true;
+    settleIntro();
     intro.classList.add("is-leaving");
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 1220);
+    }, 1620);
   };
 
   document.body.classList.add("intro-active");
@@ -150,7 +164,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(finishIntro, 1320);
+  window.setTimeout(settleIntro, 1260);
+  window.setTimeout(finishIntro, 2420);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }
