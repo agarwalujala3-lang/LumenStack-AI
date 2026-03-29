@@ -5,10 +5,14 @@ const QUESTION_STOPWORDS = new Set([
   "about",
   "an",
   "and",
+  "app",
+  "application",
   "are",
+  "behind",
   "can",
   "code",
   "does",
+  "easy",
   "explain",
   "for",
   "from",
@@ -18,11 +22,16 @@ const QUESTION_STOPWORDS = new Set([
   "in",
   "is",
   "it",
+  "lang",
+  "language",
+  "logic",
   "me",
   "of",
   "or",
   "please",
   "show",
+  "simple",
+  "simpler",
   "tell",
   "the",
   "this",
@@ -233,6 +242,161 @@ function topHotspotPaths(analysis, limit = 3) {
   return (analysis.quality?.hotspots || []).slice(0, limit).map((hotspot) => hotspot.path);
 }
 
+function topPlatformSignals(analysis, limit = 4) {
+  return (analysis.platformSignals || [])
+    .slice(0, limit)
+    .map((signal) => `${signal.name} (${signal.category})`);
+}
+
+function topRoleDescriptions(analysis, limit = 4) {
+  const vagueRoles = new Set([
+    "Contributes to the application structure."
+  ]);
+
+  return [...new Set(
+    (analysis.fileHighlights || [])
+      .map((file) => String(file.role || "").trim())
+      .filter((role) => role && !vagueRoles.has(role))
+  )].slice(0, limit);
+}
+
+function simplifyRoleTopic(role) {
+  const normalized = String(role || "").toLowerCase();
+
+  if (normalized.includes("request handling")) {
+    return "request handling";
+  }
+
+  if (normalized.includes("reusable business logic")) {
+    return "reusable business logic";
+  }
+
+  if (normalized.includes("application behavior")) {
+    return "testing";
+  }
+
+  if (normalized.includes("functional application logic")) {
+    return "general app logic";
+  }
+
+  if (normalized.includes("user interface")) {
+    return "UI rendering";
+  }
+
+  if (normalized.includes("configuration")) {
+    return "configuration";
+  }
+
+  return normalizeSentence(role);
+}
+
+function normalizeSentence(value) {
+  const text = String(value || "").trim().replace(/\.$/, "");
+
+  if (!text) {
+    return "";
+  }
+
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
+function withIndefiniteArticle(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
+  }
+
+  return /^[aeiou]/i.test(text) ? `an ${text}` : `a ${text}`;
+}
+
+function formatNaturalList(items, fallback = "") {
+  const values = (items || []).filter(Boolean);
+
+  if (!values.length) {
+    return fallback;
+  }
+
+  if (values.length === 1) {
+    return values[0];
+  }
+
+  if (values.length === 2) {
+    return `${values[0]} and ${values[1]}`;
+  }
+
+  return `${values.slice(0, -1).join(", ")}, and ${values[values.length - 1]}`;
+}
+
+function isSimpleLanguageRequest(prompt) {
+  return /simple|simpler|easy|plain english|plain language|layman|non-technical|basic words|simple lang/.test(
+    prompt
+  );
+}
+
+function isBroadOverviewQuestion(prompt) {
+  return (
+    prompt.includes("how it works") ||
+    prompt.includes("how this works") ||
+    prompt.includes("how the app works") ||
+    prompt.includes("how this app works") ||
+    prompt.includes("logic behind") ||
+    prompt.includes("overall logic") ||
+    prompt.includes("what this app does") ||
+    prompt.includes("what the app does") ||
+    prompt.includes("explain the app") ||
+    prompt.includes("explain this app") ||
+    prompt.includes("explain the project") ||
+    prompt.includes("tell me about the app") ||
+    prompt.includes("tell me about this app") ||
+    prompt.includes("tell me about the project") ||
+    prompt.includes("how the project works") ||
+    prompt.includes("how this project works") ||
+    prompt.includes("give me an overview")
+  );
+}
+
+function buildSimpleOverviewAnswer(analysis, matches, options = {}) {
+  const { simple = false } = options;
+  const summary = analysis.summary || {};
+  const moduleNames = topModuleNames(analysis);
+  const dependencyNames = topDependencyNames(analysis, 4);
+  const roleDescriptions = [...new Set(topRoleDescriptions(analysis, 4).map(simplifyRoleTopic))];
+  const platformSignals = topPlatformSignals(analysis, 3);
+  const preferredEntrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
+  const entrypoints = preferredEntrypoints.length ? preferredEntrypoints.slice(0, 2) : (summary.entrypoints || []).slice(0, 2);
+  const citations = buildCitations(matches);
+  const frameworkLine = summary.frameworks?.length
+    ? formatNaturalList(summary.frameworks)
+    : summary.primaryLanguage || "software";
+
+  return {
+    answer: [
+      simple
+        ? `In simple terms, ${summary.sourceName || "this project"} looks like ${withIndefiniteArticle(frameworkLine)} app or service.`
+        : `${summary.sourceName || "This project"} looks like ${withIndefiniteArticle(frameworkLine)} app or service.`,
+      entrypoints.length
+        ? `It most likely starts around ${formatNaturalList(entrypoints)} and then hands work to the main modules.`
+        : "",
+      moduleNames.length
+        ? `The code is mainly split into parts like ${formatNaturalList(moduleNames)}, which helps keep different responsibilities separate.`
+        : "",
+      roleDescriptions.length
+        ? `Those parts mainly handle things like ${formatNaturalList(roleDescriptions)}.`
+        : "",
+      dependencyNames.length
+        ? `The main tools it relies on are ${formatNaturalList(dependencyNames)}.`
+        : "",
+      platformSignals.length
+        ? `It also includes workflow or deployment setup such as ${formatNaturalList(platformSignals)}.`
+        : ""
+    ]
+      .filter(Boolean)
+      .join(" "),
+    citations
+  };
+}
+
 function buildCitations(matches) {
   return matches.map((match) => ({
     path: match.path,
@@ -263,6 +427,8 @@ function buildHighLevelAnswer(analysis, question, matches) {
 function buildFallbackAnswer(analysis, question, matches) {
   const prompt = String(question || "").toLowerCase();
   const focus = extractQuestionFocus(question);
+  const simpleLanguage = isSimpleLanguageRequest(prompt);
+  const broadOverview = isBroadOverviewQuestion(prompt);
   const summary = analysis.summary || {};
   const quality = analysis.quality || {};
   const preferredEntrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
@@ -271,13 +437,26 @@ function buildFallbackAnswer(analysis, question, matches) {
   const dependencyNames = topDependencyNames(analysis);
   const hotspotPaths = topHotspotPaths(analysis);
   const findingSummary = topFindingSummary(analysis);
+  const platformSignals = topPlatformSignals(analysis);
   const evidenceMatches = pickEvidenceMatches(matches);
   const matchPaths = summarizeMatches(evidenceMatches);
   const matchModules = [...new Set(evidenceMatches.map((match) => match.module).filter(Boolean))];
   const evidenceDescriptions = describeEvidence(evidenceMatches);
   const citations = buildCitations(matches);
 
+  if (broadOverview || (simpleLanguage && !focus)) {
+    return buildSimpleOverviewAnswer(analysis, matches, {
+      simple: simpleLanguage
+    });
+  }
+
   if (!matches.length) {
+    if (simpleLanguage) {
+      return buildSimpleOverviewAnswer(analysis, matches, {
+        simple: true
+      });
+    }
+
     return buildHighLevelAnswer(analysis, question, matches);
   }
 
@@ -288,6 +467,15 @@ function buildFallbackAnswer(analysis, question, matches) {
     prompt.startsWith("explain") ||
     prompt.startsWith("describe")
   ) {
+    if (
+      !focus ||
+      ["app", "application", "project", "codebase", "logic", "flow", "overview"].includes(focus)
+    ) {
+      return buildSimpleOverviewAnswer(analysis, matches, {
+        simple: simpleLanguage
+      });
+    }
+
     const directLambdaMatches = evidenceMatches.filter(
       (match) => match.path.includes("lambda/") || match.module === "lambda" || match.path.toLowerCase().includes("lambda")
     );
@@ -351,6 +539,40 @@ function buildFallbackAnswer(analysis, question, matches) {
         `${summary.sourceName || "This codebase"} currently looks ${quality.summary ? quality.summary.toLowerCase() : "like it has a few maintainability risks"}.`,
         findingSummary.length ? `The strongest risk signals are ${formatList(findingSummary)}.` : "",
         hotspotPaths.length ? `The highest-review files are ${formatList(hotspotPaths)}.` : ""
+      ]
+        .filter(Boolean)
+        .join(" "),
+      citations
+    };
+  }
+
+  if (
+    prompt.includes("pipeline") ||
+    prompt.includes("workflow") ||
+    prompt.includes("ci") ||
+    prompt.includes("cd") ||
+    prompt.includes("deploy") ||
+    prompt.includes("github action") ||
+    prompt.includes("gitlab") ||
+    prompt.includes("bitbucket") ||
+    prompt.includes("azure") ||
+    prompt.includes("codeowner") ||
+    prompt.includes("dependabot") ||
+    prompt.includes("renovate")
+  ) {
+    return {
+      answer: [
+        platformSignals.length
+          ? `The repository shows these workflow or platform signals: ${formatList(platformSignals)}.`
+          : "I do not see strong workflow or platform tooling signals in the current repository snapshot.",
+        (analysis.platformSignals || []).length
+          ? `The clearest evidence is ${formatList(
+              analysis.platformSignals
+                .slice(0, 4)
+                .map((signal) => `${signal.name.toLowerCase()} via ${formatList(signal.evidence, "its detected files")}`)
+            )}.`
+          : "",
+        evidenceDescriptions.length ? `Related implementation files also include ${formatList(evidenceDescriptions)}.` : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -484,6 +706,7 @@ async function answerQuestion(analysis, question) {
       findings: analysis.quality.findings.slice(0, 5),
       hotspots: analysis.quality.hotspots.slice(0, 5)
     },
+    platformSignals: analysis.platformSignals.slice(0, 8),
     matches: matches.map((match) => ({
       path: match.path,
       module: match.module,
@@ -503,7 +726,8 @@ async function answerQuestion(analysis, question) {
               type: "input_text",
               text:
                 "Answer codebase questions using only the provided analysis context. " +
-                "Answer directly in plain language first. Use file paths only as supporting evidence, not as a substitute for the explanation. " +
+                "Answer directly in plain language first. If the user asks for simple language, explain in very simple English with a short high-level overview before details. " +
+                "Use file paths only as supporting evidence, not as a substitute for the explanation. " +
                 "If the answer is uncertain, say that briefly and then give the best grounded explanation from the provided analysis."
             }
           ]

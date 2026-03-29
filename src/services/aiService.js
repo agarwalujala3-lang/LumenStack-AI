@@ -13,6 +13,10 @@ function buildFallbackDocumentation(analysis) {
     .map((dependency) => dependency.name)
     .join(", ") || "No manifest dependencies detected";
   const entrypoints = analysis.summary.entrypoints.join(", ") || "No obvious entrypoint detected";
+  const platformSignals = analysis.platformSignals
+    .slice(0, 5)
+    .map((signal) => `${signal.name} (${signal.category})`)
+    .join(", ") || "No workflow or platform signals detected";
 
   return {
     explanation:
@@ -28,6 +32,9 @@ function buildFallbackDocumentation(analysis) {
       "",
       "## Key Dependencies",
       dependencies,
+      "",
+      "## Platform Signals",
+      platformSignals,
       "",
       "## Suggested Explanation Flow",
       "1. Start from the entrypoint files.",
@@ -72,7 +79,8 @@ async function generateInsights(analysis) {
     modules: analysis.modules.slice(0, 10),
     dependencies: analysis.dependencies.slice(0, 20),
     relationships: analysis.relationships.slice(0, 12),
-    fileHighlights: analysis.fileHighlights.slice(0, 8)
+    fileHighlights: analysis.fileHighlights.slice(0, 8),
+    platformSignals: analysis.platformSignals.slice(0, 8)
   };
 
   try {

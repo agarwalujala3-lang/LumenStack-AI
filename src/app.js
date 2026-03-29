@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const { prepareSource } = require("./services/sourceService");
+const { prepareSource, getSupportedSourcePlatforms } = require("./services/sourceService");
 const { analyzeCodebase } = require("./services/analyzerService");
 const { generateInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
@@ -12,8 +12,9 @@ const { answerQuestion } = require("./services/chatService");
 const {
   createAnalysisSession,
   getAnalysisSession,
-  saveWebhookReport,
-  getWebhookReport
+  getWebhookReport,
+  saveWorkspaceReport,
+  getWorkspaceReport
 } = require("./services/sessionStore");
 
 const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
@@ -39,12 +40,25 @@ function serializeAnalysis(analysis, insights) {
     relationships: analysis.relationships,
     fileHighlights: analysis.fileHighlights,
     quality: analysis.quality,
+    platformSignals: analysis.platformSignals,
     diagrams: analysis.diagrams,
     mermaidDiagram: analysis.mermaidDiagram,
     reportMarkdown: analysis.reportMarkdown,
     explanation: insights.explanation,
     documentation: insights.documentation,
     aiStatus: insights.aiStatus
+  };
+}
+
+function buildSourceMetadata(preparedSource) {
+  return {
+    name: preparedSource.sourceName,
+    type: preparedSource.sourceType,
+    platform: preparedSource.sourcePlatform || "Repository Workspace",
+    platformId: preparedSource.sourcePlatformId || "generic",
+    workspaceLabel: preparedSource.sourceWorkspaceLabel || preparedSource.sourceName,
+    workspaceKey: preparedSource.sourceWorkspaceKey || "",
+    repoUrl: preparedSource.sourceRepoUrl || ""
   };
 }
 
@@ -83,7 +97,8 @@ function verifyGitHubSignature(rawBody, signatureHeader, secret) {
 async function runAnalysisForSource(preparedSource) {
   const analysis = await analyzeCodebase(preparedSource.rootPath, {
     sourceName: preparedSource.sourceName,
-    sourceType: preparedSource.sourceType
+    sourceType: preparedSource.sourceType,
+    sourcePlatform: preparedSource.sourcePlatform
   });
   const insights = await generateInsights(analysis);
 
@@ -146,9 +161,11 @@ function createApp() {
       });
 
       const { analysis, insights } = await runAnalysisForSource(preparedSource);
-      saveWebhookReport(repository.full_name, {
+      saveWorkspaceReport("github", repository.full_name, {
         repository: repository.full_name,
         ref,
+        provider: "github",
+        source: buildSourceMetadata(preparedSource),
         analysis: serializeAnalysis(analysis, insights)
       });
     } finally {
@@ -176,12 +193,32 @@ function createApp() {
     res.json({ status: "ok" });
   });
 
+  app.get("/api/platforms", (_req, res) => {
+    res.json({
+      providers: getSupportedSourcePlatforms()
+    });
+  });
+
   app.get("/api/github/reports/:owner/:repo", (req, res) => {
     const report = getWebhookReport(`${req.params.owner}/${req.params.repo}`);
 
     if (!report) {
       return res.status(404).json({
         error: "No stored webhook report found for that repository."
+      });
+    }
+
+    return res.json(report);
+  });
+
+  app.get("/api/workspaces/:provider/:owner/:repo", (req, res) => {
+    const provider = String(req.params.provider || "").trim().toLowerCase();
+    const repository = `${req.params.owner}/${req.params.repo}`;
+    const report = getWorkspaceReport(provider, repository);
+
+    if (!report) {
+      return res.status(404).json({
+        error: "No stored workspace report found for that repository."
       });
     }
 
@@ -208,7 +245,7 @@ function createApp() {
 
         if (!repoUrl && !uploadedFile) {
           return res.status(400).json({
-            error: "Provide either a GitHub repository URL or a ZIP file."
+            error: "Provide either a public repository URL or a ZIP file."
           });
         }
 
@@ -238,18 +275,12 @@ function createApp() {
           analysis,
           baselineAnalysis,
           comparison,
-          source: {
-            name: preparedSource.sourceName,
-            type: preparedSource.sourceType
-          }
+          source: buildSourceMetadata(preparedSource)
         });
 
         res.json({
           analysisId,
-          source: {
-            name: preparedSource.sourceName,
-            type: preparedSource.sourceType
-          },
+          source: buildSourceMetadata(preparedSource),
           analysis: serializeAnalysis(analysis, insights),
           comparison,
           exportUrls: {

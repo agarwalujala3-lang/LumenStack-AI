@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LumenStack AI Workspaces</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient-layer" aria-hidden="true">
+      <div class="ambient-orb orb-a"></div>
+      <div class="ambient-orb orb-b"></div>
+      <div class="ambient-grid"></div>
+      <div class="ambient-beam beam-a"></div>
+      <div class="ambient-beam beam-b"></div>
+    </div>
+
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark">LS</div>
+          <div>
+            <p class="eyebrow">LumenStack AI</p>
+            <strong>Workspace Presets</strong>
+          </div>
+        </div>
+
+        <nav class="topbar-nav" aria-label="Primary">
+          <a href="/">Analyzer</a>
+          <a href="/workspaces.html" aria-current="page">Workspaces</a>
+          <a href="/integrations.html">Integrations</a>
+        </nav>
+
+        <div class="topbar-pills">
+          <span class="top-pill">Guided Flows</span>
+          <span class="top-pill">Cross-platform</span>
+        </div>
+      </header>
+
+      <section class="hero-stage alt-hero-stage">
+        <article class="hero-panel spotlight-card">
+          <div class="hero-ribbon">Preset Routes</div>
+          <p class="eyebrow">Workspace Library</p>
+          <h1>Choose the lens before you analyze.</h1>
+          <p class="hero-text">
+            These workspace presets tune the analyzer for GitHub reviews, GitLab delivery checks,
+            Bitbucket audits, Azure migration prep, and offline ZIP exploration.
+          </p>
+          <div class="hero-actions">
+            <a class="ghost-button" href="/">Open Analyzer</a>
+            <a class="secondary-button" href="/integrations.html">See Integrations</a>
+          </div>
+        </article>
+
+        <aside class="signal-board">
+          <div class="signal-header">
+            <p class="eyebrow">How to use it</p>
+            <h2>Simple routing, stronger demos</h2>
+          </div>
+          <div class="signal-stack">
+            <article class="signal-card">
+              <span>01</span>
+              <strong>Choose a workspace</strong>
+              <p>Pick the platform or delivery scenario that matches your demo or review goal.</p>
+            </article>
+            <article class="signal-card">
+              <span>02</span>
+              <strong>Land on the analyzer</strong>
+              <p>The analyzer page adapts labels, hints, and compare-mode defaults to the preset.</p>
+            </article>
+            <article class="signal-card">
+              <span>03</span>
+              <strong>Run the repo scan</strong>
+              <p>Get structure, diagrams, platform radar, risk findings, chat, and exports in one place.</p>
+            </article>
+          </div>
+        </aside>
+      </section>
+
+      <main class="main-grid alt-main-grid">
+        <section class="panel spotlight-card">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Presets</p>
+              <h2>Workspace launchers</h2>
+            </div>
+            <span class="panel-badge">5 lanes</span>
+          </div>
+
+          <div class="workspace-preset-grid wide-grid">
+            <a class="workspace-preset-card spotlight-card" href="/?workspace=github-review#analyze-panel">
+              <span>GitHub Review</span>
+              <strong>Architecture review for PR conversations</strong>
+              <p>Best when you want compare mode, review findings, and GitHub-friendly webhook reporting.</p>
+            </a>
+
+            <a class="workspace-preset-card spotlight-card" href="/?workspace=gitlab-delivery#analyze-panel">
+              <span>GitLab Delivery</span>
+              <strong>Inspect code and delivery pipelines together</strong>
+              <p>Good for teams that care about GitLab CI/CD presence alongside application structure.</p>
+            </a>
+
+            <a class="workspace-preset-card spotlight-card" href="/?workspace=bitbucket-audit#analyze-panel">
+              <span>Bitbucket Audit</span>
+              <strong>Check ownership, risk, and dependencies</strong>
+              <p>Useful for broader repo health reviews where delivery metadata matters as much as modules.</p>
+            </a>
+
+            <a class="workspace-preset-card spotlight-card" href="/?workspace=azure-migration#analyze-panel">
+              <span>Azure Migration</span>
+              <strong>Prepare a migration-minded architecture brief</strong>
+              <p>Use this when an Azure DevOps repo needs structure clarity before moving platforms.</p>
+            </a>
+
+            <a class="workspace-preset-card spotlight-card" href="/?workspace=offline-zip#analyze-panel">
+              <span>Offline ZIP</span>
+              <strong>Analyze private snapshots without a remote host</strong>
+              <p>Great for demos, internal drops, or air-gapped reviews where cloning is not an option.</p>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

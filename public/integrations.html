@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LumenStack AI Integrations</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient-layer" aria-hidden="true">
+      <div class="ambient-orb orb-a"></div>
+      <div class="ambient-orb orb-b"></div>
+      <div class="ambient-grid"></div>
+      <div class="ambient-beam beam-a"></div>
+      <div class="ambient-beam beam-b"></div>
+    </div>
+
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark">LS</div>
+          <div>
+            <p class="eyebrow">LumenStack AI</p>
+            <strong>Integrations and Platform Coverage</strong>
+          </div>
+        </div>
+
+        <nav class="topbar-nav" aria-label="Primary">
+          <a href="/">Analyzer</a>
+          <a href="/workspaces.html">Workspaces</a>
+          <a href="/integrations.html" aria-current="page">Integrations</a>
+        </nav>
+
+        <div class="topbar-pills">
+          <span class="top-pill">Provider Radar</span>
+          <span class="top-pill">Webhook-aware</span>
+        </div>
+      </header>
+
+      <section class="hero-stage alt-hero-stage">
+        <article class="hero-panel spotlight-card">
+          <div class="hero-ribbon">Coverage Map</div>
+          <p class="eyebrow">Supported Routes</p>
+          <h1>See what the backend can ingest right now.</h1>
+          <p class="hero-text">
+            This page reflects the server’s current provider catalog so the product can explain its
+            actual intake coverage instead of relying on static marketing copy.
+          </p>
+          <div class="hero-actions">
+            <a class="ghost-button" href="/">Open Analyzer</a>
+            <a class="secondary-button" href="/workspaces.html">Open Workspaces</a>
+          </div>
+        </article>
+
+        <aside class="signal-board">
+          <div class="signal-header">
+            <p class="eyebrow">Extra functionality</p>
+            <h2>Beyond GitHub-only messaging</h2>
+          </div>
+          <div class="signal-stack">
+            <article class="signal-card">
+              <span>01</span>
+              <strong>Provider catalog API</strong>
+              <p>The backend now exposes a supported-platform list for UI pages and future integrations.</p>
+            </article>
+            <article class="signal-card">
+              <span>02</span>
+              <strong>Generic source metadata</strong>
+              <p>Analysis results now carry platform, workspace label, remote URL, and workspace identity.</p>
+            </article>
+            <article class="signal-card">
+              <span>03</span>
+              <strong>Platform radar</strong>
+              <p>The analyzer surfaces CI/CD, governance, and deployment signals from the repository itself.</p>
+            </article>
+          </div>
+        </aside>
+      </section>
+
+      <main class="main-grid alt-main-grid">
+        <section class="panel spotlight-card">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Provider API</p>
+              <h2>Runtime-supported intake platforms</h2>
+            </div>
+            <span class="panel-badge">Live catalog</span>
+          </div>
+
+          <div id="integration-grid" class="integration-grid">
+            <p class="empty-state">Loading provider coverage...</p>
+          </div>
+        </section>
+
+        <section class="panel spotlight-card">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">GitHub Extra</p>
+              <h2>Webhook endpoint still available</h2>
+            </div>
+          </div>
+          <div class="stack-list">
+            <article class="stack-item spotlight-card">
+              <span class="file-meta-label">Endpoint</span>
+              <strong>POST /api/github/webhook</strong>
+              <p>GitHub keeps first-class webhook ingestion, while the rest of the product now uses generic source metadata.</p>
+            </article>
+            <article class="stack-item spotlight-card">
+              <span class="file-meta-label">Reports</span>
+              <strong>GET /api/workspaces/:provider/:owner/:repo</strong>
+              <p>Stored workspace reports now have a generic lookup path so the app can grow beyond one provider.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/integrations.js"></script>
+  </body>
+</html>

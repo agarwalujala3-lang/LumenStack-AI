@@ -51,9 +51,15 @@
           </div>
         </div>
 
+        <nav class="topbar-nav" aria-label="Primary">
+          <a href="/">Analyzer</a>
+          <a href="/workspaces.html">Workspaces</a>
+          <a href="/integrations.html">Integrations</a>
+        </nav>
+
         <div class="topbar-actions">
           <div class="topbar-pills">
-            <span class="top-pill">Glow UI</span>
+            <span class="top-pill">Multi Platform</span>
             <span class="top-pill">Review Mode</span>
             <span class="top-pill">Code Chat</span>
             <span class="top-pill">Mermaid Maps</span>
@@ -71,16 +77,18 @@
       <section class="hero-stage">
         <article class="hero-panel motion-target spotlight-card" data-parallax="0.08">
           <div class="hero-ribbon">Neural architecture lens</div>
-          <p class="eyebrow">Repository Intelligence</p>
-          <h1>Map, question, compare, and review any codebase.</h1>
+          <p class="eyebrow">Repository Workspace</p>
+          <h1>Map, question, compare, and review repos from more than one platform.</h1>
           <p class="hero-text">
-            LumenStack AI turns raw repositories into a cinematic architecture story with
-            diagrams, quality signals, compare-mode review, exports, and codebase chat.
+            LumenStack AI turns GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic Git,
+            and ZIP archives into a cinematic architecture workspace with diagrams, platform
+            signals, compare-mode review, exports, and codebase chat.
           </p>
 
           <div class="hero-actions">
             <a class="ghost-button" href="#analyze-panel">Launch Analysis</a>
-            <span class="hero-caption">Designed to impress technical reviewers and non-technical stakeholders together.</span>
+            <a class="secondary-button" href="/workspaces.html">Browse Workspaces</a>
+            <span class="hero-caption">Built for technical reviewers, delivery teams, and platform-minded demos.</span>
           </div>
 
           <div class="hero-showcase">
@@ -97,16 +105,16 @@
               </div>
               <div class="scan-stats">
                 <div>
+                  <strong>6</strong>
+                  <span>Source modes</span>
+                </div>
+                <div>
                   <strong>4</strong>
                   <span>Diagram modes</span>
                 </div>
                 <div>
                   <strong>3</strong>
-                  <span>Review layers</span>
-                </div>
-                <div>
-                  <strong>1</strong>
-                  <span>Shareable brief</span>
+                  <span>Workspace pages</span>
                 </div>
               </div>
             </article>
@@ -122,8 +130,8 @@
               <div class="prompt-tags">
                 <span>Routing</span>
                 <span>Hotspots</span>
-                <span>Auth</span>
-                <span>Entrypoints</span>
+                <span>CI/CD</span>
+                <span>Ownership</span>
               </div>
             </article>
           </div>
@@ -158,7 +166,7 @@
             <article class="signal-card">
               <span>01</span>
               <strong>Ingest</strong>
-              <p>Clone repos, unpack uploads, and accept compare baselines or webhook events.</p>
+              <p>Clone public Git repos across platforms, unpack uploads, and accept compare baselines or webhook events.</p>
             </article>
             <article class="signal-card">
               <span>02</span>
@@ -173,7 +181,7 @@
             <article class="signal-card">
               <span>04</span>
               <strong>Interact</strong>
-              <p>Question the codebase, compare revisions, and export polished architecture briefs.</p>
+              <p>Question the codebase, compare revisions, inspect platform signals, and export polished architecture briefs.</p>
             </article>
           </div>
         </aside>
@@ -187,6 +195,10 @@
           <span>Dependency Lenses</span>
           <span>Codebase Chat</span>
           <span>Compare Reviews</span>
+          <span>GitHub Workspaces</span>
+          <span>GitLab Workspaces</span>
+          <span>Bitbucket Support</span>
+          <span>Platform Radar</span>
           <span>Risk Findings</span>
           <span>Hotspot Files</span>
           <span>Markdown Export</span>
@@ -197,10 +209,65 @@
           <span>Dependency Lenses</span>
           <span>Codebase Chat</span>
           <span>Compare Reviews</span>
+          <span>GitHub Workspaces</span>
+          <span>GitLab Workspaces</span>
+          <span>Bitbucket Support</span>
+          <span>Platform Radar</span>
           <span>Risk Findings</span>
           <span>Hotspot Files</span>
           <span>Markdown Export</span>
           <span>Webhook Ready</span>
+        </div>
+      </section>
+
+      <section class="workspace-strip motion-target" data-parallax="0.02">
+        <article class="panel workspace-focus spotlight-card">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Workspace Focus</p>
+              <h2 id="workspace-focus-title">Universal intake workspace</h2>
+            </div>
+            <span id="workspace-focus-badge" class="panel-badge">Cross-platform</span>
+          </div>
+          <p id="workspace-focus-copy" class="body-copy">
+            Bring a GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic HTTPS Git repo,
+            or a ZIP archive. Use workspace presets to bias the form toward review, delivery,
+            migration, or offline exploration.
+          </p>
+          <div id="workspace-focus-tags" class="chip-row">
+            <span class="chip">GitHub</span>
+            <span class="chip">GitLab</span>
+            <span class="chip">Bitbucket</span>
+            <span class="chip">Azure DevOps</span>
+            <span class="chip">ZIP Upload</span>
+          </div>
+          <div class="action-row tight">
+            <a class="secondary-button" href="/workspaces.html">Open Workspaces</a>
+            <a class="ghost-button" href="/integrations.html">Open Integrations</a>
+          </div>
+        </article>
+
+        <div class="workspace-preset-grid">
+          <a class="workspace-preset-card spotlight-card" href="/?workspace=github-review#analyze-panel">
+            <span>GitHub Review</span>
+            <strong>PR-ready architecture review</strong>
+            <p>Bias compare mode and review prompts toward baseline-versus-latest structural changes.</p>
+          </a>
+          <a class="workspace-preset-card spotlight-card" href="/?workspace=gitlab-delivery#analyze-panel">
+            <span>GitLab Delivery</span>
+            <strong>Delivery and pipeline visibility</strong>
+            <p>Focus intake on GitLab repos and highlight CI/CD, release, and deployment signals.</p>
+          </a>
+          <a class="workspace-preset-card spotlight-card" href="/?workspace=bitbucket-audit#analyze-panel">
+            <span>Bitbucket Audit</span>
+            <strong>Workspace-wide delivery audit</strong>
+            <p>Check dependency surface, ownership clues, and pipeline metadata for Bitbucket projects.</p>
+          </a>
+          <a class="workspace-preset-card spotlight-card" href="/?workspace=offline-zip#analyze-panel">
+            <span>Offline ZIP</span>
+            <strong>Air-gapped architecture mode</strong>
+            <p>Skip the remote clone flow and go straight into uploaded archive analysis.</p>
+          </a>
         </div>
       </section>
 
@@ -211,19 +278,23 @@
               <p class="eyebrow">Analyze</p>
               <h2>Primary repository</h2>
             </div>
-            <span class="panel-badge">Multi-mode</span>
+            <span class="panel-badge">Multi-platform</span>
           </div>
 
           <form id="analyze-form" class="analyze-form">
             <label class="field">
-              <span>Public GitHub repository URL</span>
+              <span id="repo-url-label">Public repository URL</span>
               <input
                 id="repo-url"
                 type="url"
                 name="repoUrl"
-                placeholder="https://github.com/owner/repo"
+                placeholder="https://github.com/owner/repo or https://gitlab.com/group/project"
               />
             </label>
+
+            <p id="provider-hint" class="field-hint">
+              Supports GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, and generic HTTPS Git remotes.
+            </p>
 
             <label class="field">
               <span>Optional branch or ref</span>
@@ -258,12 +329,12 @@
               </div>
 
               <label class="field">
-                <span>Baseline GitHub repository URL</span>
+                <span id="baseline-repo-url-label">Baseline repository URL</span>
                 <input
                   id="baseline-repo-url"
                   type="url"
                   name="baselineRepoUrl"
-                  placeholder="https://github.com/owner/repo"
+                  placeholder="https://github.com/owner/repo or https://gitlab.com/group/project"
                 />
               </label>
 
@@ -312,6 +383,11 @@
 
           <div class="preview-grid">
             <article class="preview-card">
+              <span>Route</span>
+              <strong>Provider workspaces</strong>
+              <p>Jump between GitHub review, GitLab delivery, Bitbucket audit, Azure migration, or ZIP-first flows.</p>
+            </article>
+            <article class="preview-card">
               <span>Ask</span>
               <strong>Codebase chat</strong>
               <p>Query modules, files, entrypoints, and relationships after an analysis run.</p>
@@ -322,14 +398,9 @@
               <p>Analyze a baseline and current version together to surface structural change risks.</p>
             </article>
             <article class="preview-card">
-              <span>Visualize</span>
-              <strong>Four diagram types</strong>
-              <p>Switch between architecture, sequence, class, and dependency views.</p>
-            </article>
-            <article class="preview-card">
-              <span>Export</span>
-              <strong>Shareable reports</strong>
-              <p>Download markdown or JSON output for documentation, demos, and repo publishing.</p>
+              <span>Radar</span>
+              <strong>Platform signals</strong>
+              <p>Surface CI/CD, ownership, containerization, dependency automation, and deployment clues.</p>
             </article>
           </div>
         </aside>
@@ -346,6 +417,28 @@
               <span id="analysis-time" class="result-time">Just now</span>
             </div>
           </article>
+
+          <section class="platform-grid reveal-grid">
+            <article class="panel spotlight-card">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Workspace</p>
+                  <h2>Source identity</h2>
+                </div>
+              </div>
+              <div id="source-profile" class="source-profile-grid"></div>
+            </article>
+
+            <article class="panel spotlight-card">
+              <div class="panel-header compact">
+                <div>
+                  <p class="eyebrow">Platform Radar</p>
+                  <h2>Delivery and collaboration signals</h2>
+                </div>
+              </div>
+              <div id="platform-signals" class="signal-insight-grid"></div>
+            </article>
+          </section>
 
           <section class="metric-grid six-grid reveal-grid">
             <article class="panel metric-card spotlight-card">

@@ -13,6 +13,7 @@ async function main() {
 
   console.log("Summary:", analysis.summary);
   console.log("Top modules:", analysis.modules.slice(0, 5));
+  console.log("Platform signals:", analysis.platformSignals.slice(0, 5));
   console.log("AI status:", insights.aiStatus);
 }
 

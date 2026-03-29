@@ -14,6 +14,15 @@ const form = document.getElementById("analyze-form");
 const clearButton = document.getElementById("clear-form");
 const compareToggle = document.getElementById("compare-toggle");
 const compareFields = document.getElementById("compare-fields");
+const repoUrlInput = document.getElementById("repo-url");
+const baselineRepoUrlInput = document.getElementById("baseline-repo-url");
+const repoUrlLabelElement = document.getElementById("repo-url-label");
+const baselineRepoUrlLabelElement = document.getElementById("baseline-repo-url-label");
+const providerHintElement = document.getElementById("provider-hint");
+const workspaceFocusTitleElement = document.getElementById("workspace-focus-title");
+const workspaceFocusBadgeElement = document.getElementById("workspace-focus-badge");
+const workspaceFocusCopyElement = document.getElementById("workspace-focus-copy");
+const workspaceFocusTagsElement = document.getElementById("workspace-focus-tags");
 const uploadInput = document.getElementById("upload-input");
 const baselineUploadInput = document.getElementById("baseline-upload-input");
 const uploadCaption = document.getElementById("upload-caption");
@@ -44,6 +53,8 @@ const modulesElement = document.getElementById("modules");
 const dependenciesElement = document.getElementById("dependencies");
 const relationshipsElement = document.getElementById("relationships");
 const filesElement = document.getElementById("files");
+const sourceProfileElement = document.getElementById("source-profile");
+const platformSignalsElement = document.getElementById("platform-signals");
 const diagramElement = document.getElementById("diagram");
 const aiBadgeElement = document.getElementById("ai-badge");
 const copyMermaidButton = document.getElementById("copy-mermaid");
@@ -88,6 +99,93 @@ const rotatingPrompts = [
   "Which module carries the most architectural pressure?",
   "What changed most between the baseline and the latest version?"
 ];
+const workspacePresets = {
+  universal: {
+    title: "Universal intake workspace",
+    badge: "Cross-platform",
+    copy:
+      "Bring a GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic HTTPS Git repo, or a ZIP archive. Use workspace presets to bias the form toward review, delivery, migration, or offline exploration.",
+    tags: ["GitHub", "GitLab", "Bitbucket", "Azure DevOps", "ZIP Upload"],
+    repoLabel: "Public repository URL",
+    baselineLabel: "Baseline repository URL",
+    repoPlaceholder: "https://github.com/owner/repo or https://gitlab.com/group/project",
+    baselinePlaceholder: "https://github.com/owner/repo or https://gitlab.com/group/project",
+    providerHint:
+      "Supports GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, and generic HTTPS Git remotes.",
+    compareByDefault: false,
+    status: "Waiting for a repository, ZIP upload, or compare baseline."
+  },
+  "github-review": {
+    title: "GitHub review workspace",
+    badge: "GitHub PR flow",
+    copy:
+      "Bias the app toward architecture review, baseline comparison, and webhook-friendly GitHub repository analysis.",
+    tags: ["GitHub", "Compare Mode", "Webhook Ready", "PR Review"],
+    repoLabel: "Public GitHub repository URL",
+    baselineLabel: "Baseline GitHub repository URL",
+    repoPlaceholder: "https://github.com/owner/repo",
+    baselinePlaceholder: "https://github.com/owner/repo",
+    providerHint: "Best for pull-request reviews, compare mode, and GitHub webhook-backed reporting.",
+    compareByDefault: true,
+    status: "GitHub review workspace loaded. Add a repository URL or ZIP and compare against a baseline if needed."
+  },
+  "gitlab-delivery": {
+    title: "GitLab delivery workspace",
+    badge: "GitLab flow",
+    copy:
+      "Focus on GitLab repositories and delivery visibility, especially CI/CD, release, and pipeline-related signals.",
+    tags: ["GitLab", "CI/CD", "Release Readiness", "Delivery"],
+    repoLabel: "Public GitLab repository URL",
+    baselineLabel: "Baseline GitLab repository URL",
+    repoPlaceholder: "https://gitlab.com/group/project",
+    baselinePlaceholder: "https://gitlab.com/group/project",
+    providerHint: "Useful for GitLab projects where pipeline presence and delivery metadata matter as much as code structure.",
+    compareByDefault: false,
+    status: "GitLab delivery workspace loaded. Add a GitLab repository URL or ZIP to inspect code and pipeline signals together."
+  },
+  "bitbucket-audit": {
+    title: "Bitbucket audit workspace",
+    badge: "Bitbucket audit",
+    copy:
+      "Turn Bitbucket repositories into delivery and dependency audits with structural risk, pipeline, and ownership clues in one view.",
+    tags: ["Bitbucket", "Audit", "Dependencies", "Ownership"],
+    repoLabel: "Public Bitbucket repository URL",
+    baselineLabel: "Baseline Bitbucket repository URL",
+    repoPlaceholder: "https://bitbucket.org/workspace/repo",
+    baselinePlaceholder: "https://bitbucket.org/workspace/repo",
+    providerHint: "Good for delivery audits, dependency checks, and platform-signal reviews on Bitbucket-hosted code.",
+    compareByDefault: false,
+    status: "Bitbucket audit workspace loaded. Add a Bitbucket URL or ZIP to start the audit flow."
+  },
+  "azure-migration": {
+    title: "Azure migration workspace",
+    badge: "Migration lens",
+    copy:
+      "Use this workspace when the repo lives in Azure DevOps and you want a migration-minded architecture brief with delivery context.",
+    tags: ["Azure DevOps", "Migration", "Pipelines", "Review"],
+    repoLabel: "Azure DevOps repository URL",
+    baselineLabel: "Baseline Azure DevOps repository URL",
+    repoPlaceholder: "https://dev.azure.com/org/project/_git/repo",
+    baselinePlaceholder: "https://dev.azure.com/org/project/_git/repo",
+    providerHint: "Useful for Azure DevOps projects that need architecture clarity before migration or platform changes.",
+    compareByDefault: true,
+    status: "Azure migration workspace loaded. Add a repository URL and optional baseline to compare current structure before migration."
+  },
+  "offline-zip": {
+    title: "Offline ZIP workspace",
+    badge: "Archive-only",
+    copy:
+      "Skip the remote clone flow and work directly from uploaded ZIP archives. This is useful for air-gapped demos and private snapshots.",
+    tags: ["ZIP Upload", "Offline", "Air-gapped", "Snapshot Review"],
+    repoLabel: "Optional repository URL",
+    baselineLabel: "Optional baseline repository URL",
+    repoPlaceholder: "Leave blank and upload a ZIP below",
+    baselinePlaceholder: "Leave blank and upload a baseline ZIP below",
+    providerHint: "Best when you want local or private archive analysis without depending on a remote Git host.",
+    compareByDefault: false,
+    status: "Offline ZIP workspace loaded. Upload a primary archive to begin."
+  }
+};
 
 function configureMermaid(theme) {
   if (!window.mermaid) {
@@ -146,9 +244,76 @@ function createElement(tagName, className, text) {
   return element;
 }
 
+function renderChipRow(element, values) {
+  if (!element) {
+    return;
+  }
+
+  clearChildren(element);
+
+  for (const value of values) {
+    element.appendChild(createElement("span", "chip", value));
+  }
+}
+
+function getWorkspacePreset(key) {
+  return workspacePresets[key] || workspacePresets.universal;
+}
+
+let activeWorkspaceKey = "universal";
+
 function setStatus(message, state = "idle") {
   statusPanel.dataset.state = state;
   statusText.textContent = sanitize(message);
+}
+
+function applyWorkspacePreset(key) {
+  const normalizedKey = workspacePresets[key] ? key : "universal";
+  const preset = getWorkspacePreset(normalizedKey);
+  activeWorkspaceKey = normalizedKey;
+
+  if (workspaceFocusTitleElement) {
+    workspaceFocusTitleElement.textContent = preset.title;
+  }
+
+  if (workspaceFocusBadgeElement) {
+    workspaceFocusBadgeElement.textContent = preset.badge;
+  }
+
+  if (workspaceFocusCopyElement) {
+    workspaceFocusCopyElement.textContent = preset.copy;
+  }
+
+  renderChipRow(workspaceFocusTagsElement, preset.tags);
+
+  if (repoUrlLabelElement) {
+    repoUrlLabelElement.textContent = preset.repoLabel;
+  }
+
+  if (baselineRepoUrlLabelElement) {
+    baselineRepoUrlLabelElement.textContent = preset.baselineLabel;
+  }
+
+  if (repoUrlInput) {
+    repoUrlInput.placeholder = preset.repoPlaceholder;
+  }
+
+  if (baselineRepoUrlInput) {
+    baselineRepoUrlInput.placeholder = preset.baselinePlaceholder;
+  }
+
+  if (providerHintElement) {
+    providerHintElement.textContent = preset.providerHint;
+  }
+
+  compareToggle.checked = Boolean(preset.compareByDefault);
+  compareFields.classList.toggle("hidden", !compareToggle.checked);
+  setStatus(preset.status, "idle");
+}
+
+function applyWorkspacePresetFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  applyWorkspacePreset(params.get("workspace") || "universal");
 }
 
 function formatTime() {
@@ -415,6 +580,34 @@ function setupPromptRotator() {
     return;
   }
 
+  function stabilizePromptRotatorHeight() {
+    const probe = promptRotator.cloneNode();
+    let maxHeight = 0;
+
+    probe.removeAttribute("id");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.pointerEvents = "none";
+    probe.style.inset = "0 auto auto 0";
+    promptCycler.appendChild(probe);
+
+    for (const prompt of rotatingPrompts) {
+      probe.textContent = prompt;
+      maxHeight = Math.max(maxHeight, probe.getBoundingClientRect().height);
+    }
+
+    probe.remove();
+
+    if (maxHeight > 0) {
+      promptCycler.style.setProperty("--prompt-rotator-height", `${Math.ceil(maxHeight)}px`);
+    }
+  }
+
+  stabilizePromptRotatorHeight();
+  window.addEventListener("resize", stabilizePromptRotatorHeight);
+  document.fonts?.ready.then(stabilizePromptRotatorHeight).catch(() => {});
+
   let index = 0;
 
   promptTimer = window.setInterval(() => {
@@ -575,9 +768,27 @@ function refreshSpotlights(root) {
 }
 
 function setupParallax() {
-  document.querySelectorAll("[data-parallax]").forEach((target) => {
-    target.style.setProperty("--parallax-shift", "0px");
-  });
+  if (prefersReducedMotion) {
+    return;
+  }
+
+  const parallaxTargets = [...document.querySelectorAll("[data-parallax]")];
+
+  function update() {
+    const viewport = window.innerHeight || 1;
+
+    for (const target of parallaxTargets) {
+      const factor = Number(target.dataset.parallax || "0");
+      const rect = target.getBoundingClientRect();
+      const distanceFromCenter = rect.top + rect.height / 2 - viewport / 2;
+      const shift = distanceFromCenter * factor * -0.12;
+      target.style.setProperty("--parallax-shift", `${shift}px`);
+    }
+  }
+
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
 }
 
 function setupCursorSystem() {
@@ -677,9 +888,10 @@ function setupCursorSystem() {
 function renderMetrics(payload) {
   const { summary, modules, relationships, quality } = payload.analysis;
   const { source } = payload;
+  const sourceMode = source.type === "git" ? "Remote" : source.type;
 
-  resultTitleElement.textContent = `${source.name} intelligence brief`;
-  sourcePillElement.textContent = `${source.name} / ${source.type}`;
+  resultTitleElement.textContent = `${source.name} workspace brief`;
+  sourcePillElement.textContent = `${source.platform || source.name} / ${sourceMode}`;
   analysisTimeElement.textContent = formatTime();
   primaryLanguageElement.textContent = sanitize(summary.primaryLanguage || "-");
   animateCount(codeFilesElement, summary.codeFiles || 0);
@@ -688,6 +900,75 @@ function renderMetrics(payload) {
   animateCount(relationshipCountElement, relationships.length);
   animateCount(qualityScoreElement, quality.score);
   aiBadgeElement.textContent = payload.analysis.aiStatus === "live" ? "OpenAI" : "Fallback";
+}
+
+function renderSourceProfile(source) {
+  if (!sourceProfileElement) {
+    return;
+  }
+
+  clearChildren(sourceProfileElement);
+
+  const fields = [
+    {
+      label: "Platform",
+      value: source.platform || source.type || "Repository Workspace"
+    },
+    {
+      label: "Workspace",
+      value: source.workspaceLabel || source.name || "Unknown"
+    },
+    {
+      label: "Mode",
+      value: source.type === "git" ? "Remote clone" : source.type || "Analysis"
+    },
+    {
+      label: "Remote",
+      value: source.repoUrl || "ZIP or local archive upload"
+    }
+  ];
+
+  if (source.workspaceKey) {
+    fields.push({
+      label: "Workspace Key",
+      value: source.workspaceKey
+    });
+  }
+
+  for (const field of fields) {
+    const card = createElement("article", "profile-card spotlight-card");
+    card.appendChild(createElement("span", "file-meta-label", field.label));
+    card.appendChild(createElement("strong", "", field.value));
+    sourceProfileElement.appendChild(card);
+  }
+}
+
+function renderPlatformSignals(signals) {
+  if (!platformSignalsElement) {
+    return;
+  }
+
+  clearChildren(platformSignalsElement);
+
+  if (!signals.length) {
+    platformSignalsElement.appendChild(
+      createElement("p", "empty-state", "No delivery or collaboration signals were detected.")
+    );
+    return;
+  }
+
+  for (const signal of signals) {
+    const card = createElement("article", "signal-insight-card spotlight-card");
+    card.appendChild(createElement("span", "file-meta-label", signal.category));
+    card.appendChild(createElement("strong", "", signal.name));
+    card.appendChild(createElement("p", "", signal.detail));
+
+    if (signal.evidence?.length) {
+      card.appendChild(createElement("div", "file-meta", `Evidence: ${signal.evidence.join(", ")}`));
+    }
+
+    platformSignalsElement.appendChild(card);
+  }
 }
 
 function renderFrameworks(summary) {
@@ -960,10 +1241,9 @@ async function setActiveDiagram(key) {
 
 function resetFormState() {
   form.reset();
-  compareFields.classList.add("hidden");
   setFileCaption(uploadInput, uploadCaption, "No file selected.");
   setFileCaption(baselineUploadInput, baselineUploadCaption, "No baseline selected.");
-  setStatus("Waiting for a repository, ZIP upload, or compare baseline.", "idle");
+  applyWorkspacePreset(activeWorkspaceKey);
 }
 
 function resetAnalysisState() {
@@ -972,6 +1252,13 @@ function resetAnalysisState() {
   currentDiagrams = {};
   currentDiagramKey = "architecture";
   comparisonPanel.classList.add("hidden");
+  if (sourceProfileElement) {
+    clearChildren(sourceProfileElement);
+  }
+
+  if (platformSignalsElement) {
+    clearChildren(platformSignalsElement);
+  }
   resetChat();
 }
 
@@ -1017,6 +1304,7 @@ setupTouchEffects();
 setupCursorSystem();
 refreshSpotlights(document);
 resetChat();
+applyWorkspacePresetFromLocation();
 
 themeToggleButton?.addEventListener("click", async () => {
   await applyTheme(currentTheme === "dark" ? "light" : "dark");
@@ -1165,6 +1453,8 @@ form.addEventListener("submit", async (event) => {
     lastDocumentation = payload.analysis.documentation || "";
 
     renderMetrics(payload);
+    renderSourceProfile(payload.source);
+    renderPlatformSignals(payload.analysis.platformSignals || []);
     explanationElement.textContent = sanitize(payload.analysis.explanation);
     documentationElement.textContent = sanitize(payload.analysis.documentation);
     renderFrameworks(payload.analysis.summary);
@@ -1189,7 +1479,10 @@ form.addEventListener("submit", async (event) => {
       "LumenStack indexed the repository. Ask follow-up questions like 'Where is routing handled?' or 'Which files look risky?'"
     );
 
-    setStatus("Analysis complete. Review, compare, chat, and export are now available.", "success");
+    setStatus(
+      `Analysis complete. ${payload.analysis.platformSignals?.length || 0} platform signals, review layers, chat, and exports are ready.`,
+      "success"
+    );
     const resultBounds = resultsElement.getBoundingClientRect();
     const needsReveal = resultBounds.top < 0 || resultBounds.top > window.innerHeight * 0.45;
     if (needsReveal) {

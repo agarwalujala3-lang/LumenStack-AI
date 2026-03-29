@@ -99,6 +99,130 @@ const PRIORITY_MODULE_NAMES = new Set([
   "utils"
 ]);
 
+const IMPORTANT_HIDDEN_ENTRIES = new Set([
+  ".env.example",
+  ".github",
+  ".gitlab-ci.yml",
+  ".circleci",
+  ".devcontainer",
+  ".platform",
+  ".ebextensions",
+  ".dockerignore",
+  ".editorconfig",
+  ".npmrc",
+  ".nvmrc",
+  ".yarnrc"
+]);
+
+const IMPORTANT_HIDDEN_PREFIXES = [
+  ".eslintrc",
+  ".prettierrc",
+  ".stylelintrc",
+  ".babelrc"
+];
+
+const PLATFORM_SIGNAL_RULES = [
+  {
+    id: "github-actions",
+    name: "GitHub Actions",
+    category: "Delivery",
+    matches: (relativePath) => relativePath.startsWith(".github/workflows/")
+  },
+  {
+    id: "github-templates",
+    name: "GitHub Collaboration Templates",
+    category: "Collaboration",
+    matches: (relativePath) =>
+      relativePath.startsWith(".github/ISSUE_TEMPLATE/") ||
+      relativePath === ".github/PULL_REQUEST_TEMPLATE.md" ||
+      relativePath === ".github/pull_request_template.md"
+  },
+  {
+    id: "gitlab-ci",
+    name: "GitLab CI/CD",
+    category: "Delivery",
+    matches: (relativePath) => relativePath === ".gitlab-ci.yml"
+  },
+  {
+    id: "bitbucket-pipelines",
+    name: "Bitbucket Pipelines",
+    category: "Delivery",
+    matches: (relativePath) => relativePath === "bitbucket-pipelines.yml"
+  },
+  {
+    id: "azure-pipelines",
+    name: "Azure Pipelines",
+    category: "Delivery",
+    matches: (relativePath) => relativePath === "azure-pipelines.yml" || relativePath === "azure-pipeline.yml"
+  },
+  {
+    id: "circleci",
+    name: "CircleCI",
+    category: "Delivery",
+    matches: (relativePath) => relativePath === ".circleci/config.yml"
+  },
+  {
+    id: "jenkins",
+    name: "Jenkins",
+    category: "Delivery",
+    matches: (relativePath) => path.posix.basename(relativePath).toLowerCase() === "jenkinsfile"
+  },
+  {
+    id: "codeowners",
+    name: "Code Ownership",
+    category: "Governance",
+    matches: (relativePath) =>
+      relativePath === "CODEOWNERS" ||
+      relativePath === ".github/CODEOWNERS" ||
+      relativePath === ".gitlab/CODEOWNERS"
+  },
+  {
+    id: "dependabot",
+    name: "Dependabot",
+    category: "Governance",
+    matches: (relativePath) => relativePath === ".github/dependabot.yml"
+  },
+  {
+    id: "renovate",
+    name: "Renovate",
+    category: "Governance",
+    matches: (relativePath) =>
+      relativePath === "renovate.json" ||
+      relativePath === "renovate.json5" ||
+      relativePath === ".github/renovate.json"
+  },
+  {
+    id: "devcontainer",
+    name: "Dev Container",
+    category: "Developer Experience",
+    matches: (relativePath) => relativePath.startsWith(".devcontainer/")
+  },
+  {
+    id: "containerization",
+    name: "Containerization",
+    category: "Deployment",
+    matches: (relativePath) => {
+      const fileName = path.posix.basename(relativePath).toLowerCase();
+      return (
+        fileName === "dockerfile" ||
+        ["docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml"].includes(relativePath)
+      );
+    }
+  },
+  {
+    id: "elastic-beanstalk",
+    name: "Elastic Beanstalk Hooks",
+    category: "Deployment",
+    matches: (relativePath) => relativePath.startsWith(".platform/") || relativePath.startsWith(".ebextensions/")
+  },
+  {
+    id: "terraform",
+    name: "Terraform",
+    category: "Infrastructure",
+    matches: (relativePath) => relativePath.endsWith(".tf") || relativePath.endsWith(".tfvars")
+  }
+];
+
 function toPosixPath(filePath) {
   return filePath.split(path.sep).join("/");
 }
@@ -128,6 +252,20 @@ function dedupeBy(items, resolver) {
   }
 
   return result;
+}
+
+function shouldSkipHiddenEntry(entryName) {
+  if (!entryName.startsWith(".")) {
+    return false;
+  }
+
+  const normalized = entryName.toLowerCase();
+
+  if (IMPORTANT_HIDDEN_ENTRIES.has(normalized)) {
+    return false;
+  }
+
+  return !IMPORTANT_HIDDEN_PREFIXES.some((prefix) => normalized.startsWith(prefix));
 }
 
 function isTextBuffer(buffer) {
@@ -166,6 +304,83 @@ function normalizePackageName(value) {
   }
 
   return value.split("/")[0];
+}
+
+function isLikelyEntrypoint(relativePath, fileName) {
+  const normalizedName = fileName.toLowerCase();
+
+  if (!ENTRYPOINT_NAMES.has(normalizedName)) {
+    return false;
+  }
+
+  const segments = relativePath.split("/");
+
+  if (segments[0] === "public" && normalizedName !== "index.html") {
+    return false;
+  }
+
+  return true;
+}
+
+function formatSignalEvidence(paths) {
+  return paths.slice(0, 3).join(", ");
+}
+
+function buildSignalDetail(rule, matches) {
+  const evidence = formatSignalEvidence(matches);
+
+  switch (rule.id) {
+    case "github-actions":
+      return `Automation workflows were found in ${evidence}.`;
+    case "github-templates":
+      return `Repository collaboration templates were found in ${evidence}.`;
+    case "gitlab-ci":
+      return `A GitLab pipeline entrypoint was found in ${evidence}.`;
+    case "bitbucket-pipelines":
+      return `A Bitbucket pipeline file was found in ${evidence}.`;
+    case "azure-pipelines":
+      return `An Azure pipeline file was found in ${evidence}.`;
+    case "circleci":
+      return `CircleCI configuration was found in ${evidence}.`;
+    case "jenkins":
+      return `A Jenkins automation entrypoint was found in ${evidence}.`;
+    case "codeowners":
+      return `Code ownership rules were found in ${evidence}.`;
+    case "dependabot":
+      return `Automated dependency update config was found in ${evidence}.`;
+    case "renovate":
+      return `Renovate configuration was found in ${evidence}.`;
+    case "devcontainer":
+      return `Developer environment bootstrap files were found in ${evidence}.`;
+    case "containerization":
+      return `Container-oriented deployment files were found in ${evidence}.`;
+    case "elastic-beanstalk":
+      return `Elastic Beanstalk platform hooks or config were found in ${evidence}.`;
+    case "terraform":
+      return `Infrastructure-as-code files were found in ${evidence}.`;
+    default:
+      return `Repository workflow signals were found in ${evidence}.`;
+  }
+}
+
+function detectPlatformSignals(filePaths) {
+  const normalizedPaths = [...new Set(filePaths.map((filePath) => toPosixPath(filePath)))];
+
+  return PLATFORM_SIGNAL_RULES.flatMap((rule) => {
+    const matches = normalizedPaths.filter((relativePath) => rule.matches(relativePath));
+
+    if (!matches.length) {
+      return [];
+    }
+
+    return [{
+      id: rule.id,
+      name: rule.name,
+      category: rule.category,
+      detail: buildSignalDetail(rule, matches),
+      evidence: matches.slice(0, 3)
+    }];
+  });
 }
 
 function summarizeRole(relativePath, sample) {
@@ -794,16 +1009,23 @@ function buildReportMarkdown(analysis) {
     "",
     "## Summary",
     `- Source type: ${analysis.summary.sourceType}`,
+    `- Source platform: ${analysis.summary.sourcePlatform || "Workspace"}`,
     `- Code files: ${analysis.summary.codeFiles}`,
     `- Primary language: ${analysis.summary.primaryLanguage}`,
     `- Frameworks: ${analysis.summary.frameworks.join(", ") || "None detected"}`,
     `- Quality score: ${analysis.quality.score}`,
+    `- Platform signals: ${analysis.platformSignals.length}`,
     "",
     "## Modules",
     ...analysis.modules.slice(0, 10).map((module) => `- ${module.name}: ${module.fileCount} files`),
     "",
     "## Dependencies",
     ...analysis.dependencies.slice(0, 12).map((dependency) => `- ${dependency.name} (${dependency.source})`),
+    "",
+    "## Platform Signals",
+    ...(analysis.platformSignals.length
+      ? analysis.platformSignals.map((signal) => `- [${signal.category}] ${signal.name}: ${signal.detail}`)
+      : ["- No platform workflow signals were detected."]),
     "",
     "## Findings",
     ...analysis.quality.findings.map((finding) => `- [${finding.severity}] ${finding.title}: ${finding.detail}`),
@@ -822,7 +1044,7 @@ async function walkDirectory(rootPath, currentPath, state) {
   const entries = await fs.readdir(currentPath, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (entry.name.startsWith(".") && ![".env.example", ".github"].includes(entry.name)) {
+    if (shouldSkipHiddenEntry(entry.name)) {
       continue;
     }
 
@@ -839,6 +1061,7 @@ async function walkDirectory(rootPath, currentPath, state) {
     }
 
     state.totalFiles += 1;
+    state.allFiles.push(relativePath);
 
     const extension = path.extname(entry.name).toLowerCase();
     const isCodeFile = Boolean(CODE_FILE_TYPES[extension]);
@@ -879,7 +1102,7 @@ async function walkDirectory(rootPath, currentPath, state) {
         moduleName,
         sample,
         role: summarizeRole(relativePath, sample),
-        isEntrypoint: ENTRYPOINT_NAMES.has(entry.name.toLowerCase()),
+        isEntrypoint: isLikelyEntrypoint(relativePath, entry.name),
         classRecords,
         functionCount: countFunctions(extension, sample),
         lineCount: sample.split(/\r?\n/).length
@@ -911,6 +1134,7 @@ async function analyzeCodebase(rootPath, options = {}) {
   const state = {
     totalFiles: 0,
     codeFiles: 0,
+    allFiles: [],
     manifests: [],
     files: [],
     entrypoints: [],
@@ -962,6 +1186,7 @@ async function analyzeCodebase(rootPath, options = {}) {
     .sort((a, b) => b.count - a.count || a.from.localeCompare(b.from));
 
   const frameworks = detectFrameworks(dependencies, languages, state.entrypoints);
+  const platformSignals = detectPlatformSignals(state.allFiles);
 
   const fileHighlights = [...state.files]
     .sort((a, b) => {
@@ -983,6 +1208,7 @@ async function analyzeCodebase(rootPath, options = {}) {
   const summary = {
     sourceName: options.sourceName || path.basename(rootPath),
     sourceType: options.sourceType || "upload",
+    sourcePlatform: options.sourcePlatform || "Workspace",
     totalFiles: state.totalFiles,
     codeFiles: state.codeFiles,
     manifestCount: state.manifests.length,
@@ -990,7 +1216,8 @@ async function analyzeCodebase(rootPath, options = {}) {
     languages,
     frameworks,
     dependencyCount: dependencies.length,
-    entrypoints: state.entrypoints
+    entrypoints: state.entrypoints,
+    platformSignalsCount: platformSignals.length
   };
 
   const quality = buildQualityReport({
@@ -1023,6 +1250,7 @@ async function analyzeCodebase(rootPath, options = {}) {
     relationships,
     fileHighlights,
     quality,
+    platformSignals,
     diagrams,
     mermaidDiagram: diagrams.architecture,
     reportMarkdown: "",

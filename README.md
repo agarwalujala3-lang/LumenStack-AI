@@ -4,14 +4,16 @@ LumenStack AI is a full-stack Node.js and Express application that turns a repos
 
 It supports:
 
-- repository analysis from a public GitHub URL or ZIP upload
+- repository analysis from GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic HTTPS Git URLs, or ZIP upload
 - compare mode for baseline-vs-current structural review
 - dependency and module detection
 - quality scoring, hotspot detection, and review findings
+- platform signal detection for CI/CD, governance, and deployment metadata
 - multiple Mermaid diagram types
 - retrieval-backed codebase chat
 - markdown and JSON exports
-- webhook-ready GitHub ingestion
+- workspace presets and extra static pages for provider-focused flows
+- webhook-ready GitHub ingestion with generic stored workspace report routes
 
 ## Stack
 
@@ -23,14 +25,16 @@ It supports:
 
 ## Features
 
-- Analyze uploaded ZIP archives or public GitHub repositories
+- Analyze uploaded ZIP archives or public repositories across multiple Git platforms
 - Detect languages, entrypoints, framework hints, and dependency manifests
 - Infer modules, cross-module relationships, and hotspot files
+- Detect platform signals such as GitHub Actions, GitLab CI, Bitbucket Pipelines, Azure Pipelines, container files, and ownership rules
 - Generate Mermaid architecture, sequence, class, and dependency diagrams
 - Run compare mode against a baseline repo or ZIP for review-style summaries
 - Ask follow-up questions against the analyzed codebase
 - Export markdown and JSON reports
 - Accept GitHub webhook events and store the latest analyzed report per repository
+- Offer dedicated workspace presets and extra pages for analyzer, workspaces, and integrations
 
 ## Local Setup
 
@@ -73,20 +77,22 @@ It supports:
 - `POST /api/analyze`: analyze a repo or ZIP, optionally with a comparison baseline
 - `POST /api/chat`: ask questions against a stored analysis session
 - `GET /api/export/:analysisId?format=markdown|json`: export the current report
+- `GET /api/platforms`: list supported repository platforms and intake modes
 - `POST /api/github/webhook`: accept webhook-triggered analyses
 - `GET /api/github/reports/:owner/:repo`: fetch the latest stored webhook report
+- `GET /api/workspaces/:provider/:owner/:repo`: fetch a stored report through a generic workspace route
 
 ## Project Structure
 
 - `server.js`: server entrypoint
 - `src/app.js`: Express routes and orchestration
-- `src/services/sourceService.js`: GitHub clone and ZIP extraction
+- `src/services/sourceService.js`: multi-platform repository clone and ZIP extraction
 - `src/services/analyzerService.js`: static analysis, quality scoring, and Mermaid generation
 - `src/services/aiService.js`: AI explanation and documentation generation
 - `src/services/chatService.js`: retrieval-backed codebase chat
 - `src/services/comparisonService.js`: compare mode and review findings
 - `src/services/sessionStore.js`: in-memory analysis session storage
-- `public/`: frontend files
+- `public/`: frontend files, including analyzer, workspaces, and integrations pages
 - `.github/workflows/smoke.yml`: GitHub Actions smoke test
 
 ## Verification
