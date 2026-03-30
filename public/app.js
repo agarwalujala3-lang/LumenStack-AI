@@ -262,6 +262,47 @@ function createElement(tagName, className, text) {
   return element;
 }
 
+function summarizePath(pathValue, options = {}) {
+  const value = sanitize(pathValue || "");
+  const maxLength = options.maxLength || 58;
+  const segments = value.split("/").filter(Boolean);
+
+  if (value.length <= maxLength || segments.length <= 3) {
+    return value;
+  }
+
+  const headCount = options.headCount || 2;
+  const tailCount = options.tailCount || 2;
+  const head = segments.slice(0, headCount);
+  const tail = segments.slice(-tailCount);
+  const compact = [...head, "...", ...tail].join("/");
+
+  if (compact.length <= maxLength) {
+    return compact;
+  }
+
+  const fileName = segments.at(-1) || value;
+  const parentName = segments.at(-2);
+  return parentName ? `.../${parentName}/${fileName}` : `.../${fileName}`;
+}
+
+function createPathTitle(pathValue, className = "file-path-title") {
+  const element = createElement("strong", className, summarizePath(pathValue));
+  element.title = sanitize(pathValue);
+  element.setAttribute("aria-label", sanitize(pathValue));
+  return element;
+}
+
+function formatImportPreview(imports, limit = 4) {
+  if (!imports?.length) {
+    return "none detected";
+  }
+
+  const preview = imports.slice(0, limit).join(", ");
+  const remainingCount = imports.length - limit;
+  return remainingCount > 0 ? `${preview}, +${remainingCount} more` : preview;
+}
+
 function renderChipRow(element, values) {
   if (!element) {
     return;
@@ -1074,7 +1115,7 @@ function renderHotspots(quality) {
   for (const hotspot of quality.hotspots) {
     const item = createElement("article", "stack-item spotlight-card");
     item.appendChild(createElement("span", "file-meta-label", hotspot.module));
-    item.appendChild(createElement("strong", "", hotspot.path));
+    item.appendChild(createPathTitle(hotspot.path));
     item.appendChild(
       createElement(
         "p",
@@ -1156,12 +1197,13 @@ function renderFiles(files) {
   for (const file of files) {
     const card = createElement("article", "file-card spotlight-card");
     card.appendChild(createElement("span", "file-meta-label", file.language));
-    card.appendChild(createElement("strong", "", file.path));
+    card.appendChild(createPathTitle(file.path));
     card.appendChild(createElement("p", "", file.role));
 
     const meta = createElement("div", "file-meta");
-    const imports = file.imports.length ? file.imports.join(", ") : "none detected";
+    const imports = formatImportPreview(file.imports);
     meta.textContent = `${file.module} | imports: ${imports} | classes: ${file.classCount} | functions: ${file.functionCount}`;
+    meta.title = sanitize(file.path);
     card.appendChild(meta);
     filesElement.appendChild(card);
   }

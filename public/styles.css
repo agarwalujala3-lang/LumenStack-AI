@@ -2874,6 +2874,7 @@ input[type="text"]:focus,
 .module-card,
 .finding-card,
 .chat-bubble {
+  min-width: 0;
   padding: 16px;
   border-radius: 20px;
   border: 1px solid var(--line);
@@ -2903,6 +2904,11 @@ input[type="text"]:focus,
 .finding-card strong {
   display: block;
   margin-top: 6px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 .preview-card p,
@@ -3182,6 +3188,14 @@ input[type="text"]:focus,
   color: var(--muted-soft);
   font-size: 0.86rem;
   line-height: 1.55;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.file-path-title {
+  font-size: 1.02rem;
 }
 
 .empty-state {
