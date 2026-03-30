@@ -2,7 +2,7 @@ services:
   - type: web
     name: lumenstack-ai
     runtime: node
-    plan: free
+    plan: starter
     autoDeployTrigger: commit
     buildCommand: npm install
     startCommand: npm start
