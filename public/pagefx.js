@@ -1,4 +1,3 @@
-const INTRO_SEEN_KEY = "lumenstack-intro-seen";
 const ROUTE_TRANSITION_KEY = "lumenstack-route-transition";
 
 function shouldSkipIntro() {
@@ -11,14 +10,6 @@ function safeSessionStorage(action, fallback = null) {
   } catch {
     return fallback;
   }
-}
-
-function hasSeenIntro() {
-  return safeSessionStorage(() => window.sessionStorage.getItem(INTRO_SEEN_KEY) === "1", false);
-}
-
-function markIntroSeen() {
-  safeSessionStorage(() => window.sessionStorage.setItem(INTRO_SEEN_KEY, "1"));
 }
 
 function queueRouteTransition() {
@@ -240,17 +231,15 @@ function initPageFx() {
     return;
   }
 
-  const shouldRunIntro = !shouldSkipIntro() && !hasSeenIntro();
   const shouldRunRouteTransition = consumeRouteTransition();
-
-  if (shouldRunIntro) {
-    markIntroSeen();
-    runPageIntro();
-    return;
-  }
 
   if (shouldRunRouteTransition) {
     runRouteTransition();
+    return;
+  }
+
+  if (!shouldSkipIntro()) {
+    runPageIntro();
   }
 }
 
