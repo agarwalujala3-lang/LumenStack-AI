@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (() => {
+        try {
+          if (
+            window.matchMedia("(pointer: fine)").matches &&
+            !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) {
+            document.documentElement.classList.add("cursor-bootstrap");
+          }
+        } catch {}
+      })();
+    </script>
     <title>LumenStack AI Workspaces</title>
     <link rel="icon" href="/brand-mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
@@ -20,6 +32,10 @@
       <div class="ambient-beam beam-a"></div>
       <div class="ambient-beam beam-b"></div>
     </div>
+
+    <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
+    <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
+    <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
 
     <div class="page-shell">
       <header class="topbar">

@@ -805,6 +805,8 @@ strong,
 
 .cursor-core,
 .cursor-aura {
+  left: 50vw;
+  top: 50vh;
   border-radius: 999px;
   transform: translate3d(-50%, -50%, 0);
   transition:
@@ -3457,6 +3459,19 @@ body.js-motion .reveal-grid > *.is-visible {
 }
 
 body.touch-enhanced .cursor-trail {
+  opacity: 1;
+}
+
+html.cursor-bootstrap,
+html.cursor-bootstrap *,
+html.cursor-bootstrap *::before,
+html.cursor-bootstrap *::after {
+  cursor: none !important;
+}
+
+html.cursor-bootstrap .cursor-core,
+html.cursor-bootstrap .cursor-aura,
+html.cursor-bootstrap .cursor-trail {
   opacity: 1;
 }
 

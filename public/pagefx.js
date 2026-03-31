@@ -265,15 +265,16 @@ function initSharedCursorSystem() {
     return;
   }
 
-  if (document.getElementById("cursor-core") || document.getElementById("cursor-aura") || document.getElementById("cursor-trail")) {
-    return;
+  const cursorCore = document.getElementById("cursor-core") || createCursorNode("cursor-core", "cursor-core");
+  const cursorAura = document.getElementById("cursor-aura") || createCursorNode("cursor-aura", "cursor-aura");
+  const cursorTrail = document.getElementById("cursor-trail") || createCursorNode("cursor-trail", "cursor-trail");
+
+  if (!cursorCore.isConnected || !cursorAura.isConnected || !cursorTrail.isConnected) {
+    document.body.append(cursorCore, cursorAura, cursorTrail);
   }
 
-  const cursorCore = createCursorNode("cursor-core", "cursor-core");
-  const cursorAura = createCursorNode("cursor-aura", "cursor-aura");
-  const cursorTrail = createCursorNode("cursor-trail", "cursor-trail");
-  document.body.append(cursorCore, cursorAura, cursorTrail);
   document.body.classList.add("cursor-enhanced");
+  document.documentElement.classList.remove("cursor-bootstrap");
 
   const target = {
     x: window.innerWidth / 2,

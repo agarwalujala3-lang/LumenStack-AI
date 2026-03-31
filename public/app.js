@@ -887,6 +887,7 @@ function setupCursorSystem() {
   }
 
   body.classList.add("cursor-enhanced");
+  document.documentElement.classList.remove("cursor-bootstrap");
 
   const target = {
     x: window.innerWidth / 2,
