@@ -224,6 +224,34 @@ function bindNavigationIntent() {
   });
 }
 
+function applyCursorKind(cursorCoreElement, cursorAuraElement, kind) {
+  const kinds = ["action", "upload", "field"];
+  kinds.forEach((entry) => {
+    cursorCoreElement.classList.toggle(`is-${entry}`, entry === kind);
+    cursorAuraElement.classList.toggle(`is-${entry}`, entry === kind);
+  });
+}
+
+function resolveCursorKind(target) {
+  if (!(target instanceof Element)) {
+    return "";
+  }
+
+  if (target.closest(".upload-surface")) {
+    return "upload";
+  }
+
+  if (target.closest("input:not([type='file']), textarea, select")) {
+    return "field";
+  }
+
+  if (target.closest("a, button, .diagram-tab, .theme-toggle, .toggle-row")) {
+    return "action";
+  }
+
+  return "";
+}
+
 function createCursorNode(className, id) {
   const element = document.createElement("div");
   element.id = id;
@@ -326,9 +354,8 @@ function initSharedCursorSystem() {
   }, { passive: true });
 
   window.addEventListener("pointerover", (event) => {
-    const isHot = Boolean(event.target.closest("a, button, input, label, .diagram-tab, .panel"));
-    cursorAura.classList.toggle("is-hot", isHot);
-    cursorCore.classList.toggle("is-hot", isHot);
+    const kind = resolveCursorKind(event.target);
+    applyCursorKind(cursorCore, cursorAura, kind);
   });
 }
 

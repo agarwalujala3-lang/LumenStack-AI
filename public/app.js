@@ -104,6 +104,34 @@ function bindMediaQueryChange(query, listener) {
   return () => {};
 }
 
+function applyCursorKind(cursorCoreElement, cursorAuraElement, kind) {
+  const kinds = ["action", "upload", "field"];
+  kinds.forEach((entry) => {
+    cursorCoreElement.classList.toggle(`is-${entry}`, entry === kind);
+    cursorAuraElement.classList.toggle(`is-${entry}`, entry === kind);
+  });
+}
+
+function resolveCursorKind(target) {
+  if (!(target instanceof Element)) {
+    return "";
+  }
+
+  if (target.closest(".upload-surface")) {
+    return "upload";
+  }
+
+  if (target.closest("input:not([type='file']), textarea, select")) {
+    return "field";
+  }
+
+  if (target.closest("a, button, .diagram-tab, .theme-toggle, .toggle-row")) {
+    return "action";
+  }
+
+  return "";
+}
+
 const contentStreams = [explanationElement, documentationElement, diagramElement];
 const loadingMessages = [
   "Reading directory structure, imports, and dependency signatures.",
@@ -942,9 +970,9 @@ function setupCursorSystem() {
   }, { passive: true });
 
   window.addEventListener("pointerover", (event) => {
-    pointerHot = Boolean(event.target.closest("a, button, input, label, .diagram-tab, .panel"));
-    cursorAura.classList.toggle("is-hot", pointerHot);
-    cursorCore.classList.toggle("is-hot", pointerHot);
+    const kind = resolveCursorKind(event.target);
+    pointerHot = Boolean(kind);
+    applyCursorKind(cursorCore, cursorAura, kind);
   });
 }
 
