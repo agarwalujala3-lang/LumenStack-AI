@@ -328,6 +328,7 @@ function initSharedCursorSystem() {
   window.addEventListener("pointerover", (event) => {
     const isHot = Boolean(event.target.closest("a, button, input, label, .diagram-tab, .panel"));
     cursorAura.classList.toggle("is-hot", isHot);
+    cursorCore.classList.toggle("is-hot", isHot);
   });
 }
 

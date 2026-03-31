@@ -944,6 +944,7 @@ function setupCursorSystem() {
   window.addEventListener("pointerover", (event) => {
     pointerHot = Boolean(event.target.closest("a, button, input, label, .diagram-tab, .panel"));
     cursorAura.classList.toggle("is-hot", pointerHot);
+    cursorCore.classList.toggle("is-hot", pointerHot);
   });
 }
 
