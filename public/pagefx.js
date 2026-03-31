@@ -224,12 +224,121 @@ function bindNavigationIntent() {
   });
 }
 
+function createCursorNode(className, id) {
+  const element = document.createElement("div");
+  element.id = id;
+  element.className = className;
+  element.setAttribute("aria-hidden", "true");
+  return element;
+}
+
+function initSharedCursorSystem() {
+  if (!document.body || shouldSkipIntro() || !window.matchMedia("(pointer: fine)").matches) {
+    return;
+  }
+
+  if (document.getElementById("cursor-core") || document.getElementById("cursor-aura") || document.getElementById("cursor-trail")) {
+    return;
+  }
+
+  const cursorCore = createCursorNode("cursor-core", "cursor-core");
+  const cursorAura = createCursorNode("cursor-aura", "cursor-aura");
+  const cursorTrail = createCursorNode("cursor-trail", "cursor-trail");
+  document.body.append(cursorCore, cursorAura, cursorTrail);
+  document.body.classList.add("cursor-enhanced");
+
+  const target = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2
+  };
+  const core = { ...target };
+  const aura = { ...target };
+  let lastTrace = 0;
+  let lastScrollY = window.scrollY;
+
+  function spawnNode(className, styles = {}) {
+    const node = document.createElement("span");
+    node.className = className;
+    Object.entries(styles).forEach(([property, value]) => {
+      node.style[property] = value;
+    });
+    cursorTrail.appendChild(node);
+    node.addEventListener("animationend", () => node.remove(), { once: true });
+  }
+
+  function loop() {
+    core.x += (target.x - core.x) * 0.3;
+    core.y += (target.y - core.y) * 0.3;
+    aura.x += (target.x - aura.x) * 0.16;
+    aura.y += (target.y - aura.y) * 0.16;
+
+    cursorCore.style.left = `${core.x}px`;
+    cursorCore.style.top = `${core.y}px`;
+    cursorAura.style.left = `${aura.x}px`;
+    cursorAura.style.top = `${aura.y}px`;
+
+    window.requestAnimationFrame(loop);
+  }
+
+  window.requestAnimationFrame(loop);
+
+  window.addEventListener("pointermove", (event) => {
+    target.x = event.clientX;
+    target.y = event.clientY;
+
+    const now = performance.now();
+    if (now - lastTrace > 38) {
+      spawnNode("cursor-trace", {
+        left: `${event.clientX}px`,
+        top: `${event.clientY}px`
+      });
+      lastTrace = now;
+    }
+  });
+
+  window.addEventListener("scroll", () => {
+    const delta = window.scrollY - lastScrollY;
+    lastScrollY = window.scrollY;
+
+    if (!delta) {
+      return;
+    }
+
+    const intensity = Math.min(140, Math.abs(delta));
+    const direction = delta > 0 ? 1 : -1;
+
+    spawnNode("cursor-flow", {
+      left: `${target.x}px`,
+      top: `${target.y}px`,
+      height: `${Math.min(200, 84 + intensity * 0.8)}px`,
+      "--flow-start-shift": direction > 0 ? "-18px" : "18px",
+      "--flow-end-shift": direction > 0 ? "-44px" : "44px"
+    });
+
+    const size = Math.min(88, 36 + intensity * 0.34);
+    spawnNode("cursor-wave", {
+      left: `${target.x}px`,
+      top: `${target.y}px`,
+      width: `${size}px`,
+      height: `${size}px`,
+      "--wave-scale": `${1.4 + intensity / 220}`
+    });
+  }, { passive: true });
+
+  window.addEventListener("pointerover", (event) => {
+    const isHot = Boolean(event.target.closest("a, button, input, label, .diagram-tab, .panel"));
+    cursorAura.classList.toggle("is-hot", isHot);
+  });
+}
+
 function initPageFx() {
   bindNavigationIntent();
 
   if (!document.body) {
     return;
   }
+
+  initSharedCursorSystem();
 
   const shouldRunRouteTransition = consumeRouteTransition();
 
