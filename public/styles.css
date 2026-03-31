@@ -3484,11 +3484,10 @@ body.touch-enhanced .cursor-trail {
 
 @media (pointer: fine) {
   body.cursor-enhanced,
-  body.cursor-enhanced a,
-  body.cursor-enhanced button,
-  body.cursor-enhanced input,
-  body.cursor-enhanced label {
-    cursor: none;
+  body.cursor-enhanced *,
+  body.cursor-enhanced *::before,
+  body.cursor-enhanced *::after {
+    cursor: none !important;
   }
 
   body.cursor-enhanced .cursor-core,
