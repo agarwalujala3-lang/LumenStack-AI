@@ -872,22 +872,29 @@ strong,
 }
 
 .cursor-core.is-action {
+  width: 16px;
+  height: 16px;
   border-radius: 999px;
-  transform: translate3d(-50%, -50%, 0) scale(1.04);
+  transform: translate3d(-50%, -50%, 0) scale(1.02);
 }
 
 .cursor-core.is-action::before {
-  width: 11px;
-  height: 11px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
-  border-color: rgba(236, 249, 255, 0.28);
-  opacity: 1;
+  border-color: rgba(236, 249, 255, 0.34);
+  opacity: 0.92;
   transform: translate(-50%, -50%) scale(1);
 }
 
 .cursor-core.is-action::after {
+  width: 4px;
+  height: 4px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(236, 249, 255, 0.96);
   opacity: 1;
-  transform: translate(-6%, -12%) rotate(0deg) scale(0.95);
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .cursor-core.is-upload {
@@ -972,26 +979,29 @@ strong,
 }
 
 .cursor-aura.is-action {
-  width: 64px;
-  height: 64px;
+  width: 58px;
+  height: 58px;
   border-radius: 999px;
-  transform: translate3d(-50%, -50%, 0) scale(1.02);
+  transform: translate3d(-50%, -50%, 0) scale(1.01);
 }
 
 .cursor-aura.is-action::before {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 999px;
   border-color: rgba(116, 239, 255, 0.52);
-  opacity: 0.92;
+  opacity: 0.72;
   transform: translate(-50%, -50%) scale(1);
 }
 
 .cursor-aura.is-action::after {
-  background: rgba(116, 239, 255, 0.88);
-  box-shadow: 0 0 18px rgba(116, 239, 255, 0.52);
-  opacity: 0.96;
-  transform: translate(-50%, -50%) rotate(0deg) scale(0.82);
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(116, 239, 255, 0.78);
+  box-shadow: 0 0 14px rgba(116, 239, 255, 0.36);
+  opacity: 0.82;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .cursor-aura.is-upload {
@@ -2989,9 +2999,17 @@ input[type="text"]:focus,
 
 .upload-surface input[type="file"] {
   position: absolute;
-  inset: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
   opacity: 0;
-  cursor: pointer;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .upload-icon {
