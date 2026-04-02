@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI Brand Mark</title>
+  <desc id="desc">A glowing cyan neural flower composed of orbital loops around a bright core.</desc>
+  <defs>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8ffff"/>
+      <stop offset="48%" stop-color="#7ef9ff"/>
+      <stop offset="100%" stop-color="#2bc4d8"/>
+    </radialGradient>
+    <linearGradient id="loopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6bfff7"/>
+      <stop offset="55%" stop-color="#45dee7"/>
+      <stop offset="100%" stop-color="#1aa7c2"/>
+    </linearGradient>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#65f7ff" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#1ab8d5" flood-opacity="0.34"/>
+    </filter>
+    <filter id="coreAura" x="-160%" y="-160%" width="420%" height="420%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+  <g filter="url(#softGlow)">
+    <circle cx="80" cy="80" r="34" fill="#5df4ff" opacity="0.14" filter="url(#coreAura)"/>
+    <g fill="none" stroke="url(#loopGlow)" stroke-linecap="round" stroke-width="10.5" opacity="0.92">
+      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(0 80 80)"/>
+      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(60 80 80)"/>
+      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(120 80 80)"/>
+      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(30 80 80)" opacity="0.82"/>
+      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(90 80 80)" opacity="0.82"/>
+      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(150 80 80)" opacity="0.82"/>
+    </g>
+    <g fill="#8dffff" opacity="0.82">
+      <circle cx="121" cy="80" r="4.4"/>
+      <circle cx="100.5" cy="115.5" r="4.2"/>
+      <circle cx="59.5" cy="115.5" r="4.2"/>
+      <circle cx="39" cy="80" r="4.4"/>
+      <circle cx="59.5" cy="44.5" r="4.2"/>
+      <circle cx="100.5" cy="44.5" r="4.2"/>
+    </g>
+    <circle cx="80" cy="80" r="19" fill="url(#coreGlow)"/>
+    <circle cx="80" cy="80" r="10.5" fill="#dffcff" opacity="0.9"/>
+    <circle cx="80" cy="80" r="5.2" fill="#8ef8ff"/>
+  </g>
+</svg>

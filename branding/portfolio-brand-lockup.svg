@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI Logo</title>
+  <desc id="desc">The LumenStack AI logo combining a glowing cyan neural flower symbol with the LumenStack AI wordmark.</desc>
+  <defs>
+    <radialGradient id="lockupCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8ffff"/>
+      <stop offset="48%" stop-color="#7ef9ff"/>
+      <stop offset="100%" stop-color="#2bc4d8"/>
+    </radialGradient>
+    <linearGradient id="lockupLoopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6bfff7"/>
+      <stop offset="55%" stop-color="#45dee7"/>
+      <stop offset="100%" stop-color="#1aa7c2"/>
+    </linearGradient>
+    <linearGradient id="lockupText" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#baf7ff"/>
+      <stop offset="45%" stop-color="#7defff"/>
+      <stop offset="100%" stop-color="#5bd8ff"/>
+    </linearGradient>
+    <filter id="lockupGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#65f7ff" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#1ab8d5" flood-opacity="0.34"/>
+    </filter>
+    <filter id="textGlow" x="-20%" y="-120%" width="160%" height="300%">
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#4cdcff" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g transform="translate(20 10)" filter="url(#lockupGlow)">
+    <circle cx="70" cy="80" r="34" fill="#5df4ff" opacity="0.14"/>
+    <g fill="none" stroke="url(#lockupLoopGlow)" stroke-linecap="round" stroke-width="10.5" opacity="0.92">
+      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(0 70 80)"/>
+      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(60 70 80)"/>
+      <ellipse cx="70" cy="80" rx="42" ry="17" transform="rotate(120 70 80)"/>
+      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(30 70 80)" opacity="0.82"/>
+      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(90 70 80)" opacity="0.82"/>
+      <ellipse cx="70" cy="80" rx="48" ry="20" transform="rotate(150 70 80)" opacity="0.82"/>
+    </g>
+    <g fill="#8dffff" opacity="0.82">
+      <circle cx="111" cy="80" r="4.4"/>
+      <circle cx="90.5" cy="115.5" r="4.2"/>
+      <circle cx="49.5" cy="115.5" r="4.2"/>
+      <circle cx="29" cy="80" r="4.4"/>
+      <circle cx="49.5" cy="44.5" r="4.2"/>
+      <circle cx="90.5" cy="44.5" r="4.2"/>
+    </g>
+    <circle cx="70" cy="80" r="19" fill="url(#lockupCoreGlow)"/>
+    <circle cx="70" cy="80" r="10.5" fill="#dffcff" opacity="0.9"/>
+    <circle cx="70" cy="80" r="5.2" fill="#8ef8ff"/>
+  </g>
+  <g filter="url(#textGlow)">
+    <text x="170" y="108" fill="url(#lockupText)" font-family="Bahnschrift, 'Segoe UI', Arial, sans-serif" font-size="78" font-weight="600" letter-spacing="4">LumenStack AI</text>
+  </g>
+</svg>
