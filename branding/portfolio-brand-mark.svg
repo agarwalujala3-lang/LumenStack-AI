@@ -1,45 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
-  <title id="title">LumenStack AI Brand Mark</title>
-  <desc id="desc">A glowing cyan neural flower composed of orbital loops around a bright core.</desc>
+  <title id="title">LumenStack AI Mark</title>
+  <desc id="desc">Glowing prism symbol with circuit traces for LumenStack AI.</desc>
   <defs>
-    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#e8ffff"/>
-      <stop offset="48%" stop-color="#7ef9ff"/>
-      <stop offset="100%" stop-color="#2bc4d8"/>
-    </radialGradient>
-    <linearGradient id="loopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6bfff7"/>
-      <stop offset="55%" stop-color="#45dee7"/>
-      <stop offset="100%" stop-color="#1aa7c2"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1b2b"/>
+      <stop offset="100%" stop-color="#0f2740"/>
     </linearGradient>
-    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#65f7ff" flood-opacity="0.6"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#1ab8d5" flood-opacity="0.34"/>
-    </filter>
-    <filter id="coreAura" x="-160%" y="-160%" width="420%" height="420%">
-      <feGaussianBlur stdDeviation="10"/>
+    <linearGradient id="prismLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3ffff"/>
+      <stop offset="100%" stop-color="#a3f4ff"/>
+    </linearGradient>
+    <linearGradient id="prismMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8ffff"/>
+      <stop offset="100%" stop-color="#8fd9ff"/>
+    </linearGradient>
+    <linearGradient id="prismRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9ecbff"/>
+      <stop offset="100%" stop-color="#7c68ff"/>
+    </linearGradient>
+    <linearGradient id="trace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8ffbff"/>
+      <stop offset="100%" stop-color="#689cff"/>
+    </linearGradient>
+    <filter id="glow" x="-120%" y="-120%" width="340%" height="340%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#71f6ff" flood-opacity="0.95"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#29cfff" flood-opacity="0.38"/>
     </filter>
   </defs>
-  <g filter="url(#softGlow)">
-    <circle cx="80" cy="80" r="34" fill="#5df4ff" opacity="0.14" filter="url(#coreAura)"/>
-    <g fill="none" stroke="url(#loopGlow)" stroke-linecap="round" stroke-width="10.5" opacity="0.92">
-      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(0 80 80)"/>
-      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(60 80 80)"/>
-      <ellipse cx="80" cy="80" rx="42" ry="17" transform="rotate(120 80 80)"/>
-      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(30 80 80)" opacity="0.82"/>
-      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(90 80 80)" opacity="0.82"/>
-      <ellipse cx="80" cy="80" rx="48" ry="20" transform="rotate(150 80 80)" opacity="0.82"/>
-    </g>
-    <g fill="#8dffff" opacity="0.82">
-      <circle cx="121" cy="80" r="4.4"/>
-      <circle cx="100.5" cy="115.5" r="4.2"/>
-      <circle cx="59.5" cy="115.5" r="4.2"/>
-      <circle cx="39" cy="80" r="4.4"/>
-      <circle cx="59.5" cy="44.5" r="4.2"/>
-      <circle cx="100.5" cy="44.5" r="4.2"/>
-    </g>
-    <circle cx="80" cy="80" r="19" fill="url(#coreGlow)"/>
-    <circle cx="80" cy="80" r="10.5" fill="#dffcff" opacity="0.9"/>
-    <circle cx="80" cy="80" r="5.2" fill="#8ef8ff"/>
+  <rect x="8" y="8" width="144" height="144" rx="28" fill="url(#bg)"/>
+  <g filter="url(#glow)">
+    <path d="M26 94 V48 L60 24" fill="none" stroke="url(#trace)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M134 94 V48 L100 24" fill="none" stroke="url(#trace)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M30 98 L62 126 H116" fill="none" stroke="url(#trace)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="26" cy="94" r="4.5" fill="#a9ffff"/>
+    <circle cx="26" cy="48" r="4.5" fill="#a9ffff"/>
+    <circle cx="60" cy="24" r="4.5" fill="#a9ffff"/>
+    <circle cx="100" cy="24" r="4.5" fill="#a9ffff"/>
+    <circle cx="134" cy="48" r="4.5" fill="#a9ffff"/>
+    <circle cx="134" cy="94" r="4.5" fill="#a9ffff"/>
+    <path d="M80 20 L108 44 V96 L80 122 L52 96 V44 Z" fill="url(#prismMid)" opacity="0.22"/>
+    <path d="M80 28 L102 46 V96 L80 116 L58 96 V46 Z" fill="url(#prismMid)"/>
+    <path d="M80 28 L58 46 V96 L80 116 Z" fill="url(#prismLeft)"/>
+    <path d="M80 28 L102 46 V96 L80 116 Z" fill="url(#prismRight)"/>
+    <path d="M80 28 L102 46 L80 59 L58 46 Z" fill="#f8ffff" opacity="0.82"/>
+    <path d="M59 120 H103 L119 136 H79 Z" fill="url(#trace)" opacity="0.9"/>
+    <path d="M32 101 H66" stroke="url(#trace)" stroke-width="4" stroke-linecap="round"/>
   </g>
 </svg>

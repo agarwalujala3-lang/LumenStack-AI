@@ -13,11 +13,11 @@
   |
   <a href="https://lumenstack-ai.onrender.com/integrations.html">Integrations</a>
   |
-  <a href="public/lumenstack-linkedin-thumbnail.svg">Brand Preview</a>
+  <a href="public/lumenstack-github-preview.svg">Brand Preview</a>
 </p>
 
 <p align="center">
-  <img src="public/lumenstack-linkedin-thumbnail.svg" alt="LumenStack AI preview" width="920" />
+  <img src="public/lumenstack-github-preview.svg" alt="LumenStack AI preview" width="920" />
 </p>
 
 # LumenStack AI
