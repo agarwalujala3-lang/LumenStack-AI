@@ -1,165 +1,115 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="thumbBg" x1="126" y1="62" x2="1498" y2="842" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="94" y1="58" x2="1504" y2="850" gradientUnits="userSpaceOnUse">
       <stop stop-color="#07111B"/>
-      <stop offset="0.48" stop-color="#0A1624"/>
-      <stop offset="1" stop-color="#0E2030"/>
+      <stop offset="0.48" stop-color="#091827"/>
+      <stop offset="1" stop-color="#0C1D2E"/>
     </linearGradient>
-    <radialGradient id="thumbGlowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(238 160) rotate(27.8) scale(522 306)">
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(246 154) rotate(28) scale(472 268)">
       <stop stop-color="#72EEFF" stop-opacity="0.22"/>
       <stop offset="1" stop-color="#72EEFF" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="thumbGlowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1312 734) rotate(142) scale(388 242)">
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1270 746) rotate(143) scale(356 222)">
       <stop stop-color="#7D8FFF" stop-opacity="0.18"/>
       <stop offset="1" stop-color="#7D8FFF" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="thumbPanel" x1="854" y1="136" x2="1454" y2="760" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#102132" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#0A1826" stop-opacity="0.86"/>
+    <linearGradient id="panelStroke" x1="960" y1="224" x2="1404" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D6C89"/>
+      <stop offset="1" stop-color="#233E59"/>
     </linearGradient>
-    <linearGradient id="thumbGlass" x1="900" y1="196" x2="1412" y2="696" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#163851" stop-opacity="0.56"/>
-      <stop offset="1" stop-color="#0A1624" stop-opacity="0.1"/>
+    <linearGradient id="panelFill" x1="1000" y1="236" x2="1424" y2="644" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102233" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#0B1724" stop-opacity="0.92"/>
     </linearGradient>
-    <linearGradient id="thumbEdge" x1="44" y1="38" x2="148" y2="148" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F4FFFF"/>
-      <stop offset="0.42" stop-color="#73F2FF"/>
-      <stop offset="1" stop-color="#6784FF"/>
-    </linearGradient>
-    <linearGradient id="thumbMarkGlass" x1="52" y1="42" x2="126" y2="126" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#18384D" stop-opacity="0.84"/>
-      <stop offset="0.56" stop-color="#102637" stop-opacity="0.92"/>
-      <stop offset="1" stop-color="#081521" stop-opacity="0.98"/>
-    </linearGradient>
-    <linearGradient id="thumbCore" x1="66" y1="34" x2="106" y2="120" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#FCFFFF"/>
-      <stop offset="0.42" stop-color="#9AF9FF"/>
-      <stop offset="1" stop-color="#6C87FF"/>
-    </linearGradient>
-    <linearGradient id="thumbText" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#EDFDFF"/>
-      <stop offset="0.24" stop-color="#C4FBFF"/>
-      <stop offset="0.64" stop-color="#70E9FF"/>
+    <linearGradient id="textFill" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ECFDFF"/>
+      <stop offset="0.3" stop-color="#BDFBFF"/>
+      <stop offset="0.7" stop-color="#70E9FF"/>
       <stop offset="1" stop-color="#8C9CFF"/>
     </linearGradient>
-    <linearGradient id="thumbAccent" x1="1034" y1="320" x2="1254" y2="540" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#73F2FF"/>
-      <stop offset="1" stop-color="#7D8FFF"/>
+    <linearGradient id="chipStroke" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#3B7FA0"/>
+      <stop offset="1" stop-color="#29516B"/>
     </linearGradient>
-    <filter id="thumbBlur" x="-240" y="-240" width="2100" height="1380" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="64"/>
-    </filter>
-    <filter id="thumbCardShadow" x="832" y="128" width="662" height="662" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feOffset dy="20"/>
-      <feGaussianBlur stdDeviation="28"/>
-      <feColorMatrix type="matrix" values="0 0 0 0 0.00392157 0 0 0 0 0.0313725 0 0 0 0 0.0666667 0 0 0 0.52 0"/>
-      <feBlend in2="SourceGraphic" result="shape"/>
-    </filter>
-    <filter id="thumbLogoGlow" x="-80%" y="-80%" width="260%" height="260%">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#73F2FF" flood-opacity="0.46"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#6887FF" flood-opacity="0.18"/>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#73F2FF" flood-opacity="0.42"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#6887FF" flood-opacity="0.16"/>
     </filter>
   </defs>
 
-  <rect width="1600" height="900" rx="42" fill="url(#thumbBg)"/>
-  <g filter="url(#thumbBlur)">
-    <ellipse cx="242" cy="158" rx="282" ry="186" fill="url(#thumbGlowA)"/>
-    <ellipse cx="1308" cy="734" rx="254" ry="172" fill="url(#thumbGlowB)"/>
-  </g>
+  <rect width="1600" height="900" rx="42" fill="url(#bg)"/>
+  <ellipse cx="246" cy="154" rx="292" ry="182" fill="url(#glowA)"/>
+  <ellipse cx="1270" cy="746" rx="256" ry="168" fill="url(#glowB)"/>
 
   <g opacity="0.12">
-    <path d="M72 108H690" stroke="#74EFFF"/>
-    <path d="M72 162H690" stroke="#74EFFF"/>
-    <path d="M72 216H690" stroke="#74EFFF"/>
-    <path d="M72 270H690" stroke="#74EFFF"/>
-    <path d="M72 324H690" stroke="#74EFFF"/>
-    <path d="M72 378H690" stroke="#74EFFF"/>
-    <path d="M72 432H690" stroke="#74EFFF"/>
-    <path d="M72 486H690" stroke="#74EFFF"/>
-    <path d="M72 540H690" stroke="#74EFFF"/>
-    <path d="M72 594H690" stroke="#74EFFF"/>
-    <path d="M72 648H690" stroke="#74EFFF"/>
-    <path d="M72 702H690" stroke="#74EFFF"/>
+    <path d="M78 132H712" stroke="#74EFFF"/>
+    <path d="M78 186H712" stroke="#74EFFF"/>
+    <path d="M78 240H712" stroke="#74EFFF"/>
+    <path d="M78 294H712" stroke="#74EFFF"/>
+    <path d="M78 348H712" stroke="#74EFFF"/>
+    <path d="M78 402H712" stroke="#74EFFF"/>
+    <path d="M78 456H712" stroke="#74EFFF"/>
+    <path d="M78 510H712" stroke="#74EFFF"/>
+    <path d="M78 564H712" stroke="#74EFFF"/>
+    <path d="M78 618H712" stroke="#74EFFF"/>
+    <path d="M78 672H712" stroke="#74EFFF"/>
   </g>
 
-  <g transform="translate(82 72)">
-    <g filter="url(#thumbLogoGlow)">
-      <ellipse cx="84" cy="84" rx="64" ry="50" fill="#74EFFF" opacity="0.16"/>
-      <path d="M40 44H102L142 72H80Z" fill="url(#thumbMarkGlass)" stroke="url(#thumbEdge)" stroke-width="3.8" stroke-linejoin="round" opacity="0.8"/>
-      <path d="M26 82H88L128 110H66Z" fill="url(#thumbMarkGlass)" stroke="url(#thumbEdge)" stroke-width="3.8" stroke-linejoin="round" opacity="0.94"/>
-      <path d="M44 120H106L146 148H84Z" fill="url(#thumbMarkGlass)" stroke="url(#thumbEdge)" stroke-width="3.8" stroke-linejoin="round"/>
-      <path d="M84 26L113 46V118L84 138L55 118V46Z" fill="url(#thumbCore)" opacity="0.95"/>
-      <path d="M92 40L105 49V115L92 124L79 115V49Z" fill="#F4FFFF" opacity="0.88"/>
-      <path d="M113 46L140 61" stroke="#C6FFFF" stroke-width="3.6" stroke-linecap="round" opacity="0.74"/>
-      <path d="M113 118L138 132" stroke="#95ECFF" stroke-width="3.6" stroke-linecap="round" opacity="0.62"/>
-      <path d="M55 46L30 60" stroke="#91EBFF" stroke-width="3.6" stroke-linecap="round" opacity="0.52"/>
-      <circle cx="143" cy="62" r="4.6" fill="#D3FFFF"/>
-      <circle cx="140" cy="131" r="4.2" fill="#92ECFF"/>
-      <circle cx="28" cy="60" r="4" fill="#98EDFF" opacity="0.76"/>
-    </g>
-
-    <text x="214" y="108" fill="url(#thumbText)" font-family="Bahnschrift, 'Segoe UI', Arial, sans-serif" font-size="72" font-weight="600" letter-spacing="4.5">LumenStack AI</text>
-    <path d="M214 140H778" stroke="url(#thumbText)" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"/>
+  <g transform="translate(88 86)">
+    <image href="brand-lockup.svg" width="650" height="156"/>
   </g>
 
-  <text x="82" y="292" fill="#EEFBFF" font-family="Segoe UI, Arial, sans-serif" font-size="74" font-weight="800">Prism Workspace</text>
-  <text x="82" y="370" fill="#EEFBFF" font-family="Segoe UI, Arial, sans-serif" font-size="74" font-weight="800">for Repo Review</text>
-  <text x="82" y="438" fill="#AFC6D7" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="500">Architecture analysis, compare mode, system mapping, and code-aware chat in one cinematic surface.</text>
+  <text x="96" y="306" fill="#F1FCFF" font-family="Segoe UI, Arial, sans-serif" font-size="78" font-weight="800">Repo Intelligence</text>
+  <text x="96" y="392" fill="#F1FCFF" font-family="Segoe UI, Arial, sans-serif" font-size="78" font-weight="800">Workspace</text>
+  <text x="96" y="462" fill="#AFC6D7" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="500">Architecture analysis, compare mode, Mermaid maps, platform signals, and codebase chat.</text>
 
   <g>
-    <rect x="82" y="494" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="126" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo intake</text>
+    <rect x="96" y="536" width="214" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="142" y="573" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo intake</text>
 
-    <rect x="314" y="494" width="212" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="361" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
+    <rect x="328" y="536" width="222" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="375" y="573" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
 
-    <rect x="544" y="494" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="590" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">AI brief</text>
+    <rect x="568" y="536" width="176" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="621" y="573" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">AI brief</text>
+
+    <rect x="96" y="622" width="206" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="136" y="659" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid maps</text>
+
+    <rect x="320" y="622" width="170" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="366" y="659" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Chat layer</text>
+
+    <rect x="508" y="622" width="214" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="556" y="659" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Platform radar</text>
   </g>
 
-  <g>
-    <rect x="82" y="580" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="123" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid views</text>
+  <text x="96" y="792" fill="#92B5C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
+  <text x="96" y="836" fill="#BED7E6" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
 
-    <rect x="314" y="580" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="366" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Chat layer</text>
+  <g filter="url(#softGlow)">
+    <rect x="948" y="224" width="508" height="420" rx="34" fill="url(#panelFill)" stroke="url(#panelStroke)"/>
 
-    <rect x="526" y="580" width="222" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="574" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Platform radar</text>
-  </g>
+    <rect x="992" y="266" width="420" height="62" rx="18" fill="#0D2031" stroke="#295872"/>
+    <circle cx="1028" cy="297" r="8.5" fill="#73F2FF"/>
+    <text x="1052" y="307" fill="#E4F8FF" font-family="Consolas, monospace" font-size="22" font-weight="700">Architecture signal pass</text>
 
-  <text x="82" y="792" fill="#92B5C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
-  <text x="82" y="836" fill="#BED7E6" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
+    <rect x="1000" y="382" width="156" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1036" y="415" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">INPUT</text>
+    <text x="1024" y="442" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repository</text>
 
-  <g filter="url(#thumbCardShadow)" transform="translate(54 88)">
-    <rect x="856" y="152" width="590" height="576" rx="34" fill="url(#thumbPanel)" stroke="#24465E"/>
-    <rect x="856" y="152" width="590" height="576" rx="34" fill="url(#thumbGlass)" opacity="0.42"/>
+    <rect x="1256" y="382" width="176" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1291" y="415" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">PROCESS</text>
+    <text x="1274" y="442" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Graph pass</text>
 
-    <rect x="898" y="196" width="506" height="68" rx="18" fill="#0D2031" stroke="#27506C"/>
-    <circle cx="932" cy="230" r="9" fill="#73F2FF"/>
-    <text x="958" y="241" fill="#E4F8FF" font-family="Consolas, monospace" font-size="24" font-weight="700">Prism signal calibration</text>
+    <rect x="1100" y="524" width="198" height="96" rx="24" fill="#10283C" stroke="#2C5A76"/>
+    <text x="1152" y="559" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">OUTPUT</text>
+    <text x="1133" y="588" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Review brief</text>
 
-    <rect x="906" y="304" width="166" height="90" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="944" y="340" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">INPUT</text>
-    <text x="936" y="370" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Repository</text>
-
-    <rect x="1182" y="304" width="194" height="90" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1218" y="340" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">PROCESS</text>
-    <text x="1207" y="370" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Graph pass</text>
-
-    <rect x="1036" y="456" width="218" height="110" rx="24" fill="#10283C" stroke="#2C5A76"/>
-    <text x="1090" y="498" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">OUTPUT</text>
-    <text x="1072" y="536" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700">Review brief</text>
-
-    <path d="M1072 350H1170" stroke="url(#thumbAccent)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1278 394V448" stroke="url(#thumbAccent)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1200 510H1252" stroke="url(#thumbAccent)" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="1170" cy="350" r="10" fill="#73F2FF"/>
-    <circle cx="1278" cy="452" r="10" fill="#7D8FFF"/>
-    <circle cx="1252" cy="510" r="10" fill="#73F2FF"/>
-
-    <rect x="906" y="604" width="498" height="82" rx="22" fill="#0E1D2A" stroke="#234A63"/>
-    <text x="940" y="639" fill="#94EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">FEATURES</text>
-    <text x="940" y="668" fill="#EAF7FF" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="600">Repo intake | Compare mode | Chat | Reports</text>
+    <path d="M1156 424H1244" stroke="url(#textFill)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1344 466V514" stroke="url(#textFill)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1298 572H1320" stroke="url(#textFill)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="1244" cy="424" r="9" fill="#73F2FF"/>
+    <circle cx="1344" cy="518" r="9" fill="#7D8FFF"/>
+    <circle cx="1320" cy="572" r="9" fill="#73F2FF"/>
   </g>
 </svg>
