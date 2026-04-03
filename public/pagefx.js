@@ -95,7 +95,7 @@ function createIntroElement() {
       <span class="prism-intro-badge">${escapeHtml(badge)}</span>
       <div class="prism-intro-mark-stage">
         <span class="prism-intro-core-dot"></span>
-        <img class="prism-intro-mark" src="/brand-mark.svg" alt="" />
+        <img class="prism-intro-mark" src="/brand-favicon.svg" alt="" />
       </div>
       <img class="prism-intro-lockup" src="/brand-lockup.svg" alt="" />
       <p class="prism-intro-text">${escapeHtml(title)}</p>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI favicon</title>
+  <desc id="desc">A compact glass prism tile with a luminous core for the LumenStack AI browser icon.</desc>
+  <defs>
+    <linearGradient id="bg" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17384F"/>
+      <stop offset="0.58" stop-color="#0E2536"/>
+      <stop offset="1" stop-color="#08131F"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="17" y1="14" x2="49" y2="47" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2FFFF"/>
+      <stop offset="0.42" stop-color="#7AEFFF"/>
+      <stop offset="1" stop-color="#6C83FF"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="20" y1="18" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#244D68" stop-opacity="0.86"/>
+      <stop offset="0.55" stop-color="#12293A" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#0A1824" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="core" x1="24" y1="17" x2="37" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FCFFFF"/>
+      <stop offset="0.44" stop-color="#93F8FF"/>
+      <stop offset="1" stop-color="#7087FF"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#74EFFF" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#74EFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bloom" x="-70%" y="-70%" width="240%" height="240%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.8" flood-color="#77F1FF" flood-opacity="0.55"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#6D83FF" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+
+  <rect x="3" y="3" width="58" height="58" rx="17" fill="url(#bg)"/>
+
+  <g filter="url(#bloom)">
+    <ellipse cx="32" cy="32" rx="18" ry="14" fill="url(#aura)"/>
+
+    <path d="M18 22H35L45 29H28Z" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.8" stroke-linejoin="round" opacity="0.82"/>
+    <path d="M15 33H32L42 40H25Z" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.8" stroke-linejoin="round" opacity="0.94"/>
+    <path d="M19 43H36L46 50H29Z" fill="url(#glass)" stroke="url(#edge)" stroke-width="1.8" stroke-linejoin="round"/>
+
+    <path d="M30 17L38 22V40L30 47L22 40V22Z" fill="url(#core)" opacity="0.96"/>
+    <path d="M32 21L36 24V38L32 41L28 38V24Z" fill="#F2FFFF" opacity="0.9"/>
+
+    <path d="M38 22L44 26" stroke="#C8FFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.74"/>
+    <path d="M38 40L44 44" stroke="#8FEBFF" stroke-width="1.8" stroke-linecap="round" opacity="0.62"/>
+    <path d="M22 22L16 26" stroke="#8FEBFF" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+
+    <circle cx="45.5" cy="26.5" r="2" fill="#D3FFFF"/>
+    <circle cx="44.5" cy="44.5" r="1.8" fill="#90ECFF"/>
+    <circle cx="15.5" cy="26" r="1.7" fill="#9CEEFF" opacity="0.78"/>
+  </g>
+</svg>
