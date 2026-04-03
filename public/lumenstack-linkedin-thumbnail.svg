@@ -131,7 +131,7 @@
   <text x="82" y="792" fill="#92B5C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
   <text x="82" y="836" fill="#BED7E6" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
 
-  <g filter="url(#thumbCardShadow)">
+  <g filter="url(#thumbCardShadow)" transform="translate(54 88)">
     <rect x="856" y="152" width="590" height="576" rx="34" fill="url(#thumbPanel)" stroke="#24465E"/>
     <rect x="856" y="152" width="590" height="576" rx="34" fill="url(#thumbGlass)" opacity="0.42"/>
 
