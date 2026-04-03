@@ -8,11 +8,11 @@
 
 <p align="center">
   <a href="https://lumenstack-ai.onrender.com/">Live App</a>
-  ·
+  |
   <a href="https://lumenstack-ai.onrender.com/workspaces.html">Workspaces</a>
-  ·
+  |
   <a href="https://lumenstack-ai.onrender.com/integrations.html">Integrations</a>
-  ·
+  |
   <a href="public/lumenstack-linkedin-thumbnail.svg">Brand Preview</a>
 </p>
 

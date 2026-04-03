@@ -82,7 +82,7 @@
     <path d="M72 702H690" stroke="#74EFFF"/>
   </g>
 
-  <g transform="translate(82 82)">
+  <g transform="translate(82 72)">
     <g filter="url(#thumbLogoGlow)">
       <ellipse cx="84" cy="84" rx="64" ry="50" fill="#74EFFF" opacity="0.16"/>
       <path d="M40 44H102L142 72H80Z" fill="url(#thumbMarkGlass)" stroke="url(#thumbEdge)" stroke-width="3.8" stroke-linejoin="round" opacity="0.8"/>
@@ -98,33 +98,34 @@
       <circle cx="28" cy="60" r="4" fill="#98EDFF" opacity="0.76"/>
     </g>
 
-    <text x="214" y="110" fill="url(#thumbText)" font-family="Bahnschrift, 'Segoe UI', Arial, sans-serif" font-size="82" font-weight="600" letter-spacing="5">LumenStack AI</text>
-    <path d="M214 144H822" stroke="url(#thumbText)" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"/>
+    <text x="214" y="108" fill="url(#thumbText)" font-family="Bahnschrift, 'Segoe UI', Arial, sans-serif" font-size="72" font-weight="600" letter-spacing="4.5">LumenStack AI</text>
+    <path d="M214 140H778" stroke="url(#thumbText)" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round"/>
   </g>
 
-  <text x="82" y="278" fill="#EEFBFF" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="800">Prism Workspace for Repo Review</text>
-  <text x="82" y="344" fill="#AFC6D7" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="500">Architecture analysis, compare mode, system mapping, and code-aware chat in one cinematic surface.</text>
+  <text x="82" y="292" fill="#EEFBFF" font-family="Segoe UI, Arial, sans-serif" font-size="74" font-weight="800">Prism Workspace</text>
+  <text x="82" y="370" fill="#EEFBFF" font-family="Segoe UI, Arial, sans-serif" font-size="74" font-weight="800">for Repo Review</text>
+  <text x="82" y="438" fill="#AFC6D7" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="500">Architecture analysis, compare mode, system mapping, and code-aware chat in one cinematic surface.</text>
 
   <g>
-    <rect x="82" y="430" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="126" y="467" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo intake</text>
+    <rect x="82" y="494" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="126" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo intake</text>
 
-    <rect x="314" y="430" width="212" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="361" y="467" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
+    <rect x="314" y="494" width="212" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="361" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
 
-    <rect x="544" y="430" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="590" y="467" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">AI brief</text>
+    <rect x="544" y="494" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="590" y="531" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">AI brief</text>
   </g>
 
   <g>
-    <rect x="82" y="516" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="123" y="553" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid views</text>
+    <rect x="82" y="580" width="214" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="123" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid views</text>
 
-    <rect x="314" y="516" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="366" y="553" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Chat layer</text>
+    <rect x="314" y="580" width="194" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="366" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Chat layer</text>
 
-    <rect x="526" y="516" width="222" height="58" rx="29" fill="#102233" stroke="#275674"/>
-    <text x="574" y="553" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Platform radar</text>
+    <rect x="526" y="580" width="222" height="58" rx="29" fill="#102233" stroke="#275674"/>
+    <text x="574" y="617" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Platform radar</text>
   </g>
 
   <text x="82" y="792" fill="#92B5C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
@@ -159,6 +160,6 @@
 
     <rect x="906" y="604" width="498" height="82" rx="22" fill="#0E1D2A" stroke="#234A63"/>
     <text x="940" y="639" fill="#94EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">FEATURES</text>
-    <text x="940" y="668" fill="#EAF7FF" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="600">Repo intake • Compare mode • Chat • Reports</text>
+    <text x="940" y="668" fill="#EAF7FF" font-family="Segoe UI, Arial, sans-serif" font-size="23" font-weight="600">Repo intake | Compare mode | Chat | Reports</text>
   </g>
 </svg>
