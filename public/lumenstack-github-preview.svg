@@ -1,121 +1,110 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="120" y1="32" x2="1512" y2="868" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#060E18"/>
-      <stop offset="0.45" stop-color="#0A1828"/>
-      <stop offset="1" stop-color="#0F253A"/>
+    <linearGradient id="bg" x1="118" y1="28" x2="1498" y2="862" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07111C"/>
+      <stop offset="0.48" stop-color="#0A1828"/>
+      <stop offset="1" stop-color="#10243A"/>
     </linearGradient>
-    <radialGradient id="smokeA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(252 170) rotate(24) scale(520 320)">
-      <stop stop-color="#7AF2FF" stop-opacity="0.26"/>
-      <stop offset="1" stop-color="#7AF2FF" stop-opacity="0"/>
+    <radialGradient id="glowLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 166) rotate(22) scale(472 292)">
+      <stop stop-color="#82F6FF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#82F6FF" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="smokeB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1330 720) rotate(150) scale(420 260)">
-      <stop stop-color="#7D8FFF" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="#7D8FFF" stop-opacity="0"/>
+    <radialGradient id="glowRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1312 704) rotate(148) scale(336 212)">
+      <stop stop-color="#798EFF" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#798EFF" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="glassStroke" x1="820" y1="220" x2="1446" y2="676" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#66D7FF"/>
-      <stop offset="1" stop-color="#2B4E68"/>
+    <linearGradient id="panelFill" x1="1050" y1="222" x2="1462" y2="564" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#143145" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#102636" stop-opacity="0.9"/>
     </linearGradient>
-    <linearGradient id="glassFill" x1="860" y1="240" x2="1440" y2="660" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#102636" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#0B1A26" stop-opacity="0.86"/>
-    </linearGradient>
-    <linearGradient id="textGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#EDFDFF"/>
-      <stop offset="0.3" stop-color="#BDFBFF"/>
-      <stop offset="0.7" stop-color="#6FE9FF"/>
-      <stop offset="1" stop-color="#8C9CFF"/>
+    <linearGradient id="panelStroke" x1="1048" y1="222" x2="1462" y2="564" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6FE9FF"/>
+      <stop offset="1" stop-color="#355D7A"/>
     </linearGradient>
     <linearGradient id="chipStroke" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#3B7FA0"/>
-      <stop offset="1" stop-color="#29516B"/>
+      <stop stop-color="#4389AB"/>
+      <stop offset="1" stop-color="#2C5671"/>
     </linearGradient>
-    <filter id="blurGlow" x="-70%" y="-70%" width="240%" height="240%">
-      <feGaussianBlur stdDeviation="40"/>
+    <linearGradient id="signalStroke" x1="1170" y1="0" x2="1360" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7BF1FF"/>
+      <stop offset="1" stop-color="#7C8FFF"/>
+    </linearGradient>
+    <filter id="panelGlow" x="986" y="164" width="540" height="456" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#6DE8FF" flood-opacity="0.34"/>
+      <feDropShadow dx="0" dy="24" stdDeviation="34" flood-color="#091220" flood-opacity="0.45"/>
     </filter>
-    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#73F2FF" flood-opacity="0.42"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#6887FF" flood-opacity="0.18"/>
+    <filter id="softBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="34"/>
     </filter>
   </defs>
 
   <rect width="1600" height="900" rx="42" fill="url(#bg)"/>
-  <ellipse cx="252" cy="170" rx="320" ry="210" fill="url(#smokeA)"/>
-  <ellipse cx="1330" cy="720" rx="320" ry="200" fill="url(#smokeB)"/>
+  <ellipse cx="220" cy="166" rx="366" ry="246" fill="url(#glowLeft)"/>
+  <ellipse cx="1312" cy="704" rx="290" ry="188" fill="url(#glowRight)"/>
 
-  <g filter="url(#blurGlow)" opacity="0.24">
-    <path d="M120 120C360 40 620 60 820 140" stroke="#7AF2FF" stroke-width="22" stroke-linecap="round"/>
-    <path d="M980 780C1220 720 1380 620 1500 480" stroke="#7D8FFF" stroke-width="22" stroke-linecap="round"/>
+  <g opacity="0.26" filter="url(#softBlur)">
+    <path d="M124 706C274 650 454 630 668 654" stroke="#6FE9FF" stroke-width="18" stroke-linecap="round"/>
+    <path d="M1008 768C1168 738 1318 672 1450 544" stroke="#7A90FF" stroke-width="18" stroke-linecap="round"/>
   </g>
 
-  <g opacity="0.14">
-    <path d="M84 132H1500" stroke="#74EFFF"/>
-    <path d="M84 194H1500" stroke="#74EFFF"/>
-    <path d="M84 256H1500" stroke="#74EFFF"/>
-    <path d="M84 318H1500" stroke="#74EFFF"/>
-    <path d="M84 380H1500" stroke="#74EFFF"/>
-    <path d="M84 442H1500" stroke="#74EFFF"/>
-    <path d="M84 504H1500" stroke="#74EFFF"/>
-    <path d="M84 566H1500" stroke="#74EFFF"/>
-    <path d="M84 628H1500" stroke="#74EFFF"/>
-    <path d="M84 690H1500" stroke="#74EFFF"/>
+  <g transform="translate(92 78)">
+    <image href="brand-lockup.svg" width="612" height="148"/>
   </g>
 
-  <g transform="translate(92 86)">
-    <image href="brand-lockup.svg" width="700" height="168"/>
-  </g>
+  <text x="96" y="320" fill="#F2FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="800">Repo Intelligence</text>
+  <text x="96" y="402" fill="#F2FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="82" font-weight="800">Workspace</text>
 
-  <text x="96" y="320" fill="#F1FCFF" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="800">Repo Intelligence</text>
-  <text x="96" y="408" fill="#F1FCFF" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="800">Workspace</text>
-  <text x="96" y="478" fill="#AFC6D7" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="500">Architecture analysis, compare mode, Mermaid maps, platform signals, and codebase chat.</text>
+  <text x="96" y="474" fill="#B9CDDB" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="500">Architecture analysis, compare mode, Mermaid maps,</text>
+  <text x="96" y="514" fill="#B9CDDB" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="500">platform signals, and codebase chat.</text>
 
   <g>
-    <rect x="96" y="546" width="226" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="140" y="583" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repo intake</text>
+    <rect x="96" y="560" width="218" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="205" y="596" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Repo intake</text>
 
-    <rect x="340" y="546" width="236" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="386" y="583" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Compare mode</text>
+    <rect x="336" y="560" width="242" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="457" y="596" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Compare mode</text>
 
-    <rect x="594" y="546" width="182" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="646" y="583" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">AI brief</text>
+    <rect x="600" y="560" width="168" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="684" y="596" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">AI brief</text>
 
-    <rect x="96" y="624" width="214" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="132" y="661" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Mermaid maps</text>
+    <rect x="96" y="634" width="222" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="207" y="670" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Mermaid maps</text>
 
-    <rect x="328" y="624" width="176" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="372" y="661" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Chat layer</text>
+    <rect x="340" y="634" width="186" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="433" y="670" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Chat layer</text>
 
-    <rect x="522" y="624" width="226" height="58" rx="29" fill="#102233" stroke="url(#chipStroke)"/>
-    <text x="564" y="661" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Platform radar</text>
+    <rect x="548" y="634" width="242" height="56" rx="28" fill="#102233" stroke="url(#chipStroke)"/>
+    <text x="669" y="670" text-anchor="middle" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Platform radar</text>
   </g>
 
-  <text x="96" y="792" fill="#92B5C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
-  <text x="96" y="836" fill="#BED7E6" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
+  <text x="96" y="792" fill="#97B7C8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="600">github.com/agarwalujala3-lang/LumenStack-AI</text>
+  <text x="96" y="836" fill="#C2D8E5" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
 
-  <g filter="url(#softGlow)">
-    <rect x="940" y="230" width="520" height="420" rx="36" fill="url(#glassFill)" stroke="url(#glassStroke)"/>
-    <rect x="980" y="270" width="440" height="64" rx="18" fill="#0D2031" stroke="#295872"/>
-    <circle cx="1018" cy="302" r="8.5" fill="#73F2FF"/>
-    <text x="1042" y="312" fill="#E4F8FF" font-family="Consolas, monospace" font-size="22" font-weight="700">Architecture signal pass</text>
+  <g filter="url(#panelGlow)">
+    <rect x="1044" y="228" width="420" height="374" rx="34" fill="url(#panelFill)" stroke="url(#panelStroke)"/>
+    <rect x="1086" y="266" width="344" height="56" rx="16" fill="#0E2131" stroke="#2F5A75"/>
+    <circle cx="1122" cy="294" r="8.5" fill="#73F2FF"/>
+    <text x="1148" y="303" fill="#E4F8FF" font-family="Consolas, monospace" font-size="20" font-weight="700">Architecture signal pass</text>
 
-    <rect x="988" y="390" width="166" height="88" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1024" y="425" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">INPUT</text>
-    <text x="1012" y="452" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Repository</text>
+    <rect x="1100" y="388" width="148" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1140" y="420" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">INPUT</text>
+    <text x="1118" y="446" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Repository</text>
 
-    <rect x="1248" y="390" width="186" height="88" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1286" y="425" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">PROCESS</text>
-    <text x="1268" y="452" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700">Graph pass</text>
+    <rect x="1344" y="388" width="150" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1383" y="420" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">PROCESS</text>
+    <text x="1362" y="446" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Graph pass</text>
 
-    <rect x="1098" y="534" width="210" height="100" rx="24" fill="#10283C" stroke="#2C5A76"/>
-    <text x="1152" y="570" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="700">OUTPUT</text>
-    <text x="1132" y="598" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Review brief</text>
+    <rect x="1216" y="514" width="206" height="90" rx="22" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1273" y="547" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">OUTPUT</text>
+    <text x="1248" y="575" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Review brief</text>
 
-    <path d="M1152 432H1240" stroke="url(#textGlow)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1340 476V524" stroke="url(#textGlow)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1294 582H1316" stroke="url(#textGlow)" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="1240" cy="432" r="9" fill="#73F2FF"/>
-    <circle cx="1340" cy="528" r="9" fill="#7D8FFF"/>
-    <circle cx="1316" cy="582" r="9" fill="#73F2FF"/>
+    <path d="M1248 430H1336" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1418 472V514" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1422 559H1436" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="1336" cy="430" r="8.5" fill="#73F2FF"/>
+    <circle cx="1418" cy="516" r="8.5" fill="#7D8FFF"/>
+    <circle cx="1436" cy="559" r="8.5" fill="#73F2FF"/>
   </g>
 </svg>
