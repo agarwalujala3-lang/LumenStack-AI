@@ -3498,6 +3498,10 @@ html.cursor-bootstrap .cursor-trail {
 }
 
 @media (pointer: fine) {
+  html.cursor-enhanced,
+  html.cursor-enhanced *,
+  html.cursor-enhanced *::before,
+  html.cursor-enhanced *::after,
   body.cursor-enhanced,
   body.cursor-enhanced *,
   body.cursor-enhanced *::before,
@@ -3505,6 +3509,31 @@ html.cursor-bootstrap .cursor-trail {
     cursor: none !important;
   }
 
+  html.cursor-enhanced,
+  html.cursor-enhanced body {
+    cursor: none !important;
+  }
+
+  html.cursor-enhanced a,
+  html.cursor-enhanced button,
+  html.cursor-enhanced input,
+  html.cursor-enhanced select,
+  html.cursor-enhanced textarea,
+  html.cursor-enhanced label,
+  html.cursor-enhanced summary,
+  html.cursor-enhanced [role="button"],
+  html.cursor-enhanced [contenteditable="true"] {
+    cursor: none !important;
+  }
+
+  html.cursor-enhanced input::file-selector-button,
+  html.cursor-enhanced input::-webkit-file-upload-button {
+    cursor: none !important;
+  }
+
+  html.cursor-enhanced .cursor-core,
+  html.cursor-enhanced .cursor-aura,
+  html.cursor-enhanced .cursor-trail,
   body.cursor-enhanced .cursor-core,
   body.cursor-enhanced .cursor-aura,
   body.cursor-enhanced .cursor-trail {

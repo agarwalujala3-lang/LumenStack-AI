@@ -274,6 +274,7 @@ function initSharedCursorSystem() {
   }
 
   document.body.classList.add("cursor-enhanced");
+  document.documentElement.classList.add("cursor-enhanced");
   document.documentElement.classList.remove("cursor-bootstrap");
 
   const target = {
