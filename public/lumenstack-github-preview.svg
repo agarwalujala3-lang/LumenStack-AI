@@ -83,28 +83,28 @@
   <text x="96" y="836" fill="#C2D8E5" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">Built with Node.js, Express, JavaScript, OpenAI, and Mermaid</text>
 
   <g filter="url(#panelGlow)">
-    <rect x="1044" y="228" width="420" height="374" rx="34" fill="url(#panelFill)" stroke="url(#panelStroke)"/>
-    <rect x="1086" y="266" width="344" height="56" rx="16" fill="#0E2131" stroke="#2F5A75"/>
-    <circle cx="1122" cy="294" r="8.5" fill="#73F2FF"/>
-    <text x="1148" y="303" fill="#E4F8FF" font-family="Consolas, monospace" font-size="20" font-weight="700">Architecture signal pass</text>
+    <rect x="1048" y="228" width="424" height="360" rx="34" fill="url(#panelFill)" stroke="url(#panelStroke)"/>
+    <rect x="1088" y="266" width="344" height="54" rx="16" fill="#0E2131" stroke="#2F5A75"/>
+    <circle cx="1122" cy="293" r="8.5" fill="#73F2FF"/>
+    <text x="1148" y="302" fill="#E4F8FF" font-family="Consolas, monospace" font-size="20" font-weight="700">Architecture signal pass</text>
 
-    <rect x="1100" y="388" width="148" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1140" y="420" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">INPUT</text>
-    <text x="1118" y="446" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Repository</text>
+    <rect x="1098" y="390" width="148" height="80" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1138" y="421" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">INPUT</text>
+    <text x="1116" y="447" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Repository</text>
 
-    <rect x="1344" y="388" width="150" height="84" rx="20" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1383" y="420" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">PROCESS</text>
-    <text x="1362" y="446" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Graph pass</text>
+    <rect x="1298" y="390" width="146" height="80" rx="20" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1336" y="421" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">PROCESS</text>
+    <text x="1316" y="447" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Graph pass</text>
 
-    <rect x="1216" y="514" width="206" height="90" rx="22" fill="#11283B" stroke="#2C5A76"/>
-    <text x="1273" y="547" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">OUTPUT</text>
-    <text x="1248" y="575" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Review brief</text>
+    <rect x="1176" y="492" width="206" height="82" rx="22" fill="#11283B" stroke="#2C5A76"/>
+    <text x="1234" y="523" fill="#91EDFF" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">OUTPUT</text>
+    <text x="1208" y="550" fill="#F5FBFF" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Review brief</text>
 
-    <path d="M1248 430H1336" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1418 472V514" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
-    <path d="M1422 559H1436" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
-    <circle cx="1336" cy="430" r="8.5" fill="#73F2FF"/>
-    <circle cx="1418" cy="516" r="8.5" fill="#7D8FFF"/>
-    <circle cx="1436" cy="559" r="8.5" fill="#73F2FF"/>
+    <path d="M1246 430H1290" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1368 470V533" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1382 533H1400" stroke="url(#signalStroke)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="1290" cy="430" r="8.5" fill="#73F2FF"/>
+    <circle cx="1368" cy="533" r="8.5" fill="#7D8FFF"/>
+    <circle cx="1400" cy="533" r="8.5" fill="#73F2FF"/>
   </g>
 </svg>
