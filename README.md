@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="public/lumenstack-github-preview.svg?v=20260407b" alt="LumenStack AI preview" width="920" />
+  <img src="public/lumenstack-github-preview.svg?v=20260407b" alt="LumenStack AI preview showing repo intelligence, compare mode, Mermaid mapping, and codebase chat." width="100%" />
 </p>
 
 # LumenStack AI
