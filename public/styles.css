@@ -5033,6 +5033,290 @@ body[data-theme="dark"] .device-shell::after {
   background: radial-gradient(circle, rgba(201, 133, 255, 0.18), transparent 70%);
 }
 
+.main-grid {
+  gap: 28px;
+  grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
+}
+
+.panel {
+  padding: 28px;
+}
+
+.panel-header,
+.section-title-row {
+  gap: 18px;
+}
+
+.analyze-form,
+.signal-groups,
+.preview-grid,
+.finding-list,
+.relationship-list,
+.dependency-grid,
+.file-grid,
+.module-grid,
+.stack-list,
+.chat-messages {
+  gap: 16px;
+}
+
+.field span,
+.toggle-row span {
+  font-family: "Aptos", "Segoe UI", sans-serif;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.preview-card,
+.stack-item,
+.relationship-item,
+.dependency-item,
+.file-card,
+.module-card,
+.finding-card,
+.chat-bubble,
+.profile-card,
+.signal-insight-card,
+.workspace-preset-card,
+.integration-card,
+.metric-card {
+  position: relative;
+  padding: 18px;
+  border-radius: 28px;
+}
+
+.preview-card::before,
+.stack-item::before,
+.relationship-item::before,
+.dependency-item::before,
+.file-card::before,
+.module-card::before,
+.finding-card::before,
+.profile-card::before,
+.signal-insight-card::before,
+.workspace-preset-card::before,
+.integration-card::before,
+.metric-card::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(159, 231, 255, 0.94), rgba(157, 103, 255, 0.94));
+  box-shadow: 0 0 18px rgba(157, 103, 255, 0.2);
+}
+
+.workspace-strip,
+.platform-grid,
+.overview-grid,
+.diagram-grid,
+.intel-grid {
+  gap: 22px;
+}
+
+.advisor-grid {
+  gap: 22px;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+}
+
+.advisor-grid > :first-child {
+  grid-row: span 2;
+}
+
+.intel-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.intel-grid > :last-child {
+  grid-column: 1 / -1;
+}
+
+.result-banner {
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(188, 220, 255, 0.42), transparent 22%),
+    radial-gradient(circle at 86% 78%, rgba(226, 198, 255, 0.34), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(246, 238, 255, 0.64)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.48), rgba(202, 175, 255, 0.12));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    0 22px 44px rgba(145, 106, 212, 0.14);
+}
+
+.result-banner::after {
+  background: linear-gradient(90deg, transparent, rgba(173, 131, 255, 0.16), transparent);
+}
+
+.result-banner .eyebrow,
+.result-time {
+  color: var(--muted);
+}
+
+.result-banner .result-pill {
+  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(255, 255, 255, 0.82);
+  color: #6f57a0;
+}
+
+.metric-grid {
+  gap: 16px;
+}
+
+.metric-card {
+  min-height: 152px;
+  align-content: start;
+}
+
+.metric-card strong {
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+.comparison-stats,
+.chip-row {
+  gap: 12px;
+}
+
+.language-track {
+  height: 12px;
+  background: rgba(194, 164, 255, 0.16);
+}
+
+.language-fill {
+  background: linear-gradient(90deg, #8f5bff, #b67aff 56%, #ffb7e7);
+}
+
+.diagram-tabs {
+  gap: 12px;
+}
+
+.diagram-surface {
+  min-height: 420px;
+  padding: 22px;
+  border-radius: 30px;
+}
+
+.text-block {
+  margin-top: 20px;
+  font-size: 0.97rem;
+}
+
+.finding-card[data-severity="high"] {
+  border-color: rgba(255, 167, 190, 0.54);
+  background:
+    linear-gradient(180deg, rgba(255, 244, 247, 0.98), rgba(255, 232, 239, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 167, 190, 0.14));
+}
+
+.finding-card[data-severity="medium"] {
+  border-color: rgba(197, 166, 255, 0.58);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 255, 0.98), rgba(247, 239, 255, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(197, 166, 255, 0.14));
+}
+
+.finding-card[data-severity="low"] {
+  border-color: rgba(159, 231, 255, 0.58);
+  background:
+    linear-gradient(180deg, rgba(249, 254, 255, 0.98), rgba(238, 248, 255, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(159, 231, 255, 0.14));
+}
+
+.chat-panel {
+  align-content: start;
+}
+
+.chat-messages {
+  min-height: 320px;
+  max-height: 460px;
+  padding-right: 8px;
+}
+
+.chat-bubble {
+  max-width: 92%;
+  border-radius: 24px;
+}
+
+.chat-bubble.user {
+  justify-self: end;
+  background:
+    linear-gradient(135deg, rgba(194, 164, 255, 0.52), rgba(159, 231, 255, 0.3)),
+    rgba(255, 255, 255, 0.4);
+  color: #4d3d69;
+}
+
+.chat-bubble.system {
+  justify-self: start;
+}
+
+.chat-form {
+  gap: 14px;
+  align-items: center;
+}
+
+#chat-question {
+  min-height: 52px;
+}
+
+.relationship-weight {
+  background: rgba(194, 164, 255, 0.22);
+  color: #7b52b7;
+}
+
+.file-meta {
+  font-size: 0.88rem;
+}
+
+body[data-theme="dark"] .result-banner {
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(117, 135, 255, 0.18), transparent 22%),
+    radial-gradient(circle at 86% 78%, rgba(201, 133, 255, 0.18), transparent 24%),
+    linear-gradient(180deg, rgba(38, 34, 61, 0.92), rgba(21, 18, 36, 0.78)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(202, 146, 255, 0.08));
+  color: var(--ink);
+}
+
+body[data-theme="dark"] .result-banner .eyebrow,
+body[data-theme="dark"] .result-time {
+  color: var(--muted);
+}
+
+body[data-theme="dark"] .result-banner .result-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #dacdf4;
+}
+
+body[data-theme="dark"] .finding-card[data-severity="high"] {
+  background:
+    linear-gradient(180deg, rgba(80, 34, 53, 0.92), rgba(44, 19, 31, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 167, 190, 0.08));
+}
+
+body[data-theme="dark"] .finding-card[data-severity="medium"] {
+  background:
+    linear-gradient(180deg, rgba(56, 40, 88, 0.92), rgba(32, 24, 52, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(197, 166, 255, 0.08));
+}
+
+body[data-theme="dark"] .finding-card[data-severity="low"] {
+  background:
+    linear-gradient(180deg, rgba(29, 47, 70, 0.92), rgba(18, 29, 44, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(159, 231, 255, 0.08));
+}
+
+body[data-theme="dark"] .chat-bubble.user {
+  color: #f4ecff;
+}
+
+body[data-theme="dark"] .relationship-weight {
+  background: rgba(192, 156, 255, 0.18);
+  color: #ddcbff;
+}
+
 @media (max-width: 1240px) {
   .six-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
