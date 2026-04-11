@@ -774,6 +774,56 @@ function setupMagneticButtons() {
   });
 }
 
+function triggerDeviceAction(action) {
+  const analyzePanel = document.getElementById("analyze-panel");
+
+  if (!analyzePanel) {
+    window.location.href = "/#analyze-panel";
+    return;
+  }
+
+  analyzePanel.scrollIntoView({
+    behavior: window.matchMedia("(max-width: 760px)").matches ? "auto" : "smooth",
+    block: "start"
+  });
+
+  window.setTimeout(() => {
+    if (
+      action === "focus-chat" &&
+      chatQuestionInput &&
+      resultsElement &&
+      !resultsElement.classList.contains("hidden")
+    ) {
+      chatQuestionInput.focus();
+      return;
+    }
+
+    if (repoUrlInput) {
+      repoUrlInput.focus();
+    }
+  }, 280);
+}
+
+function bindDeviceActions() {
+  document.addEventListener("click", (event) => {
+    const trigger = event.target instanceof Element ? event.target.closest("[data-device-action]") : null;
+
+    if (!trigger) {
+      return;
+    }
+
+    const action = trigger.getAttribute("data-device-action") || "";
+
+    if (trigger.tagName !== "A") {
+      event.preventDefault();
+    }
+
+    if (action === "start-analysis" || action === "focus-chat") {
+      triggerDeviceAction(action);
+    }
+  });
+}
+
 function setupTouchEffects() {
   if (prefersReducedMotion || !coarsePointerQuery.matches) {
     return;
@@ -1500,6 +1550,7 @@ setupScrollProgress();
 setupAmbientParticles();
 setupPromptRotator();
 setupMagneticButtons();
+bindDeviceActions();
 setupTouchEffects();
 setupCursorSystem();
 refreshSpotlights(document);

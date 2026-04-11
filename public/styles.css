@@ -2022,6 +2022,9 @@ body[data-theme="dark"] .theme-toggle-thumb {
   display: block;
   margin-top: 10px;
   font-size: 1.05rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .workspace-preset-card p,
@@ -4682,7 +4685,7 @@ body[data-theme="dark"] .feature-marquee::after {
 
 .hero-stage-reference {
   align-items: start;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  grid-template-columns: 1fr;
   gap: 28px;
 }
 
@@ -4700,7 +4703,7 @@ body[data-theme="dark"] .feature-marquee::after {
 
 .hero-device-cluster {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
   gap: 18px;
   align-items: stretch;
   grid-auto-rows: 1fr;
@@ -4742,16 +4745,16 @@ body[data-theme="dark"] .feature-marquee::after {
 }
 
 .device-shell-intro {
-  min-height: 480px;
+  min-height: 440px;
   align-content: start;
 }
 
 .device-shell-dashboard {
-  min-height: 520px;
+  min-height: 460px;
 }
 
 .device-shell-chat {
-  min-height: 480px;
+  min-height: 440px;
 }
 
 .hero-device-cluster-compact .device-shell {
@@ -4880,6 +4883,22 @@ body[data-theme="dark"] .feature-marquee::after {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94);
 }
 
+.device-action-control {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.device-action-control:focus-visible {
+  outline: 2px solid rgba(125, 70, 242, 0.52);
+  outline-offset: 3px;
+}
+
 .device-search-icon {
   display: inline-grid;
   place-items: center;
@@ -4929,6 +4948,10 @@ body[data-theme="dark"] .feature-marquee::after {
   color: #fffaff;
   background: linear-gradient(135deg, #7d46f2, #ad73ff);
   box-shadow: 0 20px 34px rgba(125, 70, 242, 0.2);
+}
+
+.device-tile-accent.device-action-control {
+  text-align: center;
 }
 
 .device-tile-accent span {
