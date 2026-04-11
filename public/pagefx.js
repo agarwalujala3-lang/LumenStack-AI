@@ -1,4 +1,5 @@
 const ROUTE_TRANSITION_KEY = "lumenstack-route-transition";
+const CURSOR_POSITION_KEY = "lumenstack-cursor-position";
 
 function shouldSkipIntro() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -14,6 +15,32 @@ function safeSessionStorage(action, fallback = null) {
 
 function queueRouteTransition() {
   safeSessionStorage(() => window.sessionStorage.setItem(ROUTE_TRANSITION_KEY, "1"));
+}
+
+function getStoredCursorPosition() {
+  return safeSessionStorage(() => {
+    const raw = window.sessionStorage.getItem(CURSOR_POSITION_KEY);
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    const x = Number(parsed?.x);
+    const y = Number(parsed?.y);
+
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      return null;
+    }
+
+    return { x, y };
+  }, null);
+}
+
+function storeCursorPosition(x, y) {
+  safeSessionStorage(() => {
+    window.sessionStorage.setItem(CURSOR_POSITION_KEY, JSON.stringify({ x, y }));
+  });
 }
 
 function consumeRouteTransition() {
@@ -277,7 +304,8 @@ function initSharedCursorSystem() {
   document.documentElement.classList.add("cursor-enhanced");
   document.documentElement.classList.remove("cursor-bootstrap");
 
-  const target = {
+  const storedPosition = getStoredCursorPosition();
+  const target = storedPosition || {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2
   };
@@ -285,6 +313,16 @@ function initSharedCursorSystem() {
   const aura = { ...target };
   let lastTrace = 0;
   let lastScrollY = window.scrollY;
+
+  cursorCore.style.left = `${core.x}px`;
+  cursorCore.style.top = `${core.y}px`;
+  cursorAura.style.left = `${aura.x}px`;
+  cursorAura.style.top = `${aura.y}px`;
+
+  const initialTarget = document.elementFromPoint(target.x, target.y);
+  if (initialTarget) {
+    applyCursorKind(cursorCore, cursorAura, resolveCursorKind(initialTarget));
+  }
 
   function spawnNode(className, styles = {}) {
     const node = document.createElement("span");
@@ -315,6 +353,7 @@ function initSharedCursorSystem() {
   window.addEventListener("pointermove", (event) => {
     target.x = event.clientX;
     target.y = event.clientY;
+    storeCursorPosition(event.clientX, event.clientY);
 
     const now = performance.now();
     if (now - lastTrace > 38) {
@@ -324,6 +363,10 @@ function initSharedCursorSystem() {
       });
       lastTrace = now;
     }
+  });
+
+  window.addEventListener("pointerdown", (event) => {
+    storeCursorPosition(event.clientX, event.clientY);
   });
 
   window.addEventListener("scroll", () => {

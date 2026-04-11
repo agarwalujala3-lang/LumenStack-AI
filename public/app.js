@@ -84,6 +84,7 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const themePreferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
 const themeStorageKey = "lumenstack-theme";
+const cursorPositionStorageKey = "lumenstack-cursor-position";
 let currentTheme = "light";
 
 function bindMediaQueryChange(query, listener) {
@@ -270,6 +271,36 @@ function configureMermaid(theme) {
 
 function sanitize(value) {
   return String(value ?? "");
+}
+
+function getStoredCursorPosition() {
+  try {
+    const raw = window.sessionStorage.getItem(cursorPositionStorageKey);
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    const x = Number(parsed?.x);
+    const y = Number(parsed?.y);
+
+    if (!Number.isFinite(x) || !Number.isFinite(y)) {
+      return null;
+    }
+
+    return { x, y };
+  } catch {
+    return null;
+  }
+}
+
+function storeCursorPosition(x, y) {
+  try {
+    window.sessionStorage.setItem(cursorPositionStorageKey, JSON.stringify({ x, y }));
+  } catch {
+    // Ignore sessionStorage failures.
+  }
 }
 
 async function parseJsonResponse(response, fallbackMessage) {
@@ -903,7 +934,8 @@ function setupCursorSystem() {
   document.documentElement.classList.add("cursor-enhanced");
   document.documentElement.classList.remove("cursor-bootstrap");
 
-  const target = {
+  const storedPosition = getStoredCursorPosition();
+  const target = storedPosition || {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2
   };
@@ -911,6 +943,18 @@ function setupCursorSystem() {
   const aura = { ...target };
   let lastTrace = 0;
   let lastScrollY = window.scrollY;
+
+  cursorCore.style.left = `${core.x}px`;
+  cursorCore.style.top = `${core.y}px`;
+  cursorAura.style.left = `${aura.x}px`;
+  cursorAura.style.top = `${aura.y}px`;
+
+  const initialTarget = document.elementFromPoint(target.x, target.y);
+  if (initialTarget) {
+    const kind = resolveCursorKind(initialTarget);
+    pointerHot = Boolean(kind);
+    applyCursorKind(cursorCore, cursorAura, kind);
+  }
 
   function spawnTrace(x, y) {
     const trace = createElement("span", "cursor-trace");
@@ -962,12 +1006,17 @@ function setupCursorSystem() {
   window.addEventListener("pointermove", (event) => {
     target.x = event.clientX;
     target.y = event.clientY;
+    storeCursorPosition(event.clientX, event.clientY);
 
     const now = performance.now();
     if (now - lastTrace > 38) {
       spawnTrace(event.clientX, event.clientY);
       lastTrace = now;
     }
+  });
+
+  window.addEventListener("pointerdown", (event) => {
+    storeCursorPosition(event.clientX, event.clientY);
   });
 
   window.addEventListener("scroll", () => {
@@ -994,10 +1043,17 @@ function setupCursorSystem() {
 function renderMetrics(payload) {
   const { summary, modules, relationships, quality } = payload.analysis;
   const { source } = payload;
+  const baselineSource = payload.comparisonContext?.baselineSource || null;
   const sourceMode = source.type === "git" ? "Remote" : source.type;
 
-  resultTitleElement.textContent = `${source.name} workspace brief`;
-  sourcePillElement.textContent = `${source.platform || source.name} / ${sourceMode}`;
+  if (baselineSource) {
+    resultTitleElement.textContent = `Comparison review: ${source.name} vs ${baselineSource.name}`;
+    sourcePillElement.textContent = `Compare / ${source.platform || source.name}`;
+  } else {
+    resultTitleElement.textContent = `${source.name} workspace brief`;
+    sourcePillElement.textContent = `${source.platform || source.name} / ${sourceMode}`;
+  }
+
   analysisTimeElement.textContent = formatTime();
   primaryLanguageElement.textContent = sanitize(summary.primaryLanguage || "-");
   animateCount(codeFilesElement, summary.codeFiles || 0);
@@ -1008,37 +1064,68 @@ function renderMetrics(payload) {
   aiBadgeElement.textContent = payload.analysis.aiStatus === "live" ? "OpenAI" : "Fallback";
 }
 
-function renderSourceProfile(source) {
+function renderSourceProfile(source, comparisonContext = null) {
   if (!sourceProfileElement) {
     return;
   }
 
   clearChildren(sourceProfileElement);
+  const baselineSource = comparisonContext?.baselineSource || null;
+  let fields = [];
 
-  const fields = [
-    {
-      label: "Platform",
-      value: source.platform || source.type || "Repository Workspace"
-    },
-    {
-      label: "Workspace",
-      value: source.workspaceLabel || source.name || "Unknown"
-    },
-    {
-      label: "Mode",
-      value: source.type === "git" ? "Remote clone" : source.type || "Analysis"
-    },
-    {
-      label: "Remote",
-      value: source.repoUrl || "ZIP or local archive upload"
+  if (baselineSource) {
+    fields = [
+      {
+        label: "Current Repo",
+        value: source.name || "Unknown"
+      },
+      {
+        label: "Baseline Repo",
+        value: baselineSource.name || "Unknown"
+      },
+      {
+        label: "Current Ref",
+        value: source.ref || "Default branch or uploaded snapshot"
+      },
+      {
+        label: "Baseline Ref",
+        value: baselineSource.ref || "Default branch or uploaded snapshot"
+      },
+      {
+        label: "Current Remote",
+        value: source.repoUrl || "ZIP or local archive upload"
+      },
+      {
+        label: "Baseline Remote",
+        value: baselineSource.repoUrl || "ZIP or local archive upload"
+      }
+    ];
+  } else {
+    fields = [
+      {
+        label: "Platform",
+        value: source.platform || source.type || "Repository Workspace"
+      },
+      {
+        label: "Workspace",
+        value: source.workspaceLabel || source.name || "Unknown"
+      },
+      {
+        label: "Mode",
+        value: source.type === "git" ? "Remote clone" : source.type || "Analysis"
+      },
+      {
+        label: "Remote",
+        value: source.repoUrl || "ZIP or local archive upload"
+      }
+    ];
+
+    if (source.workspaceKey) {
+      fields.push({
+        label: "Workspace Key",
+        value: source.workspaceKey
+      });
     }
-  ];
-
-  if (source.workspaceKey) {
-    fields.push({
-      label: "Workspace Key",
-      value: source.workspaceKey
-    });
   }
 
   for (const field of fields) {
@@ -1253,21 +1340,25 @@ function renderFiles(files) {
   }
 }
 
-function renderComparison(comparison) {
+function renderComparison(comparison, comparisonContext = null) {
   if (!comparison) {
     comparisonPanel.classList.add("hidden");
     return;
   }
 
   comparisonPanel.classList.remove("hidden");
-  comparisonSummaryElement.textContent = sanitize(comparison.summary);
+  const baselineSource = comparisonContext?.baselineSource || null;
+  const baselineLine = baselineSource
+    ? ` Baseline: ${baselineSource.name}${baselineSource.ref ? ` (${baselineSource.ref})` : ""}.`
+    : "";
+  comparisonSummaryElement.textContent = `${sanitize(comparison.summary)}${baselineLine}`;
 
   clearChildren(comparisonStatsElement);
   const stats = [
     `Changed ${comparison.stats.changedCodeFiles || 0}`,
-    `Total ${comparison.stats.totalFilesDelta >= 0 ? "+" : ""}${comparison.stats.totalFilesDelta || 0}`,
+    `Added ${comparison.fileDiff?.added?.length || 0}`,
+    `Removed ${comparison.fileDiff?.removed?.length || 0}`,
     `Quality ${comparison.stats.scoreDelta >= 0 ? "+" : ""}${comparison.stats.scoreDelta}`,
-    `Code ${comparison.stats.codeFilesDelta >= 0 ? "+" : ""}${comparison.stats.codeFilesDelta}`,
     `Modules ${comparison.stats.moduleDelta >= 0 ? "+" : ""}${comparison.stats.moduleDelta}`,
     `Deps ${comparison.stats.dependencyDelta >= 0 ? "+" : ""}${comparison.stats.dependencyDelta}`
   ];
@@ -1539,6 +1630,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const formData = new FormData(form);
+  formData.set("compareMode", compareToggle.checked ? "1" : "0");
   resetAnalysisState();
   resultsElement.classList.add("hidden");
   showOverlay(loadingMessages[Math.floor(Math.random() * loadingMessages.length)]);
@@ -1568,7 +1660,7 @@ form.addEventListener("submit", async (event) => {
     lastDocumentation = payload.analysis.documentation || "";
 
     renderMetrics(payload);
-    renderSourceProfile(payload.source);
+    renderSourceProfile(payload.source, payload.comparisonContext);
     renderPlatformSignals(payload.analysis.platformSignals || []);
     explanationElement.textContent = sanitize(payload.analysis.explanation);
     documentationElement.textContent = sanitize(payload.analysis.documentation);
@@ -1581,7 +1673,7 @@ form.addEventListener("submit", async (event) => {
     renderDependencies(payload.analysis.dependencies);
     renderRelationships(payload.analysis.relationships);
     renderFiles(payload.analysis.fileHighlights);
-    renderComparison(payload.comparison);
+    renderComparison(payload.comparison, payload.comparisonContext);
 
     resultsElement.classList.remove("hidden");
     refreshMotionTargets(resultsElement);

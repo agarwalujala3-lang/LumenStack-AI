@@ -58,7 +58,8 @@ function buildSourceMetadata(preparedSource) {
     platformId: preparedSource.sourcePlatformId || "generic",
     workspaceLabel: preparedSource.sourceWorkspaceLabel || preparedSource.sourceName,
     workspaceKey: preparedSource.sourceWorkspaceKey || "",
-    repoUrl: preparedSource.sourceRepoUrl || ""
+    repoUrl: preparedSource.sourceRepoUrl || "",
+    ref: preparedSource.sourceRef || ""
   };
 }
 
@@ -240,6 +241,7 @@ function createApp() {
         const repoRef = String(req.body.repoRef || "").trim();
         const baselineRepoUrl = String(req.body.baselineRepoUrl || "").trim();
         const baselineRepoRef = String(req.body.baselineRepoRef || "").trim();
+        const compareRequested = String(req.body.compareMode || "").trim() === "1";
         const uploadedFile = getUploadedFile(req.files, "codebase");
         const baselineFile = getUploadedFile(req.files, "baselineCodebase");
 
@@ -258,10 +260,19 @@ function createApp() {
         const { analysis, insights } = await runAnalysisForSource(preparedSource);
         let comparison = null;
         let baselineAnalysis = null;
+        let baselineMetadata = null;
 
-        if (baselineRepoUrl || baselineFile) {
+        if (compareRequested || baselineRepoUrl || baselineRepoRef || baselineFile) {
+          const effectiveBaselineRepoUrl = baselineRepoUrl || (baselineRepoRef && repoUrl ? repoUrl : "");
+
+          if (!effectiveBaselineRepoUrl && !baselineFile) {
+            return res.status(400).json({
+              error: "Compare mode needs a baseline repository, baseline ZIP, or a baseline ref for the same repository."
+            });
+          }
+
           baselineSource = await prepareSource({
-            repoUrl: baselineRepoUrl,
+            repoUrl: effectiveBaselineRepoUrl,
             uploadedFile: baselineFile,
             ref: baselineRepoRef
           });
@@ -269,6 +280,7 @@ function createApp() {
           const baselineResult = await runAnalysisForSource(baselineSource);
           baselineAnalysis = baselineResult.analysis;
           comparison = compareAnalyses(baselineAnalysis, analysis);
+          baselineMetadata = buildSourceMetadata(baselineSource);
         }
 
         const analysisId = createAnalysisSession({
@@ -281,6 +293,12 @@ function createApp() {
         res.json({
           analysisId,
           source: buildSourceMetadata(preparedSource),
+          comparisonContext: comparison
+            ? {
+                baselineSource: baselineMetadata,
+                baselineSummary: baselineAnalysis.summary
+              }
+            : null,
           analysis: serializeAnalysis(analysis, insights),
           comparison,
           exportUrls: {

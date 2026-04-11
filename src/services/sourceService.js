@@ -259,6 +259,7 @@ async function cloneRepository(repoUrl, ref = "") {
     sourceWorkspaceLabel: metadata.workspaceLabel,
     sourceWorkspaceKey: metadata.workspaceKey,
     sourceRepoUrl: repoUrl,
+    sourceRef: ref,
     rootPath: workingDir,
     cleanup: async () => {
       await fs.rm(workingDir, { recursive: true, force: true });
@@ -291,6 +292,7 @@ async function extractZip(uploadedFile) {
     sourceWorkspaceLabel: "Local archive workspace",
     sourceWorkspaceKey: `upload:${sourceName}`,
     sourceRepoUrl: "",
+    sourceRef: "",
     rootPath: projectRoot,
     cleanup: async () => {
       await fs.rm(extractDir, { recursive: true, force: true });
