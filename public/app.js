@@ -272,6 +272,19 @@ function sanitize(value) {
   return String(value ?? "");
 }
 
+async function parseJsonResponse(response, fallbackMessage) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.includes("application/json")) {
+    const text = await response.text();
+    const snippet = text ? text.slice(0, 120).replace(/\s+/g, " ").trim() : "";
+    const message = fallbackMessage || "Server returned a non-JSON response.";
+    throw new Error(snippet ? `${message} (${snippet})` : message);
+  }
+
+  return response.json();
+}
+
 function clearChildren(element) {
   element.replaceChildren();
 }
@@ -1500,7 +1513,10 @@ chatForm.addEventListener("submit", async (event) => {
       })
     });
 
-    const payload = await response.json();
+    const payload = await parseJsonResponse(
+      response,
+      "Chat failed because the server returned an unexpected response."
+    );
 
     if (!response.ok) {
       throw new Error(payload.error || "Chat failed.");
@@ -1537,7 +1553,10 @@ form.addEventListener("submit", async (event) => {
       body: formData
     });
 
-    const payload = await response.json();
+    const payload = await parseJsonResponse(
+      response,
+      "Analysis failed because the server returned an unexpected response."
+    );
 
     if (!response.ok) {
       throw new Error(payload.error || "Analysis failed.");
