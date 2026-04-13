@@ -72,6 +72,12 @@ const chatMessagesElement = document.getElementById("chat-messages");
 const topChatForm = document.getElementById("device-top-chat-form");
 const topChatInput = document.getElementById("device-top-chat-input");
 const topChatAnswerElement = document.getElementById("device-top-chat-answer");
+const heroDeviceCluster = document.querySelector(".hero-device-cluster");
+const heroDeviceCards = heroDeviceCluster
+  ? [...heroDeviceCluster.querySelectorAll(".device-shell")]
+  : [];
+const heroDeviceTimeElement = document.getElementById("device-top-time");
+const heroDeviceStepElement = document.getElementById("device-step-indicator");
 
 let analysisId = "";
 let exportUrls = null;
@@ -83,6 +89,8 @@ let overlayMessageTimer = 0;
 let motionObserver = null;
 let pointerHot = false;
 let promptTimer = 0;
+let heroSliderTimer = 0;
+let heroClockTimer = 0;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const themePreferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
@@ -399,6 +407,151 @@ let activeWorkspaceKey = "universal";
 function setStatus(message, state = "idle") {
   statusPanel.dataset.state = state;
   statusText.textContent = sanitize(message);
+}
+
+function setHeroDeviceStep(index) {
+  if (!heroDeviceStepElement) {
+    return;
+  }
+
+  const total = Math.max(heroDeviceCards.length, 1);
+  const normalized = Math.max(0, Math.min(index, total - 1));
+  heroDeviceStepElement.textContent = `${normalized + 1}/${total}`;
+}
+
+function updateHeroDeviceClock() {
+  if (!heroDeviceTimeElement) {
+    return;
+  }
+
+  heroDeviceTimeElement.textContent = new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(new Date());
+}
+
+function getHeroDeviceActiveIndex() {
+  if (!heroDeviceCluster || !heroDeviceCards.length) {
+    return 0;
+  }
+
+  const width = Math.max(heroDeviceCluster.clientWidth, 1);
+  const rawIndex = Math.round(heroDeviceCluster.scrollLeft / width);
+  return Math.max(0, Math.min(rawIndex, heroDeviceCards.length - 1));
+}
+
+function scrollHeroDeviceTo(index, behavior = "smooth") {
+  if (!heroDeviceCluster || !heroDeviceCards.length) {
+    return;
+  }
+
+  const safeIndex = Math.max(0, Math.min(index, heroDeviceCards.length - 1));
+  heroDeviceCluster.scrollTo({
+    left: safeIndex * heroDeviceCluster.clientWidth,
+    behavior
+  });
+  setHeroDeviceStep(safeIndex);
+}
+
+function stopHeroSlider() {
+  if (heroSliderTimer) {
+    window.clearInterval(heroSliderTimer);
+    heroSliderTimer = 0;
+  }
+}
+
+function startHeroSlider(isSliderMode) {
+  stopHeroSlider();
+
+  if (!isSliderMode || prefersReducedMotion || heroDeviceCards.length < 2) {
+    return;
+  }
+
+  if (document.activeElement && heroDeviceCluster?.contains(document.activeElement)) {
+    return;
+  }
+
+  heroSliderTimer = window.setInterval(() => {
+    const nextIndex = (getHeroDeviceActiveIndex() + 1) % heroDeviceCards.length;
+    scrollHeroDeviceTo(nextIndex);
+  }, 4800);
+}
+
+function setupHeroDeviceSlider() {
+  if (!heroDeviceCluster || !heroDeviceCards.length) {
+    return;
+  }
+
+  const sliderQuery = window.matchMedia("(max-width: 980px)");
+  let rafId = 0;
+
+  updateHeroDeviceClock();
+  setHeroDeviceStep(0);
+
+  if (heroClockTimer) {
+    window.clearInterval(heroClockTimer);
+  }
+  heroClockTimer = window.setInterval(updateHeroDeviceClock, 30000);
+
+  const syncSliderMode = () => {
+    const sliderMode = sliderQuery.matches;
+    heroDeviceCluster.classList.toggle("is-slider", sliderMode);
+
+    if (!sliderMode) {
+      stopHeroSlider();
+      heroDeviceCluster.scrollTo({ left: 0, behavior: "auto" });
+      setHeroDeviceStep(0);
+      return;
+    }
+
+    setHeroDeviceStep(getHeroDeviceActiveIndex());
+    startHeroSlider(true);
+  };
+
+  heroDeviceCluster.addEventListener("scroll", () => {
+    if (!sliderQuery.matches) {
+      return;
+    }
+
+    if (rafId) {
+      window.cancelAnimationFrame(rafId);
+    }
+
+    rafId = window.requestAnimationFrame(() => {
+      setHeroDeviceStep(getHeroDeviceActiveIndex());
+    });
+  }, { passive: true });
+
+  heroDeviceCluster.addEventListener("pointerdown", () => {
+    stopHeroSlider();
+  }, { passive: true });
+
+  heroDeviceCluster.addEventListener("pointerup", () => {
+    startHeroSlider(sliderQuery.matches);
+  }, { passive: true });
+
+  heroDeviceCluster.addEventListener("focusin", () => {
+    stopHeroSlider();
+  });
+
+  heroDeviceCluster.addEventListener("focusout", () => {
+    window.setTimeout(() => startHeroSlider(sliderQuery.matches), 120);
+  });
+
+  bindMediaQueryChange(sliderQuery, () => {
+    syncSliderMode();
+  });
+
+  window.addEventListener("resize", () => {
+    if (sliderQuery.matches) {
+      setHeroDeviceStep(getHeroDeviceActiveIndex());
+      return;
+    }
+
+    syncSliderMode();
+  });
+
+  syncSliderMode();
 }
 
 function setTopChatAnswer(message, state = "idle") {
@@ -1607,6 +1760,7 @@ setupScrollProgress();
 setupAmbientParticles();
 setupPromptRotator();
 setupMagneticButtons();
+setupHeroDeviceSlider();
 bindDeviceActions();
 setupTouchEffects();
 setupCursorSystem();
