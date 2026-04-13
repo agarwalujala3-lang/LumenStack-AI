@@ -69,6 +69,9 @@ const comparisonFindingsElement = document.getElementById("comparison-findings")
 const chatForm = document.getElementById("chat-form");
 const chatQuestionInput = document.getElementById("chat-question");
 const chatMessagesElement = document.getElementById("chat-messages");
+const topChatForm = document.getElementById("device-top-chat-form");
+const topChatInput = document.getElementById("device-top-chat-input");
+const topChatAnswerElement = document.getElementById("device-top-chat-answer");
 
 let analysisId = "";
 let exportUrls = null;
@@ -396,6 +399,15 @@ let activeWorkspaceKey = "universal";
 function setStatus(message, state = "idle") {
   statusPanel.dataset.state = state;
   statusText.textContent = sanitize(message);
+}
+
+function setTopChatAnswer(message, state = "idle") {
+  if (!topChatAnswerElement) {
+    return;
+  }
+
+  topChatAnswerElement.textContent = sanitize(message);
+  topChatAnswerElement.dataset.state = state;
 }
 
 function applyWorkspacePreset(key) {
@@ -1668,6 +1680,55 @@ downloadJsonButton.addEventListener("click", async () => {
     setStatus("JSON export downloaded.", "success");
   } catch (error) {
     setStatus(error.message || "JSON export failed.", "error");
+  }
+});
+
+topChatForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const question = topChatInput?.value.trim() || "";
+
+  if (!question) {
+    setTopChatAnswer("Type your question first and I will answer right here.", "idle");
+    return;
+  }
+
+  setTopChatAnswer("Thinking...", "loading");
+
+  try {
+    const response = await fetch("/api/system-chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question,
+        analysisId: analysisId || undefined
+      })
+    });
+
+    const payload = await parseJsonResponse(
+      response,
+      "System chat failed because the server returned an unexpected response."
+    );
+
+    if (!response.ok) {
+      throw new Error(payload.error || "System chat failed.");
+    }
+
+    setTopChatAnswer(payload.answer || "I could not generate an answer right now.", "ready");
+    if (topChatInput) {
+      topChatInput.value = "";
+    }
+    setStatus(
+      payload.aiStatus === "live"
+        ? "Top assistant answered in live mode."
+        : "Top assistant answered from local system context.",
+      "success"
+    );
+  } catch (error) {
+    setTopChatAnswer(error.message || "System chat failed.", "error");
+    setStatus(error.message || "System chat failed.", "error");
   }
 });
 

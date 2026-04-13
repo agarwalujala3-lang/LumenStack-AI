@@ -404,6 +404,75 @@ function buildCitations(matches) {
   }));
 }
 
+function shouldIncludeCitations(question) {
+  const prompt = String(question || "").toLowerCase();
+
+  return (
+    prompt.includes("source") ||
+    prompt.includes("evidence") ||
+    prompt.includes("reference") ||
+    prompt.includes("which file") ||
+    prompt.includes("which files") ||
+    prompt.includes("file path") ||
+    prompt.includes("path")
+  );
+}
+
+function toPointList(lines, max = 5) {
+  const points = (lines || [])
+    .map((line) => String(line || "").trim())
+    .filter(Boolean)
+    .slice(0, max)
+    .map((line) => line.replace(/[.?!]+$/, ""));
+
+  if (!points.length) {
+    return "1. I can explain this repository in simple points.";
+  }
+
+  return points.map((line, index) => `${index + 1}. ${line}.`).join("\n");
+}
+
+function splitSentences(text) {
+  const normalized = String(text || "").replace(/\s+/g, " ").trim();
+
+  if (!normalized) {
+    return [];
+  }
+
+  const protectedText = normalized.replace(/([a-z0-9_/\-]+)\.([a-z0-9_/\-]+)/gi, "$1<dot>$2");
+
+  return (protectedText
+    .replace(/I do not have a perfect direct match[^.]*\./gi, "I can still answer from the scanned repository.")
+    .replace(/The clearest code evidence is/gi, "Key implementation area:")
+    .replace(/The closest local evidence came from/gi, "Related areas include")
+    .replace(/The clearest supporting files are/gi, "Relevant files include")
+    .replace(/For your question, the most relevant implementation files are/gi, "Relevant files include")
+    .match(/[^.!?]+[.!?]?/g) || [])
+    .map((sentence) => sentence.replace(/<dot>/g, "."));
+}
+
+function formatAnswerForHumans(answerText, question) {
+  const raw = String(answerText || "").trim();
+
+  if (!raw) {
+    return "1. I could not generate a clear answer from the current analysis.";
+  }
+
+  if (/^\s*\d+\.\s+/m.test(raw)) {
+    return raw;
+  }
+
+  const sentences = splitSentences(raw)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => sentence.length > 0);
+
+  if (isSimpleLanguageRequest(String(question || "").toLowerCase())) {
+    return toPointList(sentences, 4);
+  }
+
+  return toPointList(sentences, 5);
+}
+
 function buildHighLevelAnswer(analysis, question, matches) {
   const summary = analysis.summary || {};
   const moduleNames = topModuleNames(analysis);
@@ -682,10 +751,13 @@ function buildFallbackAnswer(analysis, question, matches) {
 
 async function answerQuestion(analysis, question) {
   const matches = retrieveRelevantDocuments(analysis, question);
+  const includeCitations = shouldIncludeCitations(question);
+  const fallbackAnswer = buildFallbackAnswer(analysis, question, matches);
 
   if (!process.env.OPENAI_API_KEY) {
     return {
-      ...buildFallbackAnswer(analysis, question, matches),
+      answer: formatAnswerForHumans(fallbackAnswer.answer, question),
+      citations: includeCitations ? fallbackAnswer.citations : [],
       aiStatus: "fallback"
     };
   }
@@ -726,8 +798,10 @@ async function answerQuestion(analysis, question) {
               type: "input_text",
               text:
                 "Answer codebase questions using only the provided analysis context. " +
-                "Answer directly in plain language first. If the user asks for simple language, explain in very simple English with a short high-level overview before details. " +
-                "Use file paths only as supporting evidence, not as a substitute for the explanation. " +
+                "Always answer in plain human language with short numbered points (3 to 5 points). " +
+                "If the user asks for simple language, keep the wording very simple. " +
+                "Do not ask the user to check files, GitHub, or external links. " +
+                "Explain directly first, and mention file paths only if the user explicitly asks for evidence. " +
                 "If the answer is uncertain, say that briefly and then give the best grounded explanation from the provided analysis."
             }
           ]
@@ -745,13 +819,14 @@ async function answerQuestion(analysis, question) {
     });
 
     return {
-      answer: response.output_text || buildFallbackAnswer(analysis, question, matches).answer,
-      citations: buildCitations(matches),
+      answer: formatAnswerForHumans(response.output_text || fallbackAnswer.answer, question),
+      citations: includeCitations ? buildCitations(matches) : [],
       aiStatus: "live"
     };
   } catch {
     return {
-      ...buildFallbackAnswer(analysis, question, matches),
+      answer: formatAnswerForHumans(fallbackAnswer.answer, question),
+      citations: includeCitations ? fallbackAnswer.citations : [],
       aiStatus: "fallback"
     };
   }

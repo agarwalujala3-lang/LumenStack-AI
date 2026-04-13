@@ -9,6 +9,7 @@ const { analyzeCodebase } = require("./services/analyzerService");
 const { generateInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
 const { answerQuestion } = require("./services/chatService");
+const { answerSystemQuestion } = require("./services/systemChatService");
 const {
   createAnalysisSession,
   getAnalysisSession,
@@ -346,6 +347,31 @@ function createApp() {
     } catch (error) {
       res.status(500).json({
         error: error.message || "Unable to answer the question."
+      });
+    }
+  });
+
+  app.post("/api/system-chat", async (req, res) => {
+    const question = String(req.body.question || "").trim();
+    const analysisId = String(req.body.analysisId || "").trim();
+
+    if (!question) {
+      return res.status(400).json({
+        error: "question is required."
+      });
+    }
+
+    const session = analysisId ? getAnalysisSession(analysisId) : null;
+
+    try {
+      const answer = await answerSystemQuestion({
+        question,
+        analysisSummary: session?.analysis?.summary || null
+      });
+      return res.json(answer);
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message || "Unable to answer the system question."
       });
     }
   });

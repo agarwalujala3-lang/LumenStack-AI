@@ -4883,6 +4883,50 @@ body[data-theme="dark"] .feature-marquee::after {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94);
 }
 
+.device-top-chat-form {
+  padding: 10px 10px 10px 14px;
+}
+
+.device-top-chat-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.4;
+}
+
+.device-top-chat-input::placeholder {
+  color: var(--muted);
+}
+
+.device-top-chat-input:focus {
+  outline: none;
+}
+
+.device-top-chat-answer {
+  min-height: 86px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 238, 255, 0.72)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(204, 179, 255, 0.14));
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.52;
+  white-space: pre-line;
+}
+
+.device-top-chat-answer[data-state="loading"] {
+  color: var(--muted);
+}
+
+.device-top-chat-answer[data-state="error"] {
+  border-color: rgba(202, 80, 122, 0.35);
+}
+
 .device-action-control {
   width: 100%;
   margin: 0;
@@ -4909,9 +4953,13 @@ body[data-theme="dark"] .feature-marquee::after {
   place-items: center;
   width: 38px;
   height: 38px;
+  flex: 0 0 38px;
+  border: 0;
   border-radius: 999px;
   background: linear-gradient(135deg, #8a57ff, #b67aff);
   color: #fff;
+  font: inherit;
+  cursor: pointer;
   box-shadow: 0 14px 26px rgba(125, 70, 242, 0.22);
 }
 
@@ -5027,6 +5075,7 @@ body[data-theme="dark"] .feature-marquee::after {
 body[data-theme="dark"] .device-shell,
 body[data-theme="dark"] .device-searchbar,
 body[data-theme="dark"] .device-chat-input,
+body[data-theme="dark"] .device-top-chat-answer,
 body[data-theme="dark"] .device-tile,
 body[data-theme="dark"] .device-list-row,
 body[data-theme="dark"] .device-keywords span,
@@ -5081,6 +5130,14 @@ body[data-theme="dark"] .device-tile-accent {
 
 body[data-theme="dark"] .device-shell::after {
   background: radial-gradient(circle, rgba(201, 133, 255, 0.18), transparent 70%);
+}
+
+body[data-theme="dark"] .device-top-chat-input {
+  color: var(--ink);
+}
+
+body[data-theme="dark"] .device-top-chat-input::placeholder {
+  color: var(--muted);
 }
 
 .main-grid {
@@ -5287,6 +5344,7 @@ body[data-theme="dark"] .device-shell::after {
 .chat-bubble {
   max-width: 92%;
   border-radius: 24px;
+  white-space: pre-line;
 }
 
 .chat-bubble.user {

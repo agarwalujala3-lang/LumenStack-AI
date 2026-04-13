@@ -225,10 +225,20 @@
               </div>
             </div>
             <h3>Smart Assistance, Seamless Review</h3>
-            <button class="device-searchbar device-action-control" type="button" data-device-action="open-summary">
-              <span>Chat with LumenStack...</span>
-              <span class="device-search-icon">&rarr;</span>
-            </button>
+            <form class="device-searchbar device-top-chat-form" id="device-top-chat-form" autocomplete="off">
+              <input
+                id="device-top-chat-input"
+                class="device-top-chat-input"
+                type="text"
+                maxlength="240"
+                placeholder="Ask LumenStack anything..."
+                aria-label="Ask LumenStack"
+              />
+              <button class="device-search-icon" type="submit" aria-label="Send to LumenStack">&rarr;</button>
+            </form>
+            <div class="device-top-chat-answer" id="device-top-chat-answer" role="status" aria-live="polite">
+              Ask anything about the system. I will answer here in simple language.
+            </div>
             <div class="device-tile-grid">
               <button class="device-tile device-action-control" type="button" data-device-action="open-summary">
                 <span>Talk to AI assistant</span>
