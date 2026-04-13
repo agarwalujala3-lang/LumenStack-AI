@@ -775,33 +775,70 @@ function setupMagneticButtons() {
 }
 
 function triggerDeviceAction(action) {
+  const isAnalysisReady = Boolean(resultsElement && !resultsElement.classList.contains("hidden"));
   const analyzePanel = document.getElementById("analyze-panel");
+  const narrativePanel = document.querySelector(".narrative-panel");
+  const diagramPanel = document.querySelector(".diagram-panel");
+  const docsPanel = document.querySelector(".docs-panel");
+  const chatPanel = document.querySelector(".chat-panel");
+  const comparisonView = document.getElementById("comparison-panel");
+  const prefersCompactScroll = window.matchMedia("(max-width: 760px)").matches;
 
   if (!analyzePanel) {
     window.location.href = "/#analyze-panel";
     return;
   }
 
-  analyzePanel.scrollIntoView({
-    behavior: window.matchMedia("(max-width: 760px)").matches ? "auto" : "smooth",
+  if (action === "start-analysis") {
+    const target = isAnalysisReady ? resultsElement : analyzePanel;
+    target.scrollIntoView({
+      behavior: prefersCompactScroll ? "auto" : "smooth",
+      block: "start"
+    });
+
+    if (!isAnalysisReady && repoUrlInput) {
+      window.setTimeout(() => repoUrlInput.focus(), 220);
+    }
+
+    return;
+  }
+
+  if (!isAnalysisReady) {
+    setStatus("Run analysis first, then this shortcut will open that section.", "idle");
+    analyzePanel.scrollIntoView({
+      behavior: prefersCompactScroll ? "auto" : "smooth",
+      block: "start"
+    });
+    if (repoUrlInput) {
+      window.setTimeout(() => repoUrlInput.focus(), 220);
+    }
+    return;
+  }
+
+  let targetPanel = resultsElement;
+
+  if (action === "open-summary") {
+    targetPanel = narrativePanel || resultsElement;
+  } else if (action === "open-diagrams") {
+    targetPanel = diagramPanel || resultsElement;
+  } else if (action === "open-docs") {
+    targetPanel = docsPanel || resultsElement;
+  } else if (action === "open-comparison") {
+    targetPanel = comparisonView && !comparisonView.classList.contains("hidden")
+      ? comparisonView
+      : resultsElement;
+  } else if (action === "open-chat" || action === "focus-chat") {
+    targetPanel = chatPanel || resultsElement;
+  }
+
+  targetPanel.scrollIntoView({
+    behavior: prefersCompactScroll ? "auto" : "smooth",
     block: "start"
   });
 
-  window.setTimeout(() => {
-    if (
-      action === "focus-chat" &&
-      chatQuestionInput &&
-      resultsElement &&
-      !resultsElement.classList.contains("hidden")
-    ) {
-      chatQuestionInput.focus();
-      return;
-    }
-
-    if (repoUrlInput) {
-      repoUrlInput.focus();
-    }
-  }, 280);
+  if ((action === "open-chat" || action === "focus-chat") && chatQuestionInput) {
+    window.setTimeout(() => chatQuestionInput.focus(), 220);
+  }
 }
 
 function bindDeviceActions() {
@@ -818,7 +855,15 @@ function bindDeviceActions() {
       event.preventDefault();
     }
 
-    if (action === "start-analysis" || action === "focus-chat") {
+    if (
+      action === "start-analysis" ||
+      action === "focus-chat" ||
+      action === "open-summary" ||
+      action === "open-diagrams" ||
+      action === "open-docs" ||
+      action === "open-comparison" ||
+      action === "open-chat"
+    ) {
       triggerDeviceAction(action);
     }
   });

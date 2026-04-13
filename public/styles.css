@@ -4899,6 +4899,11 @@ body[data-theme="dark"] .feature-marquee::after {
   outline-offset: 3px;
 }
 
+.device-tile.device-action-control,
+.device-list-row.device-action-control {
+  font: inherit;
+}
+
 .device-search-icon {
   display: inline-grid;
   place-items: center;
@@ -4972,6 +4977,11 @@ body[data-theme="dark"] .feature-marquee::after {
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.78);
   background: rgba(255, 255, 255, 0.58);
+}
+
+.device-list-row.device-action-control:hover {
+  border-color: rgba(125, 70, 242, 0.36);
+  box-shadow: 0 12px 22px rgba(125, 70, 242, 0.14);
 }
 
 .device-bubble {
