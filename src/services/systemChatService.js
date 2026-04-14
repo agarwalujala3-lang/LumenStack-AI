@@ -380,8 +380,7 @@ function buildTopicLines(topicId, context) {
     codeFiles > 0
       ? `The latest scan indexed about ${codeFiles} code files`
       : "It works for both repo links and ZIP uploads",
-    "You can analyze, compare, visualize, and ask follow-up questions in one flow",
-    question ? `Ask me more specifically and I will answer directly about that feature: "${question}"` : ""
+    "You can analyze, compare, visualize, and ask follow-up questions in one flow"
   ].filter(Boolean);
 }
 

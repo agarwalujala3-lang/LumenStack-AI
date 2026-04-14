@@ -294,6 +294,45 @@ function topImprovementActions(analysis, limit = 3) {
   return actions;
 }
 
+function buildEntrypointSummary(summary) {
+  const preferredEntrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
+  const entrypoints = preferredEntrypoints.length ? preferredEntrypoints : (summary.entrypoints || []);
+
+  if (!entrypoints.length) {
+    return "The app starts from a standard server/bootstrap entrypoint and then routes into service modules.";
+  }
+
+  if (entrypoints.length === 1) {
+    return `The execution starts from ${entrypoints[0]} and then moves into service modules.`;
+  }
+
+  return `The execution starts from ${entrypoints.slice(0, 2).join(" and ")} and then moves into service modules.`;
+}
+
+function buildArchitectureNarrative(analysis) {
+  const summary = analysis.summary || {};
+  const moduleNames = topModuleNames(analysis, 5);
+  const relationshipSummary = topRelationshipSummary(analysis, 3);
+  const dependencyNames = topDependencyNames(analysis, 4);
+  const roleDescriptions = [...new Set(topRoleDescriptions(analysis, 4).map(simplifyRoleTopic))];
+
+  return [
+    moduleNames.length
+      ? `The architecture is modular, with core areas such as ${formatNaturalList(moduleNames)}.`
+      : "The architecture is organized into distinct modules instead of one monolithic flow.",
+    roleDescriptions.length
+      ? `These modules mainly handle ${formatNaturalList(roleDescriptions)}.`
+      : "Each module carries a focused responsibility for request flow, processing, or presentation.",
+    relationshipSummary.length
+      ? `Module interactions show a flow like ${formatNaturalList(relationshipSummary)}.`
+      : "",
+    dependencyNames.length
+      ? `Key dependency signals include ${formatNaturalList(dependencyNames)}.`
+      : "",
+    buildEntrypointSummary(summary)
+  ].filter(Boolean);
+}
+
 function topRoleDescriptions(analysis, limit = 4) {
   const vagueRoles = new Set([
     "Contributes to the application structure."
@@ -519,7 +558,8 @@ function formatAnswerForHumans(answerText, question) {
   return toPointList(sentences, 5);
 }
 
-function buildHighLevelAnswer(analysis, question, matches) {
+function buildHighLevelAnswer(analysis, question, matches, options = {}) {
+  const { includeEvidenceInText = false } = options;
   const summary = analysis.summary || {};
   const moduleNames = topModuleNames(analysis);
   const entrypoints = (summary.entrypoints || []).filter((entrypoint) => !entrypoint.startsWith("public/"));
@@ -531,7 +571,7 @@ function buildHighLevelAnswer(analysis, question, matches) {
       `${summary.sourceName || "This project"} is primarily ${summary.primaryLanguage || "unknown"}${summary.frameworks?.length ? ` and appears to use ${formatList(summary.frameworks)}` : ""}.`,
       moduleNames.length ? `The main implementation areas are ${formatList(moduleNames)}.` : "",
       entrypoints.length ? `The clearest entrypoints are ${formatList(entrypoints)}.` : "",
-      evidence.length ? `The closest local evidence came from ${formatList(evidence)}.` : ""
+      includeEvidenceInText && evidence.length ? `The closest local evidence came from ${formatList(evidence)}.` : ""
     ]
       .filter(Boolean)
       .join(" "),
@@ -539,7 +579,8 @@ function buildHighLevelAnswer(analysis, question, matches) {
   };
 }
 
-function buildFallbackAnswer(analysis, question, matches) {
+function buildFallbackAnswer(analysis, question, matches, options = {}) {
+  const { includeEvidenceInText = false } = options;
   const prompt = normalizeQuestionText(question);
   const focus = extractQuestionFocus(question);
   const simpleLanguage = isSimpleLanguageRequest(prompt);
@@ -573,7 +614,9 @@ function buildFallbackAnswer(analysis, question, matches) {
       });
     }
 
-    return buildHighLevelAnswer(analysis, question, matches);
+    return buildHighLevelAnswer(analysis, question, matches, {
+      includeEvidenceInText
+    });
   }
 
   if (
@@ -603,10 +646,10 @@ function buildFallbackAnswer(analysis, question, matches) {
       answer: [
         CONCEPT_HINTS[focus] ||
           `In this codebase, ${focus || "that area"} appears to be implemented through a specific set of files and modules rather than a single central definition.`,
-        evidenceDescriptions.length
+        includeEvidenceInText && evidenceDescriptions.length
           ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
           : "",
-        focus === "lambda" && directLambdaMatches.length
+        includeEvidenceInText && focus === "lambda" && directLambdaMatches.length
           ? `The actual Lambda-side implementation is strongest in ${formatList(directLambdaMatches.map((match) => match.path))}.`
           : "",
         focus === "lambda" && uiMentions.length
@@ -634,7 +677,9 @@ function buildFallbackAnswer(analysis, question, matches) {
       answer: [
         `The request flow most likely starts around ${formatList(preferredEntrypoints.length ? preferredEntrypoints : (summary.entrypoints || matchPaths), "the main application entrypoints")}.`,
         matchModules.length ? `The strongest routing or request-handling signals are in the ${formatList(matchModules)} area.` : "",
-        evidenceDescriptions.length ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.` : ""
+        includeEvidenceInText && evidenceDescriptions.length
+          ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
+          : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -652,12 +697,14 @@ function buildFallbackAnswer(analysis, question, matches) {
   ) {
     return {
       answer: [
-        "The strongest first improvement is to address the top quality findings and hotspot files together.",
+        "The strongest first improvement is to address the top quality findings and hotspot areas together.",
         improvementActions.length
           ? `Best next actions are ${formatList(improvementActions)}.`
           : "",
         hotspotPaths.length
-          ? `Start with these files first: ${formatList(hotspotPaths)}.`
+          ? includeEvidenceInText
+            ? `Start with these files first: ${formatList(hotspotPaths)}.`
+            : "Start with the highest-risk hotspot modules shown in the review summary."
           : "",
         dependencyNames.length
           ? `Then review high-impact dependencies such as ${formatList(dependencyNames.slice(0, 4))}.`
@@ -704,9 +751,15 @@ function buildFallbackAnswer(analysis, question, matches) {
   ) {
     return {
       answer: [
-        `${summary.sourceName || "This codebase"} currently looks ${quality.summary ? quality.summary.toLowerCase() : "like it has a few maintainability risks"}.`,
+        quality.summary
+          ? `Quality snapshot: ${quality.summary}`
+          : `${summary.sourceName || "This codebase"} has a few maintainability risk signals.`,
         findingSummary.length ? `The strongest risk signals are ${formatList(findingSummary)}.` : "",
-        hotspotPaths.length ? `The highest-review files are ${formatList(hotspotPaths)}.` : ""
+        hotspotPaths.length
+          ? includeEvidenceInText
+            ? `The highest-review files are ${formatList(hotspotPaths)}.`
+            : "The highest-risk areas are concentrated in a small group of hotspot modules."
+          : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -740,7 +793,9 @@ function buildFallbackAnswer(analysis, question, matches) {
                 .map((signal) => `${signal.name.toLowerCase()} via ${formatList(signal.evidence, "its detected files")}`)
             )}.`
           : "",
-        evidenceDescriptions.length ? `Related implementation files also include ${formatList(evidenceDescriptions)}.` : ""
+        includeEvidenceInText && evidenceDescriptions.length
+          ? `Related implementation files also include ${formatList(evidenceDescriptions)}.`
+          : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -759,7 +814,9 @@ function buildFallbackAnswer(analysis, question, matches) {
         `The main framework and dependency picture is ${formatList(summary.frameworks || [], summary.primaryLanguage || "not obvious from the current analysis")}.`,
         dependencyNames.length ? `The most visible dependencies are ${formatList(dependencyNames)}.` : "",
         relationshipSummary.length ? `The strongest module links are ${formatList(relationshipSummary)}.` : "",
-        evidenceDescriptions.length ? `The clearest supporting files are ${formatList(evidenceDescriptions)}.` : ""
+        includeEvidenceInText && evidenceDescriptions.length
+          ? `The clearest supporting files are ${formatList(evidenceDescriptions)}.`
+          : ""
       ]
         .filter(Boolean)
         .join(" "),
@@ -775,14 +832,9 @@ function buildFallbackAnswer(analysis, question, matches) {
     prompt.includes("organisation") ||
     prompt.includes("organization")
   ) {
+    const architectureNarrative = buildArchitectureNarrative(analysis);
     return {
-      answer: [
-        `The codebase is mainly organized around ${formatList(moduleNames)}.`,
-        relationshipSummary.length ? `The clearest cross-module links are ${formatList(relationshipSummary)}.` : "",
-        evidenceDescriptions.length ? `For your question, the most relevant implementation files are ${formatList(evidenceDescriptions)}.` : ""
-      ]
-        .filter(Boolean)
-        .join(" "),
+      answer: architectureNarrative.join(" "),
       citations
     };
   }
@@ -808,16 +860,16 @@ function buildFallbackAnswer(analysis, question, matches) {
           : matchModules.length
             ? `The best local signal for authentication or session handling is in the ${formatList(matchModules)} area.`
             : "I do not see a dedicated authentication module in the strongest local matches.",
-        frontendAuthMatches.length
+        includeEvidenceInText && frontendAuthMatches.length
           ? `On the frontend side, the clearest files are ${formatList(
               frontendAuthMatches.map((match) => `${match.path} where it ${normalizeRole(match.role)}`)
             )}.`
           : "",
-        backendAuthMatches.length
+        includeEvidenceInText && backendAuthMatches.length
           ? `On the backend side, the clearest files are ${formatList(
               backendAuthMatches.map((match) => `${match.path} where it ${normalizeRole(match.role)}`)
             )}.`
-          : evidenceDescriptions.length
+          : includeEvidenceInText && evidenceDescriptions.length
             ? `The closest implementation evidence is ${formatList(evidenceDescriptions)}.`
             : ""
       ]
@@ -834,7 +886,9 @@ function buildFallbackAnswer(analysis, question, matches) {
         : matchModules.length
           ? `This question is best answered from the ${formatList(matchModules)} area of the codebase.`
           : `I could not isolate a single dedicated module for "${question}", but I can still explain the likely implementation area.`,
-      evidenceDescriptions.length ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.` : "",
+      includeEvidenceInText && evidenceDescriptions.length
+        ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
+        : "",
       preferredEntrypoints.length
         ? `The main entrypoints are ${formatList(preferredEntrypoints)}.`
         : summary.entrypoints?.length
@@ -852,7 +906,9 @@ async function answerQuestion(analysis, question) {
   const normalizedQuestion = normalizeQuestionText(question);
   const matches = retrieveRelevantDocuments(analysis, normalizedQuestion);
   const includeCitations = shouldIncludeCitations(normalizedQuestion);
-  const fallbackAnswer = buildFallbackAnswer(analysis, normalizedQuestion, matches);
+  const fallbackAnswer = buildFallbackAnswer(analysis, normalizedQuestion, matches, {
+    includeEvidenceInText: includeCitations
+  });
 
   if (!process.env.OPENAI_API_KEY) {
     return {
