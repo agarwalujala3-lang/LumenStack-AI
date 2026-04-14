@@ -409,6 +409,45 @@ function setStatus(message, state = "idle") {
   statusText.textContent = sanitize(message);
 }
 
+function getAiFallbackLabel(reason) {
+  if (reason === "quota") {
+    return "Fallback (Quota)";
+  }
+
+  if (reason === "auth") {
+    return "Fallback (Auth)";
+  }
+
+  if (reason === "missing_key") {
+    return "Fallback (No Key)";
+  }
+
+  return "Fallback";
+}
+
+function getAiFallbackStatus(scopeLabel, payload = {}) {
+  const reason = String(payload.aiReason || "");
+  const aiMessage = String(payload.aiMessage || "").trim();
+
+  if (aiMessage) {
+    return aiMessage;
+  }
+
+  if (reason === "quota") {
+    return `${scopeLabel} answered from local context because OpenAI quota is currently exhausted.`;
+  }
+
+  if (reason === "auth") {
+    return `${scopeLabel} answered from local context because OpenAI authentication failed.`;
+  }
+
+  if (reason === "missing_key") {
+    return `${scopeLabel} answered from local context because OPENAI_API_KEY is not configured.`;
+  }
+
+  return `${scopeLabel} answered from local indexed context.`;
+}
+
 function setHeroDeviceStep(index) {
   if (!heroDeviceStepElement) {
     return;
@@ -1321,7 +1360,9 @@ function renderMetrics(payload) {
   animateCount(moduleCountElement, modules.length);
   animateCount(relationshipCountElement, relationships.length);
   animateCount(qualityScoreElement, quality.score);
-  aiBadgeElement.textContent = payload.analysis.aiStatus === "live" ? "OpenAI" : "Fallback";
+  aiBadgeElement.textContent = payload.analysis.aiStatus === "live"
+    ? "OpenAI"
+    : getAiFallbackLabel(payload.analysis.aiReason);
 }
 
 function renderSourceProfile(source, comparisonContext = null) {
@@ -1877,7 +1918,7 @@ topChatForm?.addEventListener("submit", async (event) => {
     setStatus(
       payload.aiStatus === "live"
         ? "Top assistant answered in live mode."
-        : "Top assistant answered from local system context.",
+        : getAiFallbackStatus("Top assistant", payload),
       "success"
     );
   } catch (error) {
@@ -1928,7 +1969,7 @@ chatForm.addEventListener("submit", async (event) => {
     setStatus(
       payload.aiStatus === "live"
         ? "Chat answered with live AI support and repository evidence."
-        : "Chat answered from the indexed repository context.",
+        : getAiFallbackStatus("Repo chat", payload),
       "success"
     );
   } catch (error) {
@@ -1998,7 +2039,9 @@ form.addEventListener("submit", async (event) => {
     );
 
     setStatus(
-      `Analysis complete. ${payload.analysis.platformSignals?.length || 0} platform signals, review layers, chat, and exports are ready.`,
+      payload.analysis.aiStatus === "live"
+        ? `Analysis complete. ${payload.analysis.platformSignals?.length || 0} platform signals, review layers, chat, and exports are ready.`
+        : `Analysis complete. ${payload.analysis.platformSignals?.length || 0} platform signals, review layers, chat, and exports are ready. ${getAiFallbackStatus("Analysis", payload.analysis)}`,
       "success"
     );
     const resultBounds = resultsElement.getBoundingClientRect();

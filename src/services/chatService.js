@@ -1,4 +1,30 @@
 const OpenAI = require("openai");
+const { normalizeQuestionText } = require("./questionNormalizer");
+
+function classifyOpenAIError(error) {
+  const status = Number(error?.status || 0);
+  const code = String(error?.code || "").toLowerCase();
+  const message = String(error?.message || "").toLowerCase();
+
+  if (status === 429 || code === "insufficient_quota" || message.includes("insufficient_quota")) {
+    return {
+      aiReason: "quota",
+      aiMessage: "OpenAI quota reached. Answering from indexed repository context."
+    };
+  }
+
+  if (status === 401 || code === "invalid_api_key" || message.includes("invalid api key")) {
+    return {
+      aiReason: "auth",
+      aiMessage: "OpenAI key invalid or unauthorized. Answering from indexed repository context."
+    };
+  }
+
+  return {
+    aiReason: "unavailable",
+    aiMessage: "OpenAI unavailable right now. Answering from indexed repository context."
+  };
+}
 
 const QUESTION_STOPWORDS = new Set([
   "a",
@@ -248,6 +274,26 @@ function topPlatformSignals(analysis, limit = 4) {
     .map((signal) => `${signal.name} (${signal.category})`);
 }
 
+function topImprovementActions(analysis, limit = 3) {
+  const actions = [];
+
+  for (const finding of analysis.quality?.findings || []) {
+    if (actions.length >= limit) {
+      break;
+    }
+
+    const title = String(finding.title || "").trim();
+    const detail = String(finding.detail || "").trim();
+    if (!title && !detail) {
+      continue;
+    }
+
+    actions.push(`${title}${detail ? `: ${detail}` : ""}`);
+  }
+
+  return actions;
+}
+
 function topRoleDescriptions(analysis, limit = 4) {
   const vagueRoles = new Set([
     "Contributes to the application structure."
@@ -494,7 +540,7 @@ function buildHighLevelAnswer(analysis, question, matches) {
 }
 
 function buildFallbackAnswer(analysis, question, matches) {
-  const prompt = String(question || "").toLowerCase();
+  const prompt = normalizeQuestionText(question);
   const focus = extractQuestionFocus(question);
   const simpleLanguage = isSimpleLanguageRequest(prompt);
   const broadOverview = isBroadOverviewQuestion(prompt);
@@ -506,6 +552,7 @@ function buildFallbackAnswer(analysis, question, matches) {
   const dependencyNames = topDependencyNames(analysis);
   const hotspotPaths = topHotspotPaths(analysis);
   const findingSummary = topFindingSummary(analysis);
+  const improvementActions = topImprovementActions(analysis);
   const platformSignals = topPlatformSignals(analysis);
   const evidenceMatches = pickEvidenceMatches(matches);
   const matchPaths = summarizeMatches(evidenceMatches);
@@ -596,8 +643,60 @@ function buildFallbackAnswer(analysis, question, matches) {
   }
 
   if (
+    prompt.includes("improve") ||
+    prompt.includes("improvement") ||
+    prompt.includes("better") ||
+    prompt.includes("priority") ||
+    prompt.includes("refactor") ||
+    prompt.includes("optimize")
+  ) {
+    return {
+      answer: [
+        "The strongest first improvement is to address the top quality findings and hotspot files together.",
+        improvementActions.length
+          ? `Best next actions are ${formatList(improvementActions)}.`
+          : "",
+        hotspotPaths.length
+          ? `Start with these files first: ${formatList(hotspotPaths)}.`
+          : "",
+        dependencyNames.length
+          ? `Then review high-impact dependencies such as ${formatList(dependencyNames.slice(0, 4))}.`
+          : ""
+      ]
+        .filter(Boolean)
+        .join(" "),
+      citations
+    };
+  }
+
+  if (
+    prompt.includes("clone") ||
+    prompt.includes("copies the repo") ||
+    prompt.includes("copy repo") ||
+    prompt.includes("pull repo") ||
+    prompt.includes("download repo") ||
+    prompt.includes("fetch repo") ||
+    prompt.includes("how the app gets repo")
+  ) {
+    return {
+      answer: [
+        "The app takes either a public repository URL or a ZIP upload as input.",
+        "For repository URLs, it clones with git using depth 1 and can target a specific branch or ref.",
+        "If a branch fetch fails, it falls back to fetching and checking out the ref directly.",
+        "For ZIP mode, it unpacks the archive and analyzes that extracted project root."
+      ]
+        .filter(Boolean)
+        .join(" "),
+      citations
+    };
+  }
+
+  if (
     prompt.includes("risk") ||
     prompt.includes("risky") ||
+    prompt.includes("bug") ||
+    prompt.includes("bugs") ||
+    prompt.includes("defect") ||
     prompt.includes("hotspot") ||
     prompt.includes("warning") ||
     prompt.includes("issue") ||
@@ -750,15 +849,18 @@ function buildFallbackAnswer(analysis, question, matches) {
 }
 
 async function answerQuestion(analysis, question) {
-  const matches = retrieveRelevantDocuments(analysis, question);
-  const includeCitations = shouldIncludeCitations(question);
-  const fallbackAnswer = buildFallbackAnswer(analysis, question, matches);
+  const normalizedQuestion = normalizeQuestionText(question);
+  const matches = retrieveRelevantDocuments(analysis, normalizedQuestion);
+  const includeCitations = shouldIncludeCitations(normalizedQuestion);
+  const fallbackAnswer = buildFallbackAnswer(analysis, normalizedQuestion, matches);
 
   if (!process.env.OPENAI_API_KEY) {
     return {
       answer: formatAnswerForHumans(fallbackAnswer.answer, question),
       citations: includeCitations ? fallbackAnswer.citations : [],
-      aiStatus: "fallback"
+      aiStatus: "fallback",
+      aiReason: "missing_key",
+      aiMessage: "OPENAI_API_KEY is missing. Answering from indexed repository context."
     };
   }
 
@@ -767,7 +869,7 @@ async function answerQuestion(analysis, question) {
   });
 
   const promptPayload = {
-    question,
+    question: normalizedQuestion,
     summary: analysis.summary,
     modules: analysis.modules.slice(0, 10),
     dependencies: analysis.dependencies.slice(0, 10),
@@ -819,15 +921,20 @@ async function answerQuestion(analysis, question) {
     });
 
     return {
-      answer: formatAnswerForHumans(response.output_text || fallbackAnswer.answer, question),
+      answer: formatAnswerForHumans(response.output_text || fallbackAnswer.answer, normalizedQuestion),
       citations: includeCitations ? buildCitations(matches) : [],
-      aiStatus: "live"
+      aiStatus: "live",
+      aiReason: "ok",
+      aiMessage: "OpenAI live response."
     };
-  } catch {
+  } catch (error) {
+    const aiDetails = classifyOpenAIError(error);
     return {
-      answer: formatAnswerForHumans(fallbackAnswer.answer, question),
+      answer: formatAnswerForHumans(fallbackAnswer.answer, normalizedQuestion),
       citations: includeCitations ? fallbackAnswer.citations : [],
-      aiStatus: "fallback"
+      aiStatus: "fallback",
+      aiReason: aiDetails.aiReason,
+      aiMessage: aiDetails.aiMessage
     };
   }
 }

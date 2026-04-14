@@ -10,6 +10,7 @@ const { generateInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
 const { answerQuestion } = require("./services/chatService");
 const { answerSystemQuestion } = require("./services/systemChatService");
+const { normalizeUserQuestion } = require("./services/questionNormalizer");
 const {
   createAnalysisSession,
   getAnalysisSession,
@@ -326,8 +327,9 @@ function createApp() {
   app.post("/api/chat", async (req, res) => {
     const analysisId = String(req.body.analysisId || "").trim();
     const question = String(req.body.question || "").trim();
+    const { normalizedQuestion } = normalizeUserQuestion(question);
 
-    if (!analysisId || !question) {
+    if (!analysisId || !normalizedQuestion) {
       return res.status(400).json({
         error: "analysisId and question are required."
       });
@@ -342,7 +344,7 @@ function createApp() {
     }
 
     try {
-      const answer = await answerQuestion(session.analysis, question);
+      const answer = await answerQuestion(session.analysis, normalizedQuestion);
       res.json(answer);
     } catch (error) {
       res.status(500).json({
@@ -353,9 +355,10 @@ function createApp() {
 
   app.post("/api/system-chat", async (req, res) => {
     const question = String(req.body.question || "").trim();
+    const { normalizedQuestion, originalQuestion } = normalizeUserQuestion(question);
     const analysisId = String(req.body.analysisId || "").trim();
 
-    if (!question) {
+    if (!normalizedQuestion) {
       return res.status(400).json({
         error: "question is required."
       });
@@ -365,7 +368,8 @@ function createApp() {
 
     try {
       const answer = await answerSystemQuestion({
-        question,
+        question: normalizedQuestion,
+        originalQuestion,
         analysisSummary: session?.analysis?.summary || null
       });
       return res.json(answer);

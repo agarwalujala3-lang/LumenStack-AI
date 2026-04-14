@@ -22,6 +22,14 @@ main().catch((error) => {
   const status = error?.status ? `HTTP ${error.status}` : "";
   const code = error?.code ? `(${error.code})` : "";
   const message = error?.message || String(error);
+  const lower = String(message).toLowerCase();
+
+  if (Number(error?.status || 0) === 429 || lower.includes("insufficient_quota")) {
+    console.error("HTTP 429 (insufficient_quota) OpenAI key is valid but quota/billing limit is reached.");
+    process.exitCode = 1;
+    return;
+  }
+
   console.error([status, code, message].filter(Boolean).join(" "));
   process.exitCode = 1;
 });

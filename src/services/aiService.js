@@ -1,6 +1,31 @@
 const OpenAI = require("openai");
 
-function buildFallbackDocumentation(analysis) {
+function classifyOpenAIError(error) {
+  const status = Number(error?.status || 0);
+  const code = String(error?.code || "").toLowerCase();
+  const message = String(error?.message || "").toLowerCase();
+
+  if (status === 429 || code === "insufficient_quota" || message.includes("insufficient_quota")) {
+    return {
+      aiReason: "quota",
+      aiMessage: "OpenAI quota limit reached. Using fallback repository summary."
+    };
+  }
+
+  if (status === 401 || code === "invalid_api_key" || message.includes("invalid api key")) {
+    return {
+      aiReason: "auth",
+      aiMessage: "OpenAI key is invalid or missing permission. Using fallback repository summary."
+    };
+  }
+
+  return {
+    aiReason: "unavailable",
+    aiMessage: "OpenAI is temporarily unavailable. Using fallback repository summary."
+  };
+}
+
+function buildFallbackDocumentation(analysis, options = {}) {
   const frameworkLine = analysis.summary.frameworks.length
     ? analysis.summary.frameworks.join(", ")
     : analysis.summary.primaryLanguage;
@@ -41,7 +66,9 @@ function buildFallbackDocumentation(analysis) {
       "2. Follow module relationships in the Mermaid diagram.",
       "3. Review the highlighted files for implementation details."
     ].join("\n"),
-    aiStatus: "fallback"
+    aiStatus: "fallback",
+    aiReason: options.aiReason || "unavailable",
+    aiMessage: options.aiMessage || "Using fallback repository summary."
   };
 }
 
@@ -66,7 +93,10 @@ function extractJsonObject(value) {
 
 async function generateInsights(analysis) {
   if (!process.env.OPENAI_API_KEY) {
-    return buildFallbackDocumentation(analysis);
+    return buildFallbackDocumentation(analysis, {
+      aiReason: "missing_key",
+      aiMessage: "OPENAI_API_KEY is missing. Using fallback repository summary."
+    });
   }
 
   const client = new OpenAI({
@@ -120,10 +150,13 @@ async function generateInsights(analysis) {
     return {
       explanation: String(parsed.explanation).trim(),
       documentation: String(parsed.documentation).trim(),
-      aiStatus: "live"
+      aiStatus: "live",
+      aiReason: "ok",
+      aiMessage: "OpenAI live response."
     };
-  } catch {
-    return buildFallbackDocumentation(analysis);
+  } catch (error) {
+    const aiDetails = classifyOpenAIError(error);
+    return buildFallbackDocumentation(analysis, aiDetails);
   }
 }
 

@@ -1,4 +1,30 @@
 const OpenAI = require("openai");
+const { normalizeQuestionText } = require("./questionNormalizer");
+
+function classifyOpenAIError(error) {
+  const status = Number(error?.status || 0);
+  const code = String(error?.code || "").toLowerCase();
+  const message = String(error?.message || "").toLowerCase();
+
+  if (status === 429 || code === "insufficient_quota" || message.includes("insufficient_quota")) {
+    return {
+      aiReason: "quota",
+      aiMessage: "OpenAI quota reached. Answering from local assistant context."
+    };
+  }
+
+  if (status === 401 || code === "invalid_api_key" || message.includes("invalid api key")) {
+    return {
+      aiReason: "auth",
+      aiMessage: "OpenAI key invalid or unauthorized. Answering from local assistant context."
+    };
+  }
+
+  return {
+    aiReason: "unavailable",
+    aiMessage: "OpenAI unavailable right now. Answering from local assistant context."
+  };
+}
 
 const SYSTEM_FACTS = [
   "LumenStack scans repository structure and code files.",
@@ -23,6 +49,57 @@ const TOPIC_CONFIGS = [
       "env",
       "environment variable",
       "leak"
+    ]
+  },
+  {
+    id: "overview",
+    keywords: [
+      "how app works",
+      "how this app works",
+      "how the app works",
+      "what this app does",
+      "what the app does",
+      "app overview",
+      "project overview",
+      "overall"
+    ]
+  },
+  {
+    id: "ingest",
+    keywords: [
+      "clone",
+      "copy repo",
+      "copies the repo",
+      "pull repo",
+      "fetch repo",
+      "download repo",
+      "ingest",
+      "source intake"
+    ]
+  },
+  {
+    id: "improvement",
+    keywords: [
+      "improve",
+      "improvement",
+      "better",
+      "optimize",
+      "refactor",
+      "priority"
+    ]
+  },
+  {
+    id: "quality",
+    keywords: [
+      "bug",
+      "bugs",
+      "issue",
+      "issues",
+      "defect",
+      "error",
+      "errors",
+      "risk",
+      "risky"
     ]
   },
   {
@@ -185,6 +262,42 @@ function buildTopicLines(topicId, context) {
       "Sensitive values should stay in server environment variables, not in client code or browser output",
       "If you want, ask for a security checklist and I will give concrete hardening steps for this app",
       "I can also explain which parts are safe to expose in UI and which should stay backend-only"
+    ];
+  }
+
+  if (topicId === "overview") {
+    return [
+      `${sourceName} turns a repository into an architecture review workspace`,
+      "It analyzes modules, dependencies, quality findings, and platform signals",
+      "It generates diagrams plus structured summaries for quick understanding",
+      "It also supports compare mode and point-wise Q&A after analysis"
+    ];
+  }
+
+  if (topicId === "ingest") {
+    return [
+      "The app accepts either a repository URL or ZIP upload as input",
+      "For repository URLs, it clones with shallow depth and supports branch or ref targeting",
+      "If a direct branch clone fails, it retries by fetching and checking out that ref",
+      "ZIP mode unpacks the archive and analyzes the extracted project root"
+    ];
+  }
+
+  if (topicId === "quality") {
+    return [
+      "Bug-prone areas are usually where hotspot files and quality findings overlap",
+      "Start review from the highest-risk files shown after analysis",
+      "Then check dependency-heavy and high-change modules first",
+      "If you want, ask this in repo chat and I will return concrete file-level priorities"
+    ];
+  }
+
+  if (topicId === "improvement") {
+    return [
+      "Best first improvement is to fix top quality findings in hotspot files",
+      "Second, tighten module boundaries where dependencies are too broad",
+      "Third, strengthen tests around high-change paths",
+      "I can give a repo-specific improvement order once analysis is complete"
     ];
   }
 
@@ -363,12 +476,15 @@ function normalizePointAnswer(text) {
 }
 
 async function answerSystemQuestion({ question, analysisSummary }) {
-  const fallbackAnswer = buildFallbackSystemAnswer(question, analysisSummary);
+  const normalizedQuestion = normalizeQuestionText(question);
+  const fallbackAnswer = buildFallbackSystemAnswer(normalizedQuestion, analysisSummary);
 
   if (!process.env.OPENAI_API_KEY) {
     return {
       answer: fallbackAnswer,
-      aiStatus: "fallback"
+      aiStatus: "fallback",
+      aiReason: "missing_key",
+      aiMessage: "OPENAI_API_KEY is missing. Answering from local assistant context."
     };
   }
 
@@ -377,7 +493,7 @@ async function answerSystemQuestion({ question, analysisSummary }) {
   });
 
   const promptPayload = {
-    question: sanitize(question),
+    question: sanitize(normalizedQuestion),
     analysisSummary: analysisSummary || null,
     systemFacts: SYSTEM_FACTS
   };
@@ -419,12 +535,17 @@ async function answerSystemQuestion({ question, analysisSummary }) {
 
     return {
       answer: normalized,
-      aiStatus: "live"
+      aiStatus: "live",
+      aiReason: "ok",
+      aiMessage: "OpenAI live response."
     };
-  } catch {
+  } catch (error) {
+    const aiDetails = classifyOpenAIError(error);
     return {
       answer: fallbackAnswer,
-      aiStatus: "fallback"
+      aiStatus: "fallback",
+      aiReason: aiDetails.aiReason,
+      aiMessage: aiDetails.aiMessage
     };
   }
 }
