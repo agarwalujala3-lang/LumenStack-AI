@@ -1,53 +1,66 @@
 {
-  "enabled": true,
-  "id": "lumenstack",
-  "title": "LumenStack AI",
-  "kind": "AI Tooling Product",
-  "status": "Live",
-  "priority": 96,
-  "featured": true,
-  "lensPriority": {
-    "recruiter": 96,
-    "engineer": 100,
-    "founder": 88,
-    "friend": 70
-  },
-  "tags": ["ai", "backend", "full-stack", "live"],
-  "stack": ["Node.js", "Express.js", "JavaScript", "OpenAI API", "Mermaid", "HTML", "CSS"],
-  "summary": "I built LumenStack AI as a codebase architecture analyzer that parses repositories, detects structure, and generates Mermaid diagrams with guided explanations.",
-  "proof": "This project proves backend analysis flow, AI-assisted explanation, project framing, and multi-page product design.",
-  "details": [
-    "I accept repos or uploads and turn them into structured architecture summaries.",
-    "I added diagram generation, compare mode, chat, and exports.",
-    "I designed it to make unfamiliar codebases easier to understand quickly."
-  ],
-  "architecture": [
-    "Repository input is parsed file by file.",
-    "Manifest and import patterns are used to infer dependency structure.",
-    "A structured analysis layer feeds diagrams and AI explanations.",
-    "The frontend presents the output as a guided developer product."
-  ],
-  "tradeoff": "I balanced deterministic analysis with AI explanation so the tool stays useful without relying blindly on the model.",
-  "badge": "Flagship AI build",
-  "icon": "LS",
-  "iconImage": "https://raw.githubusercontent.com/agarwalujala3-lang/LumenStack-AI/main/branding/portfolio-brand-mark.svg",
-  "lockupImage": "https://raw.githubusercontent.com/agarwalujala3-lang/LumenStack-AI/main/branding/portfolio-brand-lockup.svg",
-  "links": {
-    "live": "https://lumenstack-ai.onrender.com"
-  },
-  "theme": {
-    "surface1": "rgba(242, 249, 248, 0.96)",
-    "surface2": "rgba(231, 241, 239, 0.94)",
-    "ring": "rgba(78, 124, 141, 0.15)",
-    "glow": "rgba(101, 180, 194, 0.18)",
-    "glowSoft": "rgba(128, 205, 193, 0.18)",
-    "accentStrong": "#3c6574",
-    "accentSoft": "rgba(60, 101, 116, 0.12)",
-    "badgeBg": "rgba(77, 128, 144, 0.09)",
-    "badgeBorder": "rgba(77, 128, 144, 0.16)",
-    "proofBg": "linear-gradient(135deg, rgba(87, 154, 166, 0.14), rgba(112, 181, 163, 0.1))",
-    "signalBg": "rgba(248, 252, 251, 0.76)",
-    "signalBorder": "rgba(78, 124, 141, 0.12)",
-    "iconBg": "linear-gradient(145deg, rgba(18, 44, 48, 0.98), rgba(14, 30, 34, 0.96))"
-  }
+    "enabled":  true,
+    "id":  "lumenstack",
+    "title":  "LumenStack AI",
+    "kind":  "AI Tooling Product",
+    "status":  "Live",
+    "priority":  96,
+    "featured":  true,
+    "lensPriority":  {
+                         "recruiter":  96,
+                         "engineer":  100,
+                         "founder":  88,
+                         "friend":  70
+                     },
+    "tags":  [
+                 "ai",
+                 "backend",
+                 "full-stack",
+                 "live"
+             ],
+    "stack":  [
+                  "Node.js",
+                  "Express.js",
+                  "JavaScript",
+                  "OpenAI API",
+                  "Mermaid",
+                  "HTML",
+                  "CSS"
+              ],
+    "summary":  "I built LumenStack AI as a codebase architecture analyzer that parses repositories, detects structure, and generates Mermaid diagrams with guided explanations.",
+    "proof":  "This project proves backend analysis flow, AI-assisted explanation, project framing, and multi-page product design.",
+    "details":  [
+                    "I accept repos or uploads and turn them into structured architecture summaries.",
+                    "I added diagram generation, compare mode, chat, and exports.",
+                    "I designed it to make unfamiliar codebases easier to understand quickly."
+                ],
+    "architecture":  [
+                         "Repository input is parsed file by file.",
+                         "Manifest and import patterns are used to infer dependency structure.",
+                         "A structured analysis layer feeds diagrams and AI explanations.",
+                         "The frontend presents the output as a guided developer product."
+                     ],
+    "tradeoff":  "I balanced deterministic analysis with AI explanation so the tool stays useful without relying blindly on the model.",
+    "badge":  "Flagship AI build",
+    "icon":  "LS",
+    "iconImage":  "https://raw.githubusercontent.com/agarwalujala3-lang/LumenStack-AI/main/branding/portfolio-brand-mark.svg",
+    "lockupImage":  "https://raw.githubusercontent.com/agarwalujala3-lang/LumenStack-AI/main/branding/portfolio-brand-lockup.svg",
+    "links":  {
+                  "live":  "https://lumenstack-ai.onrender.com"
+              },
+    "theme":  {
+                  "surface1":  "rgba(246, 246, 253, 0.97)",
+                  "surface2":  "rgba(236, 233, 248, 0.95)",
+                  "ring":  "rgba(150, 137, 198, 0.2)",
+                  "glow":  "rgba(165, 149, 229, 0.2)",
+                  "glowSoft":  "rgba(145, 214, 236, 0.18)",
+                  "accentStrong":  "#6c59a8",
+                  "accentSoft":  "rgba(108, 89, 168, 0.12)",
+                  "badgeBg":  "rgba(108, 89, 168, 0.1)",
+                  "badgeBorder":  "rgba(108, 89, 168, 0.2)",
+                  "proofBg":  "linear-gradient(135deg, rgba(170, 154, 233, 0.18), rgba(152, 220, 241, 0.14))",
+                  "signalBg":  "rgba(249, 248, 255, 0.84)",
+                  "signalBorder":  "rgba(160, 147, 205, 0.2)",
+                  "iconBg":  "linear-gradient(145deg, rgba(234, 247, 255, 1), rgba(217, 236, 250, 0.98))"
+              }
 }
