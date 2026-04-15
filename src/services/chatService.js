@@ -583,6 +583,11 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
   const { includeEvidenceInText = false } = options;
   const prompt = normalizeQuestionText(question);
   const focus = extractQuestionFocus(question);
+  const focusNormalized = String(focus || "")
+    .toLowerCase()
+    .replace(/^(the|a|an)\s+/, "")
+    .trim();
+  const focusKey = focusNormalized.split(/\s+/)[0] || "";
   const simpleLanguage = isSimpleLanguageRequest(prompt);
   const broadOverview = isBroadOverviewQuestion(prompt);
   const summary = analysis.summary || {};
@@ -608,6 +613,20 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
   }
 
   if (!matches.length) {
+    if (["architecture", "structure", "design", "system"].includes(focusNormalized)) {
+      const architectureNarrative = buildArchitectureNarrative(analysis);
+      return {
+        answer: architectureNarrative.join(" "),
+        citations
+      };
+    }
+
+    if (focusNormalized === "logic" || broadOverview) {
+      return buildSimpleOverviewAnswer(analysis, matches, {
+        simple: simpleLanguage
+      });
+    }
+
     if (simpleLanguage) {
       return buildSimpleOverviewAnswer(analysis, matches, {
         simple: true
@@ -627,12 +646,20 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
     prompt.startsWith("describe")
   ) {
     if (
-      !focus ||
+      !focusNormalized ||
       ["app", "application", "project", "codebase", "logic", "flow", "overview"].includes(focus)
     ) {
       return buildSimpleOverviewAnswer(analysis, matches, {
         simple: simpleLanguage
       });
+    }
+
+    if (["architecture", "structure", "design", "system", "logic"].includes(focusNormalized)) {
+      const architectureNarrative = buildArchitectureNarrative(analysis);
+      return {
+        answer: architectureNarrative.join(" "),
+        citations
+      };
     }
 
     const directLambdaMatches = evidenceMatches.filter(
@@ -645,17 +672,17 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
     return {
       answer: [
         CONCEPT_HINTS[focus] ||
-          `In this codebase, ${focus || "that area"} appears to be implemented through a specific set of files and modules rather than a single central definition.`,
+          `${focusNormalized || "That area"} is handled through the core service and module flow of this app, with logic split across focused components.`,
         includeEvidenceInText && evidenceDescriptions.length
           ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
           : "",
-        includeEvidenceInText && focus === "lambda" && directLambdaMatches.length
+        includeEvidenceInText && focusKey === "lambda" && directLambdaMatches.length
           ? `The actual Lambda-side implementation is strongest in ${formatList(directLambdaMatches.map((match) => match.path))}.`
           : "",
-        focus === "lambda" && uiMentions.length
+        focusKey === "lambda" && uiMentions.length
           ? "Some dashboard or UI files also mention Lambda because they trigger or describe that backend flow, but they are not the main implementation."
           : "",
-        preferredEntrypoints.length && !["lambda", "auth", "authentication", "authorization"].includes(focus)
+        preferredEntrypoints.length && !["lambda", "auth", "authentication", "authorization"].includes(focusKey)
           ? `The main entrypoints are ${formatList(preferredEntrypoints)}.`
           : ""
       ]
@@ -749,6 +776,14 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
     prompt.includes("issue") ||
     prompt.includes("problem")
   ) {
+    const riskCitations =
+      includeEvidenceInText && hotspotPaths.length
+        ? hotspotPaths.map((path) => ({
+            path,
+            module: ""
+          }))
+        : citations;
+
     return {
       answer: [
         quality.summary
@@ -763,7 +798,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
       ]
         .filter(Boolean)
         .join(" "),
-      citations
+      citations: riskCitations
     };
   }
 
@@ -882,7 +917,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
   return {
     answer: [
       focus
-        ? `In this codebase, ${focus} appears to live mostly in the ${formatList(matchModules, "relevant")} area.`
+        ? `In this codebase, ${focusNormalized || focus} appears to live mostly in the ${formatList(matchModules, "relevant")} area.`
         : matchModules.length
           ? `This question is best answered from the ${formatList(matchModules)} area of the codebase.`
           : `I could not isolate a single dedicated module for "${question}", but I can still explain the likely implementation area.`,
@@ -894,7 +929,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
         : summary.entrypoints?.length
           ? `The main entrypoints are ${formatList(summary.entrypoints)}.`
           : "",
-      CONCEPT_HINTS[focus] && !prompt.includes("risk") ? CONCEPT_HINTS[focus] : ""
+      CONCEPT_HINTS[focusKey] && !prompt.includes("risk") ? CONCEPT_HINTS[focusKey] : ""
     ]
       .filter(Boolean)
       .join(" "),
