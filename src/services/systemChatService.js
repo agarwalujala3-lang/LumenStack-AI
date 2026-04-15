@@ -386,7 +386,7 @@ function buildTopicLines(topicId, context) {
 
 function buildFallbackSystemAnswer(question, analysisSummary) {
   const prompt = sanitize(question).toLowerCase();
-  const sourceName = sanitize(analysisSummary?.sourceName) || "the current repository";
+  const sourceName = sanitize(analysisSummary?.sourceName) || "This app";
   const sourceType = sanitize(analysisSummary?.sourceType) || "repository";
   const codeFiles = Number(analysisSummary?.codeFiles || 0);
   const primaryLanguage = sanitize(analysisSummary?.primaryLanguage);

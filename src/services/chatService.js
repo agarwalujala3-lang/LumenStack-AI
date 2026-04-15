@@ -647,7 +647,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
   ) {
     if (
       !focusNormalized ||
-      ["app", "application", "project", "codebase", "logic", "flow", "overview"].includes(focus)
+      ["app", "application", "project", "codebase", "logic", "flow", "overview"].includes(focusKey)
     ) {
       return buildSimpleOverviewAnswer(analysis, matches, {
         simple: simpleLanguage
@@ -671,7 +671,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
 
     return {
       answer: [
-        CONCEPT_HINTS[focus] ||
+        CONCEPT_HINTS[focusKey] ||
           `${focusNormalized || "That area"} is handled through the core service and module flow of this app, with logic split across focused components.`,
         includeEvidenceInText && evidenceDescriptions.length
           ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`

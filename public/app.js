@@ -327,6 +327,95 @@ async function parseJsonResponse(response, fallbackMessage) {
   return response.json();
 }
 
+function sleep(milliseconds) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, milliseconds);
+  });
+}
+
+function isTransientRequestError(error) {
+  const status = Number(error?.responseStatus || 0);
+  const message = String(error?.message || "").toLowerCase();
+
+  if (!status) {
+    return true;
+  }
+
+  if ([408, 425, 429, 500, 502, 503, 504].includes(status)) {
+    return true;
+  }
+
+  return (
+    message.includes("non-json") ||
+    message.includes("doctype") ||
+    message.includes("unexpected response") ||
+    message.includes("failed to fetch") ||
+    message.includes("bad gateway")
+  );
+}
+
+async function requestJsonWithRetry(url, fetchOptions, requestOptions = {}) {
+  const {
+    retries = 2,
+    retryDelayMs = 1300,
+    fallbackMessage = "Request failed.",
+    onRetry = null
+  } = requestOptions;
+
+  let attempt = 0;
+
+  while (attempt <= retries) {
+    try {
+      const response = await fetch(url, fetchOptions);
+      const payload = await parseJsonResponse(response, fallbackMessage);
+
+      if (!response.ok) {
+        const requestError = new Error(payload.error || `${fallbackMessage} (HTTP ${response.status}).`);
+        requestError.responseStatus = response.status;
+        throw requestError;
+      }
+
+      return payload;
+    } catch (error) {
+      if (attempt >= retries || !isTransientRequestError(error)) {
+        throw error;
+      }
+
+      const waitMs = retryDelayMs * (attempt + 1);
+      if (typeof onRetry === "function") {
+        onRetry({
+          attempt: attempt + 1,
+          retries,
+          waitMs,
+          error
+        });
+      }
+
+      await sleep(waitMs);
+      attempt += 1;
+    }
+  }
+
+  throw new Error(fallbackMessage);
+}
+
+function normalizeRequestError(error, actionLabel = "Request") {
+  const message = sanitize(error?.message || `${actionLabel} failed.`);
+  const lowered = message.toLowerCase();
+
+  if (
+    lowered.includes("doctype") ||
+    lowered.includes("non-json response") ||
+    lowered.includes("unexpected response") ||
+    lowered.includes("bad gateway") ||
+    lowered.includes("failed to fetch")
+  ) {
+    return `${actionLabel} temporarily unavailable while the service wakes up. Please wait a few seconds and retry.`;
+  }
+
+  return message;
+}
+
 function clearChildren(element) {
   element.replaceChildren();
 }
@@ -1891,25 +1980,27 @@ topChatForm?.addEventListener("submit", async (event) => {
   setTopChatAnswer("Thinking...", "loading");
 
   try {
-    const response = await fetch("/api/system-chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+    const payload = await requestJsonWithRetry(
+      "/api/system-chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question,
+          analysisId: analysisId || undefined
+        })
       },
-      body: JSON.stringify({
-        question,
-        analysisId: analysisId || undefined
-      })
-    });
-
-    const payload = await parseJsonResponse(
-      response,
-      "System chat failed because the server returned an unexpected response."
+      {
+        retries: 2,
+        retryDelayMs: 1200,
+        fallbackMessage: "System chat failed because the server returned an unexpected response.",
+        onRetry: ({ attempt, retries }) => {
+          setStatus(`Top assistant reconnecting... (${attempt}/${retries + 1})`, "loading");
+        }
+      }
     );
-
-    if (!response.ok) {
-      throw new Error(payload.error || "System chat failed.");
-    }
 
     setTopChatAnswer(payload.answer || "I could not generate an answer right now.", "ready");
     if (topChatInput) {
@@ -1922,8 +2013,9 @@ topChatForm?.addEventListener("submit", async (event) => {
       "success"
     );
   } catch (error) {
-    setTopChatAnswer(error.message || "System chat failed.", "error");
-    setStatus(error.message || "System chat failed.", "error");
+    const message = normalizeRequestError(error, "System chat");
+    setTopChatAnswer(message, "error");
+    setStatus(message, "error");
   }
 });
 
@@ -1945,25 +2037,27 @@ chatForm.addEventListener("submit", async (event) => {
   chatQuestionInput.value = "";
 
   try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+    const payload = await requestJsonWithRetry(
+      "/api/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          analysisId,
+          question
+        })
       },
-      body: JSON.stringify({
-        analysisId,
-        question
-      })
-    });
-
-    const payload = await parseJsonResponse(
-      response,
-      "Chat failed because the server returned an unexpected response."
+      {
+        retries: 2,
+        retryDelayMs: 1000,
+        fallbackMessage: "Chat failed because the server returned an unexpected response.",
+        onRetry: ({ attempt, retries }) => {
+          setStatus(`Repo chat reconnecting... (${attempt}/${retries + 1})`, "loading");
+        }
+      }
     );
-
-    if (!response.ok) {
-      throw new Error(payload.error || "Chat failed.");
-    }
 
     appendChatBubble("system", payload.answer, payload.citations || []);
     setStatus(
@@ -1973,8 +2067,9 @@ chatForm.addEventListener("submit", async (event) => {
       "success"
     );
   } catch (error) {
-    appendChatBubble("system", error.message || "Chat failed.");
-    setStatus(error.message || "Chat failed.", "error");
+    const message = normalizeRequestError(error, "Repo chat");
+    appendChatBubble("system", message);
+    setStatus(message, "error");
   }
 });
 
@@ -1992,19 +2087,21 @@ form.addEventListener("submit", async (event) => {
   );
 
   try {
-    const response = await fetch("/api/analyze", {
-      method: "POST",
-      body: formData
-    });
-
-    const payload = await parseJsonResponse(
-      response,
-      "Analysis failed because the server returned an unexpected response."
+    const payload = await requestJsonWithRetry(
+      "/api/analyze",
+      {
+        method: "POST",
+        body: formData
+      },
+      {
+        retries: 3,
+        retryDelayMs: 1500,
+        fallbackMessage: "Analysis failed because the server returned an unexpected response.",
+        onRetry: ({ attempt, retries }) => {
+          setStatus(`Service warming up... retrying analysis (${attempt}/${retries + 1})`, "loading");
+        }
+      }
     );
-
-    if (!response.ok) {
-      throw new Error(payload.error || "Analysis failed.");
-    }
 
     analysisId = payload.analysisId;
     exportUrls = payload.exportUrls;
@@ -2054,7 +2151,7 @@ form.addEventListener("submit", async (event) => {
     }
     hideOverlay("Architecture window opened.");
   } catch (error) {
-    setStatus(error.message || "Analysis failed.", "error");
+    setStatus(normalizeRequestError(error, "Analysis"), "error");
     hideOverlay("Analysis window closed.");
   }
 });
