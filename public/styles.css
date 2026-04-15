@@ -6003,6 +6003,472 @@ body[data-theme="dark"] .brand-lockup-image {
   filter: drop-shadow(0 0 18px rgba(116, 239, 255, 0.18));
 }
 
+.platform-pillars,
+.fusion-command-deck,
+.release-roadmap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid var(--line-strong);
+  background:
+    radial-gradient(circle at 86% 16%, rgba(88, 214, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 10% 86%, rgba(107, 150, 255, 0.1), transparent 34%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.8), rgba(241, 247, 255, 0.8));
+  box-shadow: var(--hero-shadow);
+}
+
+.platform-pillars {
+  margin: 22px 0 18px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.platform-pillars::before,
+.fusion-command-deck::before,
+.release-roadmap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(21, 40, 60, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 40, 60, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.56;
+  pointer-events: none;
+}
+
+.platform-pillars-header,
+.release-roadmap-header {
+  position: relative;
+  z-index: 1;
+  max-width: 64ch;
+}
+
+.platform-pillars-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.platform-pillar-card {
+  position: relative;
+  padding: 14px 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(18, 68, 105, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(244, 250, 255, 0.72)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.1), rgba(107, 150, 255, 0.08));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 16px 34px rgba(15, 43, 70, 0.12);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.platform-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(22, 119, 183, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 20px 44px rgba(15, 43, 70, 0.2);
+}
+
+.platform-pillar-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(22, 119, 183, 0.25);
+  background: rgba(22, 119, 183, 0.08);
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.platform-pillar-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.22;
+}
+
+.platform-pillar-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.fusion-command-deck {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+  padding: clamp(20px, 3vw, 32px);
+  margin: 12px 0 24px;
+}
+
+.fusion-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 56ch;
+}
+
+.fusion-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.fusion-chip-row span {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(22, 119, 183, 0.22);
+  background: linear-gradient(135deg, rgba(88, 214, 255, 0.12), rgba(107, 150, 255, 0.09));
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fusion-visual {
+  position: relative;
+  min-height: 330px;
+  border-radius: 24px;
+  border: 1px solid rgba(18, 68, 105, 0.28);
+  background:
+    radial-gradient(circle at 72% 18%, rgba(88, 214, 255, 0.22), transparent 38%),
+    radial-gradient(circle at 12% 88%, rgba(107, 150, 255, 0.16), transparent 44%),
+    linear-gradient(165deg, rgba(5, 20, 34, 0.9), rgba(6, 14, 26, 0.92));
+  box-shadow:
+    inset 0 1px 0 rgba(158, 230, 255, 0.2),
+    0 26px 56px rgba(5, 16, 33, 0.38);
+  overflow: hidden;
+}
+
+.fusion-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(132, 210, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132, 210, 255, 0.09) 1px, transparent 1px);
+  background-size: 38px 38px;
+  opacity: 0.55;
+}
+
+.fusion-beam {
+  position: absolute;
+  width: 42%;
+  height: 180%;
+  top: -40%;
+  background: linear-gradient(180deg, rgba(88, 214, 255, 0), rgba(88, 214, 255, 0.24), rgba(88, 214, 255, 0));
+  filter: blur(18px);
+  opacity: 0.46;
+  transform: rotate(18deg);
+  animation: fusionBeamMove 18s ease-in-out infinite;
+}
+
+.fusion-beam-a {
+  left: -8%;
+}
+
+.fusion-beam-b {
+  right: -14%;
+  animation-direction: reverse;
+}
+
+.fusion-node {
+  position: absolute;
+  display: grid;
+  gap: 2px;
+  min-width: 118px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(117, 231, 255, 0.28);
+  background:
+    linear-gradient(180deg, rgba(8, 30, 49, 0.94), rgba(6, 20, 34, 0.9)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.14), rgba(107, 150, 255, 0.12));
+  box-shadow:
+    inset 0 1px 0 rgba(187, 244, 255, 0.18),
+    0 14px 32px rgba(1, 12, 28, 0.4);
+  color: #d7f7ff;
+}
+
+.fusion-node span {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(165, 233, 255, 0.72);
+}
+
+.fusion-node strong {
+  font-size: 1.02rem;
+}
+
+.node-intake {
+  top: 14%;
+  left: 8%;
+}
+
+.node-graph {
+  top: 17%;
+  right: 9%;
+}
+
+.node-risk {
+  bottom: 20%;
+  left: 26%;
+}
+
+.node-brief {
+  bottom: 10%;
+  right: 12%;
+}
+
+.fusion-link {
+  position: absolute;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(88, 214, 255, 0.12), rgba(88, 214, 255, 0.9), rgba(88, 214, 255, 0.12));
+  box-shadow: 0 0 12px rgba(88, 214, 255, 0.4);
+}
+
+.link-a {
+  top: 26%;
+  left: 35%;
+  width: 30%;
+}
+
+.link-b {
+  top: 54%;
+  left: 44%;
+  width: 22%;
+}
+
+.link-c {
+  top: 68%;
+  left: 56%;
+  width: 26%;
+}
+
+.fusion-pulse {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #f6ffff 0%, #72ecff 56%, rgba(88, 214, 255, 0) 100%);
+  box-shadow:
+    0 0 0 10px rgba(88, 214, 255, 0.08),
+    0 0 16px rgba(88, 214, 255, 0.65);
+  animation: fusionPulse 1.7s ease-in-out infinite;
+}
+
+.pulse-a {
+  top: 24%;
+  left: 49%;
+}
+
+.pulse-b {
+  top: 52%;
+  left: 60%;
+  animation-delay: 280ms;
+}
+
+.pulse-c {
+  top: 66%;
+  left: 70%;
+  animation-delay: 520ms;
+}
+
+.release-roadmap {
+  margin: 12px 0 26px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.release-roadmap-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.release-roadmap-card {
+  position: relative;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(18, 68, 105, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(243, 249, 255, 0.75)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.1), rgba(107, 150, 255, 0.08));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 16px 34px rgba(15, 43, 70, 0.12);
+}
+
+.release-roadmap-card span {
+  display: inline-block;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.release-roadmap-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.02rem;
+}
+
+.release-roadmap-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 0.9rem;
+}
+
+body[data-theme="dark"] .platform-pillars,
+body[data-theme="dark"] .fusion-command-deck,
+body[data-theme="dark"] .release-roadmap {
+  border-color: rgba(146, 216, 255, 0.16);
+  background:
+    radial-gradient(circle at 84% 14%, rgba(88, 214, 255, 0.2), transparent 34%),
+    radial-gradient(circle at 8% 84%, rgba(107, 150, 255, 0.14), transparent 34%),
+    linear-gradient(162deg, rgba(8, 18, 34, 0.92), rgba(6, 13, 24, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(210, 243, 255, 0.09),
+    0 34px 74px rgba(0, 0, 0, 0.45);
+}
+
+body[data-theme="dark"] .platform-pillar-card,
+body[data-theme="dark"] .release-roadmap-card {
+  border-color: rgba(116, 239, 255, 0.2);
+  background:
+    linear-gradient(180deg, rgba(7, 28, 46, 0.82), rgba(6, 18, 32, 0.84)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.14), rgba(107, 150, 255, 0.1));
+  box-shadow:
+    inset 0 1px 0 rgba(188, 244, 255, 0.14),
+    0 20px 44px rgba(2, 11, 26, 0.45);
+}
+
+body[data-theme="dark"] .platform-pillar-card p,
+body[data-theme="dark"] .release-roadmap-card p {
+  color: rgba(198, 218, 236, 0.9);
+}
+
+body[data-theme="dark"] .platform-pillar-index {
+  border-color: rgba(116, 239, 255, 0.25);
+  background: rgba(88, 214, 255, 0.12);
+  color: #baf3ff;
+}
+
+body[data-theme="dark"] .fusion-chip-row span {
+  border-color: rgba(116, 239, 255, 0.28);
+  background: linear-gradient(135deg, rgba(88, 214, 255, 0.2), rgba(107, 150, 255, 0.16));
+  color: #c9f8ff;
+}
+
+@keyframes fusionBeamMove {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(18deg);
+    opacity: 0.26;
+  }
+
+  50% {
+    transform: translate3d(16%, 2%, 0) rotate(18deg);
+    opacity: 0.56;
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) rotate(18deg);
+    opacity: 0.26;
+  }
+}
+
+@keyframes fusionPulse {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: scale(1.24);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1240px) {
+  .platform-pillars-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .release-roadmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .fusion-command-deck {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .fusion-visual {
+    min-height: 300px;
+  }
+
+  .platform-pillars-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .platform-pillars,
+  .fusion-command-deck,
+  .release-roadmap {
+    border-radius: 24px;
+    padding: 18px;
+  }
+
+  .platform-pillars-grid,
+  .release-roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fusion-visual {
+    min-height: 270px;
+  }
+
+  .fusion-node {
+    min-width: 106px;
+    padding: 9px 10px;
+  }
+
+  .node-intake {
+    left: 5%;
+  }
+
+  .node-graph {
+    right: 5%;
+  }
+
+  .node-risk {
+    left: 16%;
+  }
+
+  .node-brief {
+    right: 8%;
+  }
+}
+
 .brand-mark {
   background:
     radial-gradient(circle at 50% 24%, rgba(116, 239, 255, 0.18), transparent 44%),
