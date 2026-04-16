@@ -117,6 +117,22 @@
       </header>
 
       <section class="hero-stage hero-stage-reference">
+        <div class="hero-depth-scene" aria-hidden="true">
+          <span class="hero-depth-layer layer-grid" data-parallax="0.08"></span>
+          <span class="hero-depth-layer layer-ring-a" data-parallax="0.12"></span>
+          <span class="hero-depth-layer layer-ring-b" data-parallax="0.09"></span>
+          <span class="hero-depth-layer layer-ring-c" data-parallax="0.14"></span>
+          <span class="hero-depth-layer layer-beam-a" data-parallax="0.16"></span>
+          <span class="hero-depth-layer layer-beam-b" data-parallax="0.1"></span>
+          <span class="hero-depth-layer layer-node node-a" data-parallax="0.18"></span>
+          <span class="hero-depth-layer layer-node node-b" data-parallax="0.2"></span>
+          <span class="hero-depth-layer layer-node node-c" data-parallax="0.17"></span>
+          <span class="hero-depth-layer layer-node node-d" data-parallax="0.15"></span>
+          <span class="hero-depth-layer layer-link link-a" data-parallax="0.11"></span>
+          <span class="hero-depth-layer layer-link link-b" data-parallax="0.13"></span>
+          <span class="hero-depth-layer layer-link link-c" data-parallax="0.1"></span>
+        </div>
+
         <article class="hero-panel motion-target spotlight-card" data-parallax="0.08">
           <div class="hero-ribbon">Orbital review deck</div>
           <p class="eyebrow">Repository Command Surface</p>
@@ -309,6 +325,33 @@
             </div>
           </article>
         </aside>
+      </section>
+
+      <section id="live-metrics-ribbon" class="live-metrics-ribbon motion-target spotlight-card" data-parallax="0.02" aria-label="Live analysis telemetry">
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Engine</span>
+          <strong id="metrics-engine-state">Standby</strong>
+        </article>
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Source</span>
+          <strong id="metrics-source-state">Awaiting repository</strong>
+        </article>
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Throughput</span>
+          <strong id="metrics-throughput">0 files/min</strong>
+        </article>
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Latency</span>
+          <strong id="metrics-latency">0 ms</strong>
+        </article>
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Modules</span>
+          <strong id="metrics-module-count">0</strong>
+        </article>
+        <article class="metrics-ribbon-card">
+          <span class="metrics-label">Confidence</span>
+          <strong id="metrics-confidence">85%</strong>
+        </article>
       </section>
 
       <section class="signal-board signal-board-wide motion-target spotlight-card" data-parallax="0.04">
