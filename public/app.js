@@ -31,6 +31,7 @@ const dropzone = document.getElementById("dropzone");
 const baselineDropzone = document.getElementById("baseline-dropzone");
 const statusPanel = document.getElementById("status");
 const statusText = statusPanel.querySelector("p");
+const liveMetricsRibbonElement = document.getElementById("live-metrics-ribbon");
 const metricsEngineStateElement = document.getElementById("metrics-engine-state");
 const metricsSourceStateElement = document.getElementById("metrics-source-state");
 const metricsThroughputElement = document.getElementById("metrics-throughput");
@@ -511,20 +512,6 @@ let activeWorkspaceKey = "universal";
 function setStatus(message, state = "idle") {
   statusPanel.dataset.state = state;
   statusText.textContent = sanitize(message);
-
-  if (state === "loading") {
-    updateMetricsRibbon({
-      engine: "Analyzing"
-    });
-  } else if (state === "success") {
-    updateMetricsRibbon({
-      engine: "Ready"
-    });
-  } else if (state === "error") {
-    updateMetricsRibbon({
-      engine: "Attention"
-    });
-  }
 }
 
 function updateMetricsRibbon(patch = {}) {
@@ -532,6 +519,15 @@ function updateMetricsRibbon(patch = {}) {
 
   if (metricsEngineStateElement) {
     metricsEngineStateElement.textContent = sanitize(metricsState.engine);
+  }
+
+  if (liveMetricsRibbonElement) {
+    const engineState = sanitize(metricsState.engine || "standby")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "standby";
+
+    liveMetricsRibbonElement.dataset.engine = engineState;
   }
 
   if (metricsSourceStateElement) {
@@ -562,6 +558,10 @@ function stopMetricsTicker() {
     window.clearInterval(metricsTickerTimer);
     metricsTickerTimer = 0;
   }
+
+  if (liveMetricsRibbonElement) {
+    liveMetricsRibbonElement.classList.remove("is-live");
+  }
 }
 
 function startMetricsTicker() {
@@ -570,6 +570,10 @@ function startMetricsTicker() {
   }
 
   stopMetricsTicker();
+
+  if (liveMetricsRibbonElement) {
+    liveMetricsRibbonElement.classList.add("is-live");
+  }
 
   metricsTickerTimer = window.setInterval(() => {
     const nextThroughput = Math.min(640, (Number(metricsState.throughput) || 0) + 8 + Math.random() * 22);

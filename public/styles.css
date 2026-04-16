@@ -6749,6 +6749,16 @@ body[data-theme="dark"] .fusion-chip-row span {
   filter: blur(1px);
 }
 
+.hero-depth-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -18%;
+  width: 18%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(88, 214, 255, 0.24), rgba(255, 255, 255, 0));
+  filter: blur(10px);
+  animation: heroDepthScanline 6.4s ease-in-out infinite;
+}
+
 .hero-depth-layer {
   position: absolute;
   transform: translate3d(0, var(--parallax-shift, 0), 0);
@@ -6924,6 +6934,13 @@ body[data-theme="dark"] .fusion-chip-row span {
   pointer-events: none;
 }
 
+.live-metrics-ribbon.is-live {
+  border-color: rgba(22, 119, 183, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 22px 44px rgba(10, 37, 61, 0.2);
+}
+
 .metrics-ribbon-card {
   position: relative;
   z-index: 1;
@@ -6948,6 +6965,30 @@ body[data-theme="dark"] .fusion-chip-row span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+#live-metrics-ribbon[data-engine="initializing"] .metrics-ribbon-card:first-child,
+#live-metrics-ribbon[data-engine="analyzing"] .metrics-ribbon-card:first-child {
+  border-color: rgba(22, 119, 183, 0.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 0 18px rgba(22, 119, 183, 0.24);
+}
+
+#live-metrics-ribbon[data-engine="review-ready"] .metrics-ribbon-card:first-child,
+#live-metrics-ribbon[data-engine="ready"] .metrics-ribbon-card:first-child {
+  border-color: rgba(26, 127, 87, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 0 18px rgba(26, 127, 87, 0.2);
+}
+
+#live-metrics-ribbon[data-engine="attention"] .metrics-ribbon-card:first-child,
+#live-metrics-ribbon[data-engine="recovery"] .metrics-ribbon-card:first-child {
+  border-color: rgba(160, 56, 33, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 0 18px rgba(160, 56, 33, 0.22);
 }
 
 body[data-theme="dark"] .hero-depth-scene::before {
@@ -6992,6 +7033,37 @@ body[data-theme="dark"] .metrics-ribbon-card {
 
 body[data-theme="dark"] .metrics-label {
   color: rgba(180, 218, 242, 0.76);
+}
+
+body[data-theme="dark"] .live-metrics-ribbon.is-live {
+  border-color: rgba(116, 239, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(188, 244, 255, 0.12),
+    0 24px 46px rgba(0, 9, 22, 0.56);
+}
+
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="initializing"] .metrics-ribbon-card:first-child,
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="analyzing"] .metrics-ribbon-card:first-child {
+  border-color: rgba(116, 239, 255, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(188, 244, 255, 0.18),
+    0 0 20px rgba(116, 239, 255, 0.24);
+}
+
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="review-ready"] .metrics-ribbon-card:first-child,
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="ready"] .metrics-ribbon-card:first-child {
+  border-color: rgba(98, 236, 172, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(188, 244, 255, 0.18),
+    0 0 20px rgba(98, 236, 172, 0.2);
+}
+
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="attention"] .metrics-ribbon-card:first-child,
+body[data-theme="dark"] #live-metrics-ribbon[data-engine="recovery"] .metrics-ribbon-card:first-child {
+  border-color: rgba(255, 138, 118, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(188, 244, 255, 0.18),
+    0 0 20px rgba(255, 138, 118, 0.2);
 }
 
 @keyframes heroDepthOrbit {
@@ -7040,6 +7112,22 @@ body[data-theme="dark"] .metrics-label {
 
   100% {
     transform: translateX(540%);
+    opacity: 0;
+  }
+}
+
+@keyframes heroDepthScanline {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  22% {
+    opacity: 0.82;
+  }
+
+  100% {
+    transform: translateX(620%);
     opacity: 0;
   }
 }

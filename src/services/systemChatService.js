@@ -211,6 +211,27 @@ function sanitize(value) {
   return String(value || "").trim();
 }
 
+function formatSourceSubject(rawSourceName) {
+  const sourceName = sanitize(rawSourceName);
+
+  if (!sourceName) {
+    return "This app";
+  }
+
+  const normalized = sourceName.toLowerCase();
+  const genericNames = new Set(["current", "baseline", "upload", "repository", "workspace"]);
+
+  if (genericNames.has(normalized)) {
+    return "This repository";
+  }
+
+  if (/^[a-z0-9_-]{1,18}$/i.test(sourceName)) {
+    return sourceName.charAt(0).toUpperCase() + sourceName.slice(1);
+  }
+
+  return sourceName;
+}
+
 function toPoints(lines, max = 5) {
   const cleaned = (lines || [])
     .map((line) => sanitize(line).replace(/[.?!]+$/, ""))
@@ -267,7 +288,7 @@ function buildTopicLines(topicId, context) {
 
   if (topicId === "overview") {
     return [
-      `${sourceName} turns a repository into an architecture review workspace`,
+      `${sourceName} provides an architecture review workspace for code repositories`,
       "It analyzes modules, dependencies, quality findings, and platform signals",
       "It generates diagrams plus structured summaries for quick understanding",
       "It also supports compare mode and point-wise Q&A after analysis"
@@ -375,7 +396,7 @@ function buildTopicLines(topicId, context) {
   }
 
   return [
-    `This app is an AI architecture workspace for ${sourceName}`,
+    `${sourceName} is processed as an AI architecture workspace for review and explanation`,
     `${sourceType.charAt(0).toUpperCase() + sourceType.slice(1)} scans map code structure, dependencies, and risk hotspots`,
     codeFiles > 0
       ? `The latest scan indexed about ${codeFiles} code files`
@@ -386,7 +407,7 @@ function buildTopicLines(topicId, context) {
 
 function buildFallbackSystemAnswer(question, analysisSummary) {
   const prompt = sanitize(question).toLowerCase();
-  const sourceName = sanitize(analysisSummary?.sourceName) || "This app";
+  const sourceName = formatSourceSubject(analysisSummary?.sourceName || "This app");
   const sourceType = sanitize(analysisSummary?.sourceType) || "repository";
   const codeFiles = Number(analysisSummary?.codeFiles || 0);
   const primaryLanguage = sanitize(analysisSummary?.primaryLanguage);
