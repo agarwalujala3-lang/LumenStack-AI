@@ -4030,35 +4030,35 @@ body::after {
 }
 
 body[data-theme="dark"] {
-  --bg: #0f1020;
-  --bg-deep: #16142b;
-  --panel: rgba(25, 24, 44, 0.66);
-  --panel-strong: rgba(30, 28, 50, 0.84);
-  --panel-dark: #130f25;
-  --ink: #f7f1ff;
-  --muted: #bcb0d6;
-  --muted-soft: #8f83ad;
-  --accent: #af87ff;
-  --accent-strong: #d4b9ff;
-  --accent-soft: rgba(175, 135, 255, 0.22);
-  --cyan: #8ddbff;
-  --amber: #c09cff;
-  --amber-soft: rgba(192, 156, 255, 0.2);
-  --line: rgba(226, 214, 255, 0.08);
-  --line-strong: rgba(226, 214, 255, 0.14);
-  --shadow: 0 28px 72px rgba(4, 5, 15, 0.42);
-  --hero-shadow: 0 40px 100px rgba(4, 5, 15, 0.54);
+  --bg: #173048;
+  --bg-deep: #203b54;
+  --panel: rgba(20, 45, 66, 0.72);
+  --panel-strong: rgba(24, 52, 76, 0.86);
+  --panel-dark: #11273a;
+  --ink: #ecf8ff;
+  --muted: #b4cfdf;
+  --muted-soft: #88a8c0;
+  --accent: #4fc9ff;
+  --accent-strong: #9feaff;
+  --accent-soft: rgba(79, 201, 255, 0.22);
+  --cyan: #7de2ff;
+  --amber: #8fc9ff;
+  --amber-soft: rgba(143, 201, 255, 0.18);
+  --line: rgba(192, 233, 255, 0.11);
+  --line-strong: rgba(192, 233, 255, 0.18);
+  --shadow: 0 28px 72px rgba(3, 14, 24, 0.44);
+  --hero-shadow: 0 40px 100px rgba(3, 14, 24, 0.56);
   background:
-    radial-gradient(circle at 14% 12%, rgba(119, 122, 255, 0.24), transparent 24%),
-    radial-gradient(circle at 88% 14%, rgba(201, 133, 255, 0.2), transparent 24%),
-    radial-gradient(circle at 52% 100%, rgba(94, 79, 173, 0.28), transparent 30%),
-    linear-gradient(180deg, #0a0b15 0%, #111222 48%, #18152d 100%);
+    radial-gradient(circle at 14% 12%, rgba(89, 193, 255, 0.26), transparent 26%),
+    radial-gradient(circle at 88% 14%, rgba(71, 159, 228, 0.22), transparent 28%),
+    radial-gradient(circle at 52% 100%, rgba(50, 122, 188, 0.24), transparent 36%),
+    linear-gradient(180deg, #13273b 0%, #1a334b 52%, #24435e 100%);
 }
 
 body[data-theme="dark"]::before {
   background:
-    radial-gradient(circle at 26% 28%, rgba(176, 146, 255, 0.12), transparent 18%),
-    radial-gradient(circle at 78% 72%, rgba(120, 214, 255, 0.08), transparent 18%);
+    radial-gradient(circle at 26% 28%, rgba(103, 206, 255, 0.14), transparent 18%),
+    radial-gradient(circle at 78% 72%, rgba(120, 214, 255, 0.1), transparent 18%);
   opacity: 1;
 }
 
@@ -4086,7 +4086,7 @@ body[data-theme="dark"]::after {
 }
 
 body[data-theme="dark"] .orb-a {
-  background: radial-gradient(circle, rgba(122, 149, 255, 0.26), transparent 68%);
+  background: radial-gradient(circle, rgba(88, 182, 255, 0.28), transparent 68%);
 }
 
 body[data-theme="dark"] .orb-b {
@@ -7488,5 +7488,85 @@ body[data-theme="dark"] #live-metrics-ribbon[data-engine="recovery"] .metrics-ri
   .signal-board-wide {
     padding: 22px;
   }
+}
+
+/* Final dark-mode professional blue-cyan normalization */
+body[data-theme="dark"] .topbar,
+body[data-theme="dark"] .hero-panel,
+body[data-theme="dark"] .signal-board,
+body[data-theme="dark"] .panel,
+body[data-theme="dark"] .showcase-card,
+body[data-theme="dark"] .device-shell,
+body[data-theme="dark"] .preview-card,
+body[data-theme="dark"] .workspace-preset-card,
+body[data-theme="dark"] .integration-card,
+body[data-theme="dark"] .platform-pillar-card,
+body[data-theme="dark"] .release-roadmap-card,
+body[data-theme="dark"] .metrics-ribbon-card {
+  background:
+    linear-gradient(160deg, rgba(18, 44, 66, 0.86), rgba(15, 35, 54, 0.84)),
+    linear-gradient(140deg, rgba(79, 201, 255, 0.12), rgba(143, 201, 255, 0.08));
+  border-color: rgba(166, 227, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(216, 245, 255, 0.12),
+    0 22px 52px rgba(2, 11, 21, 0.42);
+}
+
+body[data-theme="dark"] .status-panel,
+body[data-theme="dark"] .chat-bubble.system,
+body[data-theme="dark"] .device-top-chat-answer,
+body[data-theme="dark"] .device-bubble,
+body[data-theme="dark"] .stack-item,
+body[data-theme="dark"] .finding-card,
+body[data-theme="dark"] .module-card,
+body[data-theme="dark"] .dependency-item,
+body[data-theme="dark"] .file-card {
+  background:
+    linear-gradient(165deg, rgba(19, 47, 70, 0.88), rgba(14, 35, 53, 0.86)),
+    linear-gradient(145deg, rgba(79, 201, 255, 0.11), rgba(143, 201, 255, 0.07));
+  border-color: rgba(160, 223, 255, 0.2);
+}
+
+body[data-theme="dark"] .topbar-nav a,
+body[data-theme="dark"] .top-pill,
+body[data-theme="dark"] .chip,
+body[data-theme="dark"] .panel-badge,
+body[data-theme="dark"] .result-pill {
+  background: rgba(17, 52, 78, 0.72);
+  border-color: rgba(157, 221, 255, 0.22);
+  color: #d7f4ff;
+}
+
+body[data-theme="dark"] .hero-text,
+body[data-theme="dark"] .body-copy,
+body[data-theme="dark"] p,
+body[data-theme="dark"] .file-meta,
+body[data-theme="dark"] .field-hint {
+  color: rgba(202, 228, 243, 0.92);
+}
+
+body[data-theme="dark"] .primary-button {
+  background: linear-gradient(135deg, #1f8ccb, #53d4ff);
+  box-shadow: 0 16px 34px rgba(6, 28, 44, 0.42);
+  color: #f4fdff;
+}
+
+body[data-theme="dark"] .primary-button:hover {
+  box-shadow: 0 22px 44px rgba(6, 28, 44, 0.52);
+}
+
+body[data-theme="dark"] .secondary-button,
+body[data-theme="dark"] .ghost-button,
+body[data-theme="dark"] .diagram-tab {
+  background: rgba(16, 47, 71, 0.74);
+  border-color: rgba(160, 223, 255, 0.22);
+  color: #dbf6ff;
+}
+
+body[data-theme="dark"] .live-metrics-ribbon {
+  background:
+    radial-gradient(circle at 8% 20%, rgba(93, 207, 255, 0.22), transparent 36%),
+    radial-gradient(circle at 88% 84%, rgba(79, 168, 232, 0.18), transparent 34%),
+    linear-gradient(145deg, rgba(14, 38, 58, 0.9), rgba(13, 31, 48, 0.86));
 }
 
