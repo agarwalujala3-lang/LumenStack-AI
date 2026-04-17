@@ -3483,6 +3483,11 @@ html.cursor-bootstrap *::after {
   cursor: none !important;
 }
 
+html.cursor-bootstrap input::file-selector-button,
+html.cursor-bootstrap input::-webkit-file-upload-button {
+  cursor: none !important;
+}
+
 html.cursor-bootstrap .cursor-core,
 html.cursor-bootstrap .cursor-aura,
 html.cursor-bootstrap .cursor-trail {

@@ -1408,9 +1408,14 @@ function setupCursorSystem() {
     return;
   }
 
+  if (window.__lumenCursorSystemActive) {
+    return;
+  }
+
   body.classList.add("cursor-enhanced");
   document.documentElement.classList.add("cursor-enhanced");
   document.documentElement.classList.remove("cursor-bootstrap");
+  window.__lumenCursorSystemActive = true;
 
   const storedPosition = getStoredCursorPosition();
   const target = storedPosition || {

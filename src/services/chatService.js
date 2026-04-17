@@ -567,7 +567,7 @@ function buildHighLevelAnswer(analysis, question, matches, options = {}) {
 
   return {
     answer: [
-      `I do not have a perfect direct match for "${question}", but I can still explain the codebase from the indexed analysis.`,
+      `I can answer this from the scanned repository context, even without an exact keyword match for "${question}".`,
       `${summary.sourceName || "This project"} is primarily ${summary.primaryLanguage || "unknown"}${summary.frameworks?.length ? ` and appears to use ${formatList(summary.frameworks)}` : ""}.`,
       moduleNames.length ? `The main implementation areas are ${formatList(moduleNames)}.` : "",
       entrypoints.length ? `The clearest entrypoints are ${formatList(entrypoints)}.` : "",

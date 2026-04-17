@@ -292,6 +292,10 @@ function initSharedCursorSystem() {
     return;
   }
 
+  if (window.__lumenCursorSystemActive) {
+    return;
+  }
+
   const cursorCore = document.getElementById("cursor-core") || createCursorNode("cursor-core", "cursor-core");
   const cursorAura = document.getElementById("cursor-aura") || createCursorNode("cursor-aura", "cursor-aura");
   const cursorTrail = document.getElementById("cursor-trail") || createCursorNode("cursor-trail", "cursor-trail");
@@ -303,6 +307,7 @@ function initSharedCursorSystem() {
   document.body.classList.add("cursor-enhanced");
   document.documentElement.classList.add("cursor-enhanced");
   document.documentElement.classList.remove("cursor-bootstrap");
+  window.__lumenCursorSystemActive = true;
 
   const storedPosition = getStoredCursorPosition();
   const target = storedPosition || {
