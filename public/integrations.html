@@ -199,15 +199,15 @@
           </div>
         </div>
 
-        <div class="dimension-stage" aria-hidden="true">
+        <div class="dimension-stage" aria-label="Integration workflow controls">
           <div class="dimension-cube-wrap">
             <div class="dimension-cube">
-              <span class="cube-face cube-front">GitHub</span>
-              <span class="cube-face cube-back">GitLab</span>
-              <span class="cube-face cube-left">Bitbucket</span>
-              <span class="cube-face cube-right">Azure</span>
-              <span class="cube-face cube-top">Gitea</span>
-              <span class="cube-face cube-bottom">ZIP</span>
+              <a class="cube-face cube-front dimension-control" href="#integration-grid">GitHub</a>
+              <a class="cube-face cube-back dimension-control" href="#integration-grid">GitLab</a>
+              <a class="cube-face cube-left dimension-control" href="#integration-grid">Bitbucket</a>
+              <a class="cube-face cube-right dimension-control" href="#integration-grid">Azure</a>
+              <a class="cube-face cube-top dimension-control" href="#integration-grid">Gitea</a>
+              <a class="cube-face cube-bottom dimension-control" href="/#analyze-panel">ZIP</a>
             </div>
             <span class="cube-orbit orbit-a"></span>
             <span class="cube-orbit orbit-b"></span>
@@ -216,22 +216,22 @@
 
           <div class="dimension-timeline">
             <div class="timeline-axis"></div>
-            <article class="timeline-node">
+            <a class="timeline-node dimension-control" href="#integration-grid">
               <span>T1</span>
               <strong>Catalog</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="#integration-grid">
               <span>T2</span>
               <strong>Validate</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="#webhook-lane">
               <span>T3</span>
               <strong>Route</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="#webhook-lane">
               <span>T4</span>
               <strong>Report</strong>
-            </article>
+            </a>
             <span class="timeline-pulse pulse-one"></span>
             <span class="timeline-pulse pulse-two"></span>
           </div>

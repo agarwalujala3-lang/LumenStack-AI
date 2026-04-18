@@ -200,15 +200,15 @@
           </div>
         </div>
 
-        <div class="dimension-stage" aria-hidden="true">
+        <div class="dimension-stage" aria-label="Workspace preset controls">
           <div class="dimension-cube-wrap">
             <div class="dimension-cube">
-              <span class="cube-face cube-front">Review</span>
-              <span class="cube-face cube-back">Delivery</span>
-              <span class="cube-face cube-left">Audit</span>
-              <span class="cube-face cube-right">Migration</span>
-              <span class="cube-face cube-top">Offline</span>
-              <span class="cube-face cube-bottom">Compare</span>
+              <a class="cube-face cube-front dimension-control" href="/?workspace=github-review#analyze-panel">Review</a>
+              <a class="cube-face cube-back dimension-control" href="/?workspace=gitlab-delivery#analyze-panel">Delivery</a>
+              <a class="cube-face cube-left dimension-control" href="/?workspace=bitbucket-audit#analyze-panel">Audit</a>
+              <a class="cube-face cube-right dimension-control" href="/?workspace=azure-migration#analyze-panel">Migration</a>
+              <a class="cube-face cube-top dimension-control" href="/?workspace=offline-zip#analyze-panel">Offline</a>
+              <a class="cube-face cube-bottom dimension-control" href="/?workspace=github-review#analyze-panel">Compare</a>
             </div>
             <span class="cube-orbit orbit-a"></span>
             <span class="cube-orbit orbit-b"></span>
@@ -217,22 +217,22 @@
 
           <div class="dimension-timeline">
             <div class="timeline-axis"></div>
-            <article class="timeline-node">
+            <a class="timeline-node dimension-control" href="#workspace-launchers">
               <span>T1</span>
               <strong>Select</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="#workspace-launchers">
               <span>T2</span>
               <strong>Preset</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="/?workspace=github-review#analyze-panel">
               <span>T3</span>
               <strong>Analyze</strong>
-            </article>
-            <article class="timeline-node">
+            </a>
+            <a class="timeline-node dimension-control" href="/?workspace=github-review#analyze-panel">
               <span>T4</span>
               <strong>Review</strong>
-            </article>
+            </a>
             <span class="timeline-pulse pulse-one"></span>
             <span class="timeline-pulse pulse-two"></span>
           </div>
