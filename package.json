@@ -1,27 +1,10 @@
 {
-  "name": "lumenstack-ai",
-  "version": "1.0.0",
-  "description": "LumenStack AI is a cinematic architecture intelligence suite for repositories and uploaded codebases.",
-  "main": "server.js",
+  "name": "lumina-learn-ai",
+  "version": "0.1.0",
+  "description": "Premium animated study simplifier that turns hard topics into cinematic AI lessons",
+  "type": "module",
   "scripts": {
-    "start": "node --env-file-if-exists=.env server.js",
-    "dev": "node --env-file-if-exists=.env --watch server.js",
-    "smoke": "node --env-file-if-exists=.env scripts/smoke-test.js",
-    "openai:check": "node --env-file-if-exists=.env scripts/openai-check.js"
-  },
-  "keywords": [
-    "architecture",
-    "analysis",
-    "mermaid",
-    "openai",
-    "express"
-  ],
-  "license": "MIT",
-  "dependencies": {
-    "adm-zip": "^0.5.16",
-    "express": "^4.21.2",
-    "mermaid": "^11.12.0",
-    "multer": "^2.0.2",
-    "openai": "^4.104.0"
+    "start": "node server.js",
+    "test": "node test/all.test.js"
   }
 }

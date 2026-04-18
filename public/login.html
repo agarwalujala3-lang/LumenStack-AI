@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Lumina Learn AI</title>
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body>
+    <canvas id="nebula-canvas" class="nebula-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <div class="page-shell">
+      <header class="main-nav">
+        <div class="brand-line">
+          <span class="brand-emblem">
+            <img src="/assets/lumina-quantum-logo.svg" alt="Lumina quantum logo" />
+          </span>
+          <div class="brand-text">
+            <strong>Lumina Learn AI</strong>
+            <small>Login</small>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="/index.html">Home</a>
+          <a class="nav-link active" href="/login.html">Login</a>
+          <a class="nav-link" href="/signup.html">Sign Up</a>
+        </nav>
+      </header>
+
+      <section class="cards-grid two">
+        <article class="panel stack" data-reveal>
+          <div class="kicker">Email Login</div>
+          <h2>Welcome Back</h2>
+          <p>Simple and fast login to continue your learning dashboard.</p>
+          <div id="flash-root"></div>
+          <form id="login-form" class="form-grid">
+            <label class="field">
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="btn primary" type="submit">Login</button>
+          </form>
+        </article>
+
+        <article class="panel stack" data-reveal>
+          <div class="kicker">Provider Login</div>
+          <h3>Google, GitHub, LinkedIn</h3>
+          <p>If OAuth is configured, it opens secure provider login. Otherwise, quick mode is used.</p>
+          <div id="provider-grid" class="action-row"></div>
+
+          <a id="phone-otp-link" class="btn hidden" href="/signup.html#phone-lane">Use phone OTP login</a>
+
+          <form id="provider-quick-form" class="form-grid hidden">
+            <h4 id="provider-quick-title"></h4>
+            <label class="field">
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label class="field">
+              <span>Name</span>
+              <input name="name" autocomplete="name" />
+            </label>
+            <button class="btn secondary" type="submit">Continue Provider Login</button>
+          </form>
+        </article>
+      </section>
+
+      <p class="footer-note">New user? <a class="nav-link" href="/signup.html">Create an account</a></p>
+    </div>
+
+    <script type="module" src="/js/login.js"></script>
+  </body>
+</html>

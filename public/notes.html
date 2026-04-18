@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes | Lumina Learn AI</title>
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body>
+    <canvas id="nebula-canvas" class="nebula-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <div class="page-shell">
+      <header class="main-nav">
+        <div class="brand-line">
+          <span class="brand-emblem">
+            <img src="/assets/lumina-quantum-logo.svg" alt="Lumina quantum logo" />
+          </span>
+          <div class="brand-text">
+            <strong>Lumina Learn AI</strong>
+            <small>Cheat notes and examples</small>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="/dashboard.html">Dashboard</a>
+          <a class="nav-link" href="/lesson.html">Lessons</a>
+          <a class="nav-link" href="/visuals.html">Visuals</a>
+          <a class="nav-link active" href="/notes.html">Notes</a>
+          <button class="nav-link" type="button" data-logout>Logout</button>
+        </nav>
+      </header>
+
+      <section id="notes-root" class="content-column"></section>
+    </div>
+
+    <script type="module" src="/js/notes.js"></script>
+  </body>
+</html>

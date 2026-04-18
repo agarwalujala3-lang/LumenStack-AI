@@ -1,139 +1,195 @@
+# Lumina Learn AI
+
 <p align="center">
-  <img src="public/brand-lockup.svg" alt="LumenStack AI" width="440" />
+  <img src="./public/assets/lumina-quantum-logo.svg" alt="Lumina Quantum Logo" width="120" />
 </p>
 
 <p align="center">
-  Cinematic repo intelligence for architecture review, compare-mode analysis, platform signals, and codebase chat.
+  <strong>Paste any video URL. Get AI-powered, child-friendly, cinematic learning.</strong><br />
+  <em>Multi-page platform with animations, visual flow, charts, notes, and render queue.</em>
 </p>
 
 <p align="center">
-  <a href="https://lumenstack-ai.onrender.com/">Live App</a>
-  |
-  <a href="https://lumenstack-ai.onrender.com/workspaces.html">Workspaces</a>
-  |
-  <a href="https://lumenstack-ai.onrender.com/integrations.html">Integrations</a>
-  |
-  <a href="public/lumenstack-github-preview.svg?v=20260407b">Brand Preview</a>
+  <a href="http://35.154.208.96"><img alt="Live Staging" src="https://img.shields.io/badge/Live-Staging-32d7bf?style=for-the-badge&logo=rocket&logoColor=white" /></a>
+  <img alt="Node" src="https://img.shields.io/badge/Node.js-HTTP%20Server-7ca9ff?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img alt="UI" src="https://img.shields.io/badge/UI-3D%20Branding-b89bff?style=for-the-badge" />
+  <img alt="Tests" src="https://img.shields.io/badge/Tests-21%2F21%20Pass-69e0bc?style=for-the-badge" />
 </p>
 
-<p align="center">
-  <img src="public/lumenstack-github-preview.svg?v=20260407b" alt="LumenStack AI preview showing repo intelligence, compare mode, Mermaid mapping, and codebase chat." width="100%" />
-</p>
+---
 
-# LumenStack AI
+## Live Demo
 
-LumenStack AI is a full-stack Node.js and Express application that turns a repository into an interactive architecture intelligence workspace.
+- Public URL: [http://35.154.208.96](http://35.154.208.96)
+- Region: `ap-south-1`
+- Health check: `GET /healthz`
 
-## What It Does
+---
 
-- repository analysis from GitHub, GitLab, Bitbucket, Azure DevOps, Gitea, generic HTTPS Git URLs, or ZIP upload
-- compare mode for baseline-vs-current structural review
-- dependency and module detection
-- quality scoring, hotspot detection, and review findings
-- platform signal detection for CI/CD, governance, and deployment metadata
-- multiple Mermaid diagram types
-- retrieval-backed codebase chat
-- markdown and JSON exports
-- workspace presets and extra static pages for provider-focused flows
-- webhook-ready GitHub ingestion with generic stored workspace report routes
+## What This App Does
 
-## Experience
+Lumina Learn AI converts hard content into easy learning by combining:
 
-- Analyzer surface for repo intake, structure maps, findings, and AI summaries
-- Dedicated Workspaces page for preset review lanes such as GitHub review, GitLab delivery, and offline ZIP mode
-- Integrations page that reflects live provider coverage from the backend
-- Prism-led startup intro, lighter internal page transitions, and dark/light themes
+- AI source breakdown from any valid URL (especially YouTube)
+- Class-1 teaching mode (simple language + storytelling)
+- Animated lesson chapters
+- Visual learning surfaces (flow diagram, chart, architecture lanes)
+- Cheat notes + deep notes + real-world examples
+- Cinematic render job queue with progress tracking
 
-## Stack
+---
 
-- Node.js
-- Express
-- Vanilla JavaScript frontend
-- Mermaid.js
-- OpenAI API with local fallback mode
+## Product Surfaces
 
-## Features
+- `Home` (`/index.html`)
+- `Login` (`/login.html`)
+- `Signup` (`/signup.html`)
+- `Dashboard` (`/dashboard.html`)
+- `Lessons` (`/lesson.html`)
+- `Visuals` (`/visuals.html`)
+- `Notes` (`/notes.html`)
+- `Queue` (`/queue.html`)
+- `Account` (`/account.html`)
 
-- Analyze uploaded ZIP archives or public repositories across multiple Git platforms
-- Detect languages, entrypoints, framework hints, and dependency manifests
-- Infer modules, cross-module relationships, and hotspot files
-- Detect platform signals such as GitHub Actions, GitLab CI, Bitbucket Pipelines, Azure Pipelines, container files, and ownership rules
-- Generate Mermaid architecture, sequence, class, and dependency diagrams
-- Run compare mode against a baseline repo or ZIP for review-style summaries
-- Ask follow-up questions against the analyzed codebase
-- Export markdown and JSON reports
-- Accept GitHub webhook events and store the latest analyzed report per repository
-- Offer dedicated workspace presets and extra pages for analyzer, workspaces, and integrations
+---
+
+## Experience Flow
+
+```mermaid
+flowchart LR
+  A["User Login"] --> B["Paste URL on Dashboard"]
+  B --> C["/api/source/analyze"]
+  C --> D["Generated Learning Experience"]
+  D --> E["Lessons Page"]
+  D --> F["Visuals Page"]
+  D --> G["Notes Page"]
+  D --> H["Create Render Job"]
+  H --> I["/api/video-jobs/create"]
+  I --> J["Queue Progress + Manifest"]
+```
+
+---
+
+## Tech Stack
+
+- Runtime: `Node.js` (no framework dependency)
+- API: Custom HTTP routing in `server.js`
+- Frontend: Static multipage HTML + modular ES scripts
+- Storage:
+  - Local JSON for development
+  - DynamoDB for live deployments
+- Deployment:
+  - Fast staging EC2 script
+  - Production ALB + ASG script
+
+---
+
+## API Snapshot
+
+### Auth
+
+- `POST /api/auth/signup`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/providers`
+- `POST /api/auth/provider/login`
+- `POST /api/auth/phone/request`
+- `POST /api/auth/phone/verify`
+
+### Core Learning
+
+- `GET /api/app`
+- `POST /api/source/analyze`
+- `POST /api/library/lesson/save`
+- `GET /api/portfolio/evidence`
+
+### Render Queue
+
+- `POST /api/video-jobs/create`
+- `GET /api/video-jobs`
+- `GET /api/video-jobs/:id`
+- `GET /api/video-jobs/:id/manifest`
+
+### System
+
+- `GET /healthz`
+
+---
 
 ## Local Setup
 
-1. Install dependencies:
+```bash
+npm install
+npm test
+node server.js
+```
 
-   ```bash
-   npm install
-   ```
+Open: [http://localhost:3000](http://localhost:3000)
 
-2. Fill in environment variables if you want live AI output or webhook signature verification:
+---
 
-   ```bash
-   copy .env.example .env
-   ```
+## Deployment
 
-3. Start the server:
+### Staging (single instance)
 
-   ```bash
-   npm start
-   ```
+```powershell
+.\scripts\deploy-staging.ps1
+```
 
-4. Open `http://localhost:3000`.
+### Production (ALB + ASG + managed persistence)
 
-## Environment Variables
+```powershell
+.\scripts\deploy-production.ps1
+```
 
-- `OPENAI_API_KEY`: optional, enables live AI explanation and chat answers
-- `OPENAI_MODEL`: optional, defaults to `gpt-5-mini`
-- `PORT`: optional, defaults to `3000`
-- `GITHUB_WEBHOOK_SECRET`: optional, verifies GitHub webhook signatures
+### Destroy (when needed)
 
-## Scripts
+```powershell
+.\scripts\destroy-ec2.ps1 -ManifestPath .\.deploy\deployment-YYYYMMDD-HHMMSS.json
+.\scripts\destroy-production.ps1 -ManifestPath .\.deploy\production-deployment-YYYYMMDD-HHMMSS.json
+```
 
-- `npm start`: start the app
-- `npm run dev`: start the app in watch mode
-- `npm run smoke`: run a local analysis against the current workspace
-- `npm run openai:check`: confirm that your OpenAI key and model work
+---
 
-## Main Endpoints
+## Highlights in This Final Build
 
-- `POST /api/analyze`: analyze a repo or ZIP, optionally with a comparison baseline
-- `POST /api/chat`: ask questions against a stored analysis session
-- `GET /api/export/:analysisId?format=markdown|json`: export the current report
-- `GET /api/platforms`: list supported repository platforms and intake modes
-- `POST /api/github/webhook`: accept webhook-triggered analyses
-- `GET /api/github/reports/:owner/:repo`: fetch the latest stored webhook report
-- `GET /api/workspaces/:provider/:owner/:repo`: fetch a stored report through a generic workspace route
+- Full multipage rebuild from scratch
+- New animated 3D logo branding (`lumina-quantum-logo.svg`)
+- Upgraded visual system with depth, glow, and reveal motion
+- Simplified user flow and clearer language
+- Strong live smoke verification (pages, auth, analyze, render-job path)
+
+---
+
+## Testing Status
+
+- Latest suite: `21/21 passing`
+- Verified on live deployment:
+  - Route accessibility (`200` on all major pages/assets)
+  - Auth flow (`signup` + `login`)
+  - Source analysis pipeline
+  - Render job creation
+
+---
 
 ## Project Structure
 
-- `server.js`: server entrypoint
-- `src/app.js`: Express routes and orchestration
-- `src/services/sourceService.js`: multi-platform repository clone and ZIP extraction
-- `src/services/analyzerService.js`: static analysis, quality scoring, and Mermaid generation
-- `src/services/aiService.js`: AI explanation and documentation generation
-- `src/services/chatService.js`: retrieval-backed codebase chat
-- `src/services/comparisonService.js`: compare mode and review findings
-- `src/services/sessionStore.js`: in-memory analysis session storage
-- `public/`: frontend files, including analyzer, workspaces, and integrations pages
-- `.github/workflows/smoke.yml`: GitHub Actions smoke test
-
-## Verification
-
-Smoke-test the local analysis path:
-
-```bash
-npm run smoke
+```text
+.
+├─ server.js
+├─ lib/
+├─ public/
+│  ├─ assets/
+│  ├─ css/
+│  ├─ js/
+│  └─ *.html
+├─ scripts/
+├─ test/
+└─ README.md
 ```
 
-Verify OpenAI connectivity:
+---
 
-```bash
-npm run openai:check
-```
+## Credits
+
+Built by Ujala with iterative AI-assisted product engineering and deployment automation.

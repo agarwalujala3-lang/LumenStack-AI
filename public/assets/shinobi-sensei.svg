@@ -1,0 +1,28 @@
+<svg width="360" height="420" viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgSensei" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E6F8F6"/>
+      <stop offset="100%" stop-color="#DDE5FF"/>
+    </linearGradient>
+    <linearGradient id="cloakSensei" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4A69A8"/>
+      <stop offset="100%" stop-color="#2A345A"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="360" height="420" rx="30" fill="url(#bgSensei)"/>
+  <ellipse cx="180" cy="380" rx="110" ry="18" fill="#2D3C69" opacity="0.2"/>
+  <circle cx="180" cy="158" r="58" fill="#F8D9BF"/>
+  <path d="M115 148C115 101 145 74 180 74C215 74 245 101 245 148V160H115V148Z" fill="#EAF2FF"/>
+  <rect x="128" y="108" width="104" height="22" rx="11" fill="#7FA0E5"/>
+  <rect x="143" y="114" width="74" height="10" rx="5" fill="#DFE9FF"/>
+  <ellipse cx="160" cy="162" rx="6" ry="7" fill="#2F3A58"/>
+  <ellipse cx="200" cy="162" rx="6" ry="7" fill="#2F3A58"/>
+  <path d="M164 188C170 195 190 195 196 188" stroke="#A95C46" stroke-width="4" stroke-linecap="round"/>
+  <path d="M120 226H240L274 374H86L120 226Z" fill="url(#cloakSensei)"/>
+  <path d="M160 226H200V374H160V226Z" fill="#EBF3FF"/>
+  <path d="M92 260L58 332L88 346L122 272L92 260Z" fill="#F8D9BF"/>
+  <path d="M268 260L302 332L272 346L238 272L268 260Z" fill="#F8D9BF"/>
+  <circle cx="180" cy="300" r="24" fill="#67D2C8"/>
+  <path d="M180 282L186 296H202L189 305L194 320L180 311L166 320L171 305L158 296H174L180 282Z" fill="#EFFFFD"/>
+  <text x="180" y="404" text-anchor="middle" font-size="20" font-family="Arial, sans-serif" fill="#2F4D87">Sensei</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg width="1440" height="720" viewBox="0 0 1440 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="day" x1="720" y1="0" x2="720" y2="720" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#79C7FF"/>
+      <stop offset="58%" stop-color="#AEE9FF"/>
+      <stop offset="100%" stop-color="#FFE7B7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="720" fill="url(#day)"/>
+  <circle cx="1160" cy="116" r="70" fill="#FFF3C9"/>
+  <ellipse cx="210" cy="132" rx="176" ry="44" fill="white" fill-opacity="0.54"/>
+  <ellipse cx="430" cy="170" rx="220" ry="54" fill="white" fill-opacity="0.46"/>
+  <ellipse cx="1060" cy="196" rx="240" ry="58" fill="white" fill-opacity="0.38"/>
+  <path d="M0 474C164 420 326 452 496 430C694 404 842 322 1030 334C1198 344 1320 400 1440 386V720H0V474Z" fill="#80B96E"/>
+  <path d="M0 538C170 506 332 564 522 532C726 498 894 562 1108 524C1252 498 1346 516 1440 500V720H0V538Z" fill="#6B9D5F"/>
+  <g>
+    <rect x="206" y="410" width="180" height="118" rx="16" fill="#FFF3E6"/>
+    <path d="M182 410L296 344L410 410H182Z" fill="#FF966A"/>
+    <rect x="246" y="450" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="290" y="450" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="304" y="478" width="42" height="50" fill="#78543D"/>
+  </g>
+  <g>
+    <rect x="452" y="370" width="220" height="154" rx="16" fill="#F9F8EC"/>
+    <path d="M424 370L560 292L696 370H424Z" fill="#5E98FF"/>
+    <rect x="498" y="412" width="36" height="28" fill="#9DCAFF"/>
+    <rect x="544" y="412" width="36" height="28" fill="#9DCAFF"/>
+    <rect x="590" y="412" width="36" height="28" fill="#9DCAFF"/>
+    <rect x="574" y="446" width="52" height="78" fill="#73523B"/>
+  </g>
+  <g>
+    <rect x="756" y="394" width="252" height="130" rx="16" fill="#FFF7EA"/>
+    <path d="M726 394L882 316L1038 394H726Z" fill="#FFAD6A"/>
+    <rect x="808" y="432" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="852" y="432" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="896" y="432" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="940" y="432" width="34" height="28" fill="#9DCAFF"/>
+    <rect x="944" y="462" width="50" height="62" fill="#76513A"/>
+  </g>
+  <g>
+    <rect x="1076" y="420" width="162" height="106" rx="16" fill="#FFF2E2"/>
+    <path d="M1056 420L1158 360L1260 420H1056Z" fill="#5C96FF"/>
+    <rect x="1112" y="454" width="30" height="24" fill="#9DCAFF"/>
+    <rect x="1152" y="454" width="30" height="24" fill="#9DCAFF"/>
+    <rect x="1184" y="478" width="34" height="48" fill="#725039"/>
+  </g>
+</svg>

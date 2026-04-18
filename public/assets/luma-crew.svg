@@ -1,0 +1,31 @@
+<svg width="760" height="420" viewBox="0 0 760 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF4DE"/>
+      <stop offset="100%" stop-color="#DDEEFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="420" rx="28" fill="url(#c1)"/>
+  <ellipse cx="382" cy="366" rx="280" ry="26" fill="#253962" fill-opacity="0.16"/>
+  <g transform="translate(66 88)">
+    <circle cx="70" cy="70" r="38" fill="#FFDCC7"/>
+    <path d="M30 68C30 32 54 10 70 10C86 10 110 32 110 68V78H30V68Z" fill="#25427F"/>
+    <path d="M34 132H106L126 246H14L34 132Z" fill="#57D3C1"/>
+  </g>
+  <g transform="translate(184 68)">
+    <circle cx="80" cy="82" r="46" fill="#FFDCC7"/>
+    <path d="M32 76C32 30 62 8 80 8C98 8 128 30 128 76V86H32V76Z" fill="#3050A0"/>
+    <path d="M38 152H122L148 286H12L38 152Z" fill="#FF9C60"/>
+  </g>
+  <g transform="translate(334 52)">
+    <circle cx="92" cy="94" r="54" fill="#FFDCC7"/>
+    <path d="M36 88C36 34 70 10 92 10C114 10 148 34 148 88V98H36V88Z" fill="#23407E"/>
+    <path d="M44 170H140L170 328H14L44 170Z" fill="#5B89FF"/>
+  </g>
+  <g transform="translate(522 80)">
+    <circle cx="72" cy="72" r="40" fill="#FFDCC7"/>
+    <path d="M30 68C30 30 56 12 72 12C88 12 114 30 114 68V78H30V68Z" fill="#25427F"/>
+    <path d="M34 136H110L132 252H12L34 136Z" fill="#57D3C1"/>
+  </g>
+  <text x="380" y="398" text-anchor="middle" font-size="26" font-family="Arial, sans-serif" fill="#35568C">Luma Crew</text>
+</svg>

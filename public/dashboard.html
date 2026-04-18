@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Lumina Learn AI</title>
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body>
+    <canvas id="nebula-canvas" class="nebula-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+
+    <div class="page-shell">
+      <header class="main-nav">
+        <div class="brand-line">
+          <span class="brand-emblem">
+            <img src="/assets/lumina-quantum-logo.svg" alt="Lumina quantum logo" />
+          </span>
+          <div class="brand-text">
+            <strong>Lumina Learn AI</strong>
+            <small>Dashboard</small>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link active" href="/dashboard.html">Dashboard</a>
+          <a class="nav-link" href="/lesson.html">Lessons</a>
+          <a class="nav-link" href="/visuals.html">Visuals</a>
+          <a class="nav-link" href="/notes.html">Notes</a>
+          <button class="nav-link" type="button" data-logout>Logout</button>
+        </nav>
+      </header>
+
+      <section class="workspace-layout">
+        <aside class="side-rail">
+          <article class="sidebar-card">
+            <div class="kicker">User</div>
+            <div id="profile-block" class="stack">
+              <strong>Loading profile...</strong>
+            </div>
+            <nav class="side-nav">
+              <a class="side-item active" href="/dashboard.html">Dashboard</a>
+              <a class="side-item" href="/lesson.html">Lessons</a>
+              <a class="side-item" href="/visuals.html">Charts & Flow</a>
+              <a class="side-item" href="/notes.html">Cheat Notes</a>
+              <a class="side-item" href="/queue.html">Render Queue</a>
+              <a class="side-item" href="/account.html">Account</a>
+            </nav>
+          </article>
+        </aside>
+
+        <div class="content-column">
+          <article class="panel stack" data-reveal>
+            <div class="kicker">Main Action</div>
+            <h1>Paste YouTube URL and generate easy animated learning</h1>
+            <p>One input. Full output. Learn with simple language, charts, flow, and story scenes.</p>
+            <div id="flash-root"></div>
+            <form id="analyze-form" class="form-grid">
+              <label class="field">
+                <span>YouTube URL</span>
+                <input id="source-url" name="sourceUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+              </label>
+              <div class="action-row">
+                <button class="btn primary" type="submit">Generate Learning Pack</button>
+                <button id="render-video-btn" class="btn secondary" type="button">Create Cinematic Render Job</button>
+              </div>
+            </form>
+          </article>
+
+          <section id="output-block" class="stack"></section>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/js/studio.js"></script>
+  </body>
+</html>

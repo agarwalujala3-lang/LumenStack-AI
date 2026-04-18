@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Render Queue | Lumina Learn AI</title>
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body>
+    <canvas id="nebula-canvas" class="nebula-canvas"></canvas>
+    <div class="bg-grid"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <div class="page-shell">
+      <header class="main-nav">
+        <div class="brand-line">
+          <span class="brand-emblem">
+            <img src="/assets/lumina-quantum-logo.svg" alt="Lumina quantum logo" />
+          </span>
+          <div class="brand-text">
+            <strong>Lumina Learn AI</strong>
+            <small>Video render queue</small>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="/dashboard.html">Dashboard</a>
+          <a class="nav-link" href="/lesson.html">Lessons</a>
+          <a class="nav-link active" href="/queue.html">Queue</a>
+          <a class="nav-link" href="/account.html">Account</a>
+          <button class="nav-link" type="button" data-logout>Logout</button>
+        </nav>
+      </header>
+
+      <section class="content-column">
+        <article class="panel stack">
+          <div class="kicker">Render Progress</div>
+          <h2>Track cinematic generation</h2>
+          <div id="flash-root"></div>
+          <div class="action-row">
+            <a class="btn" href="/dashboard.html">Generate New</a>
+            <a class="btn" href="/lesson.html">Open Lessons</a>
+          </div>
+        </article>
+        <div id="queue-root" class="cards-grid"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/js/queue.js"></script>
+  </body>
+</html>
