@@ -1,0 +1,10 @@
+{
+  "name": "lumina-learn-ai",
+  "version": "0.1.0",
+  "description": "Premium animated study simplifier that turns hard topics into cinematic AI lessons",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/all.test.js"
+  }
+}

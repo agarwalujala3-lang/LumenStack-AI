@@ -1,0 +1,61 @@
+<svg width="760" height="420" viewBox="0 0 760 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgSquad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF0D4"/>
+      <stop offset="100%" stop-color="#DCE7FF"/>
+    </linearGradient>
+    <linearGradient id="cloakA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F48F45"/>
+      <stop offset="100%" stop-color="#D7632A"/>
+    </linearGradient>
+    <linearGradient id="cloakB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5E79F5"/>
+      <stop offset="100%" stop-color="#35409A"/>
+    </linearGradient>
+    <linearGradient id="cloakC" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#47BFB4"/>
+      <stop offset="100%" stop-color="#2E8A82"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="760" height="420" rx="28" fill="url(#bgSquad)"/>
+  <ellipse cx="380" cy="360" rx="276" ry="30" fill="#2E3F6C" fill-opacity="0.18"/>
+
+  <g transform="translate(72 82)">
+    <circle cx="74" cy="76" r="42" fill="#F7D8C1"/>
+    <path d="M30 74C30 34 56 16 74 16C92 16 118 34 118 74V82H30V74Z" fill="#1E2D5E"/>
+    <rect x="44" y="44" width="60" height="12" rx="6" fill="#91A8E6"/>
+    <path d="M34 142H114L136 256H12L34 142Z" fill="url(#cloakC)"/>
+  </g>
+
+  <g transform="translate(184 66)">
+    <circle cx="88" cy="84" r="48" fill="#F9D8BD"/>
+    <path d="M34 78C34 30 66 8 88 8C110 8 142 30 142 78V88H34V78Z" fill="#243774"/>
+    <rect x="52" y="44" width="72" height="14" rx="7" fill="#9CB2EA"/>
+    <path d="M44 154H132L158 292H18L44 154Z" fill="url(#cloakA)"/>
+  </g>
+
+  <g transform="translate(324 50)">
+    <circle cx="92" cy="96" r="52" fill="#F8D8C0"/>
+    <path d="M34 88C34 36 68 10 92 10C116 10 150 36 150 88V98H34V88Z" fill="#1E2B58"/>
+    <rect x="54" y="52" width="76" height="14" rx="7" fill="#8FA7E5"/>
+    <path d="M42 172H142L172 332H12L42 172Z" fill="url(#cloakB)"/>
+    <path d="M74 172H110V332H74V172Z" fill="#EEF3FF"/>
+  </g>
+
+  <g transform="translate(500 76)">
+    <circle cx="78" cy="80" r="44" fill="#F7D7C3"/>
+    <path d="M32 72C32 32 58 12 78 12C98 12 124 32 124 72V82H32V72Z" fill="#202D60"/>
+    <rect x="48" y="44" width="60" height="12" rx="6" fill="#93A9E5"/>
+    <path d="M36 148H120L144 272H12L36 148Z" fill="url(#cloakC)"/>
+  </g>
+
+  <g transform="translate(616 88)">
+    <circle cx="58" cy="68" r="34" fill="#F6D3BC"/>
+    <path d="M20 66C20 34 40 20 58 20C76 20 96 34 96 66V74H20V66Z" fill="#1D2A58"/>
+    <rect x="32" y="46" width="50" height="10" rx="5" fill="#9CB3E8"/>
+    <path d="M22 130H94L112 234H4L22 130Z" fill="url(#cloakA)"/>
+  </g>
+
+  <text x="380" y="394" text-anchor="middle" font-size="26" font-family="Arial, sans-serif" fill="#2E467A">Shinobi Squad</text>
+</svg>

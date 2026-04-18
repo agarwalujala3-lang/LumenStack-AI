@@ -1,0 +1,26 @@
+<svg width="360" height="420" viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="p1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF5DE"/>
+      <stop offset="100%" stop-color="#E1F6FF"/>
+    </linearGradient>
+    <linearGradient id="p2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9C60"/>
+      <stop offset="100%" stop-color="#DF5B2A"/>
+    </linearGradient>
+  </defs>
+  <rect width="360" height="420" rx="28" fill="url(#p1)"/>
+  <ellipse cx="180" cy="382" rx="100" ry="18" fill="#253962" fill-opacity="0.18"/>
+  <circle cx="180" cy="160" r="56" fill="#FFDCC7"/>
+  <path d="M110 152C110 98 146 70 180 70C214 70 250 98 250 152V166H110V152Z" fill="#2E4A97"/>
+  <path d="M126 126C146 108 160 102 180 102C200 102 216 108 236 126" stroke="#9FC0FF" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="160" cy="166" rx="7" ry="8" fill="#2B3656"/>
+  <ellipse cx="202" cy="166" rx="7" ry="8" fill="#2B3656"/>
+  <path d="M162 194C170 200 192 200 198 194" stroke="#B46148" stroke-width="4" stroke-linecap="round"/>
+  <path d="M118 226H242L270 374H90L118 226Z" fill="url(#p2)"/>
+  <path d="M156 226H204V374H156V226Z" fill="#24365E"/>
+  <path d="M88 274L56 334L84 346L116 284L88 274Z" fill="#FFDCC7"/>
+  <path d="M272 274L304 334L276 346L244 284L272 274Z" fill="#FFDCC7"/>
+  <rect x="146" y="300" width="68" height="20" rx="10" fill="#FFE6BF"/>
+  <text x="180" y="404" text-anchor="middle" font-size="20" font-family="Arial, sans-serif" fill="#305189">Player</text>
+</svg>

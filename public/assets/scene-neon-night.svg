@@ -1,0 +1,98 @@
+<svg width="1400" height="600" viewBox="0 0 1400 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nightSky" x1="700" y1="0" x2="700" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0A1B52"/>
+      <stop offset="54%" stop-color="#1A2B74"/>
+      <stop offset="100%" stop-color="#2C1A45"/>
+    </linearGradient>
+    <linearGradient id="windowGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFE498"/>
+      <stop offset="100%" stop-color="#FFB56B"/>
+    </linearGradient>
+    <linearGradient id="roofNight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3B6AB8"/>
+      <stop offset="100%" stop-color="#1F3B78"/>
+    </linearGradient>
+    <linearGradient id="laneGlow" x1="700" y1="330" x2="700" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#274F89"/>
+      <stop offset="100%" stop-color="#182C56"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="600" fill="url(#nightSky)"/>
+  <circle cx="1132" cy="96" r="46" fill="#FFF2B5"/>
+  <circle cx="1132" cy="96" r="34" fill="#0A1B52"/>
+
+  <g fill="#BFD3FF" fill-opacity="0.85">
+    <circle cx="164" cy="86" r="3"/>
+    <circle cx="238" cy="132" r="2"/>
+    <circle cx="324" cy="92" r="2"/>
+    <circle cx="400" cy="140" r="3"/>
+    <circle cx="552" cy="76" r="2"/>
+    <circle cx="632" cy="112" r="3"/>
+    <circle cx="700" cy="86" r="2"/>
+    <circle cx="772" cy="124" r="3"/>
+    <circle cx="850" cy="82" r="2"/>
+    <circle cx="940" cy="118" r="3"/>
+    <circle cx="1028" cy="72" r="2"/>
+    <circle cx="1218" cy="148" r="2"/>
+    <circle cx="1320" cy="110" r="3"/>
+  </g>
+
+  <path d="M0 292C142 262 300 282 456 268C620 254 782 194 938 206C1094 218 1244 274 1400 252V376H0V292Z" fill="#1E376B"/>
+  <path d="M0 330C142 310 300 330 456 314C620 296 782 240 938 252C1094 264 1244 320 1400 300V392H0V330Z" fill="#10254E"/>
+  <path d="M0 376H1400V600H0V376Z" fill="url(#laneGlow)"/>
+
+  <g>
+    <rect x="110" y="304" width="168" height="156" rx="10" fill="#203E7A"/>
+    <path d="M92 304L194 248L298 304H92Z" fill="url(#roofNight)"/>
+    <rect x="136" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="184" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="232" y="338" width="28" height="30" fill="url(#windowGlow)"/>
+    <rect x="176" y="380" width="44" height="80" fill="#162D59"/>
+  </g>
+  <g>
+    <rect x="318" y="282" width="210" height="176" rx="10" fill="#2D4A86"/>
+    <path d="M300 282L424 216L548 282H300Z" fill="url(#roofNight)"/>
+    <rect x="354" y="320" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="398" y="320" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="442" y="320" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="354" y="362" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="398" y="362" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="442" y="362" width="34" height="30" fill="url(#windowGlow)"/>
+    <rect x="446" y="398" width="52" height="60" fill="#1A345F"/>
+  </g>
+  <g>
+    <rect x="560" y="300" width="240" height="172" rx="10" fill="#24437D"/>
+    <path d="M540 300L680 230L820 300H540Z" fill="#2F62AC"/>
+    <rect x="606" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="652" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="698" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="744" y="338" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="646" y="380" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="692" y="380" width="36" height="30" fill="url(#windowGlow)"/>
+    <rect x="708" y="410" width="56" height="62" fill="#17325E"/>
+  </g>
+  <g>
+    <rect x="840" y="286" width="200" height="174" rx="10" fill="#2A4D87"/>
+    <path d="M822 286L940 226L1060 286H822Z" fill="#2E5FA7"/>
+    <rect x="878" y="324" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="920" y="324" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="962" y="324" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="878" y="364" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="920" y="364" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="962" y="364" width="32" height="28" fill="url(#windowGlow)"/>
+    <rect x="954" y="398" width="52" height="62" fill="#19365F"/>
+  </g>
+  <g>
+    <rect x="1068" y="306" width="178" height="152" rx="10" fill="#214078"/>
+    <path d="M1052 306L1158 252L1262 306H1052Z" fill="#29579B"/>
+    <rect x="1108" y="338" width="34" height="28" fill="url(#windowGlow)"/>
+    <rect x="1152" y="338" width="34" height="28" fill="url(#windowGlow)"/>
+    <rect x="1196" y="338" width="28" height="28" fill="url(#windowGlow)"/>
+    <rect x="1178" y="378" width="40" height="80" fill="#17315A"/>
+  </g>
+
+  <rect y="458" width="1400" height="142" fill="#142949"/>
+  <path d="M0 490C210 470 364 512 564 488C768 464 938 508 1148 482C1260 468 1332 478 1400 468V600H0V490Z" fill="#1B345C"/>
+</svg>
