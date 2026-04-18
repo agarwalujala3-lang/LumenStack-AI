@@ -1,1 +1,6 @@
-.deploy/
+node_modules/
+.env
+.runtime/
+coverage/
+dist/
+build/
