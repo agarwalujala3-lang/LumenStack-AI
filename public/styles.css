@@ -6383,6 +6383,21 @@ body[data-theme="dark"] .brand-lockup-image {
   margin-top: 12px;
 }
 
+.dimension-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dimension-action-row .primary-button,
+.dimension-action-row .secondary-button,
+.dimension-action-row .ghost-button {
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
+}
+
 .dimension-chip-row span {
   display: inline-flex;
   align-items: center;
@@ -7465,6 +7480,13 @@ body[data-theme="dark"] #live-metrics-ribbon[data-engine="recovery"] .metrics-ri
   .dimension-stage {
     min-height: 250px;
     padding: 12px;
+  }
+
+  .dimension-action-row .primary-button,
+  .dimension-action-row .secondary-button,
+  .dimension-action-row .ghost-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .dimension-cube {

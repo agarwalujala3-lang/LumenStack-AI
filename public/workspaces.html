@@ -178,8 +178,69 @@
           </div>
         </section>
 
+      <section class="dimension-lab spotlight-card">
+        <div class="dimension-copy">
+          <p class="eyebrow">Workspace Command Lens</p>
+          <h2>Mission deck + launch timeline</h2>
+          <p class="body-copy">
+            This panel now works as a launcher: pick a route and jump straight into the analyzer
+            with workspace-specific defaults already selected.
+          </p>
+          <div class="dimension-chip-row">
+            <span>Preset Routing</span>
+            <span>Fast Launch</span>
+            <span>Cross-platform</span>
+            <span>Offline Ready</span>
+          </div>
+          <div class="dimension-action-row">
+            <a class="secondary-button compact-button" href="/?workspace=github-review#analyze-panel">GitHub Review</a>
+            <a class="ghost-button compact-button" href="/?workspace=gitlab-delivery#analyze-panel">GitLab Delivery</a>
+            <a class="ghost-button compact-button" href="/?workspace=offline-zip#analyze-panel">Offline ZIP</a>
+            <a class="ghost-button compact-button" href="#workspace-launchers">All Presets</a>
+          </div>
+        </div>
+
+        <div class="dimension-stage" aria-hidden="true">
+          <div class="dimension-cube-wrap">
+            <div class="dimension-cube">
+              <span class="cube-face cube-front">Review</span>
+              <span class="cube-face cube-back">Delivery</span>
+              <span class="cube-face cube-left">Audit</span>
+              <span class="cube-face cube-right">Migration</span>
+              <span class="cube-face cube-top">Offline</span>
+              <span class="cube-face cube-bottom">Compare</span>
+            </div>
+            <span class="cube-orbit orbit-a"></span>
+            <span class="cube-orbit orbit-b"></span>
+            <span class="cube-orbit orbit-c"></span>
+          </div>
+
+          <div class="dimension-timeline">
+            <div class="timeline-axis"></div>
+            <article class="timeline-node">
+              <span>T1</span>
+              <strong>Select</strong>
+            </article>
+            <article class="timeline-node">
+              <span>T2</span>
+              <strong>Preset</strong>
+            </article>
+            <article class="timeline-node">
+              <span>T3</span>
+              <strong>Analyze</strong>
+            </article>
+            <article class="timeline-node">
+              <span>T4</span>
+              <strong>Review</strong>
+            </article>
+            <span class="timeline-pulse pulse-one"></span>
+            <span class="timeline-pulse pulse-two"></span>
+          </div>
+        </div>
+      </section>
+
       <main class="main-grid alt-main-grid">
-        <section class="panel spotlight-card">
+        <section id="workspace-launchers" class="panel spotlight-card">
           <div class="panel-header">
             <div>
               <p class="eyebrow">Presets</p>
