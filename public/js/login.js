@@ -56,7 +56,7 @@ function renderProviders() {
   });
 
   if (phoneOtpLink) {
-    const phoneEnabled = state.providers.some((item) => item.id === "phone");
+    const phoneEnabled = state.providers.some((item) => item.id === "phone" && item.status === "active");
     phoneOtpLink.classList.toggle("hidden", !phoneEnabled);
   }
 }

@@ -13,6 +13,7 @@ async function startIsolatedServer() {
   await fs.writeFile(dataFile, JSON.stringify({ users: [], sessions: [] }, null, 2));
   process.env.NEXUS_DATA_FILE = dataFile;
   process.env.LUMINA_VIDEO_STAGE_MS = "90";
+  process.env.LUMINA_PHONE_OTP_TEST_MODE = "true";
 
   const server = createServer();
   server.listen(0);
@@ -29,6 +30,7 @@ async function startIsolatedServer() {
       await once(server, "close");
       delete process.env.NEXUS_DATA_FILE;
       delete process.env.LUMINA_VIDEO_STAGE_MS;
+      delete process.env.LUMINA_PHONE_OTP_TEST_MODE;
       await fs.rm(tempDir, { recursive: true, force: true });
     }
   };
@@ -478,7 +480,7 @@ test("provider quick login supports social providers without password setup", as
   }
 });
 
-test("phone login flow issues code and verifies challenge", async () => {
+test("phone login flow issues a challenge and verifies with test-only otp mode", async () => {
   const harness = await startIsolatedServer();
 
   try {
@@ -489,13 +491,14 @@ test("phone login flow issues code and verifies challenge", async () => {
 
     assert.equal(challenge.status, 200);
     assert.equal(Boolean(challenge.json.challengeId), true);
-    assert.equal(Boolean(challenge.json.code), true);
+    assert.equal(challenge.json.delivery, "test");
+    assert.equal(Boolean(challenge.json.testCode), true);
 
     const verify = await postJson(
       `${harness.baseUrl}/api/auth/phone/verify`,
       {
         challengeId: challenge.json.challengeId,
-        code: challenge.json.code,
+        code: challenge.json.testCode,
         name: "Phone User"
       }
     );
@@ -504,6 +507,24 @@ test("phone login flow issues code and verifies challenge", async () => {
     assert.equal(Boolean(verify.json.token), true);
     assert.equal(verify.json.app.user.providers.includes("phone"), true);
   } finally {
+    await harness.close();
+  }
+});
+
+test("phone request is blocked when sms is not configured and test mode is off", async () => {
+  const harness = await startIsolatedServer();
+  delete process.env.LUMINA_PHONE_OTP_TEST_MODE;
+
+  try {
+    const challenge = await postJson(
+      `${harness.baseUrl}/api/auth/phone/request`,
+      { phone: "+91 9876543211" }
+    );
+
+    assert.equal(challenge.status, 503);
+    assert.match(challenge.json.error, /not configured/i);
+  } finally {
+    process.env.LUMINA_PHONE_OTP_TEST_MODE = "true";
     await harness.close();
   }
 });

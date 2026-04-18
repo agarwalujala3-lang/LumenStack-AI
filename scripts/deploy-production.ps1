@@ -6,6 +6,11 @@ param(
   [int]$MinSize = 2,
   [int]$MaxSize = 4,
   [string]$OAuthBaseUrl = $env:LUMINA_OAUTH_BASE_URL,
+  [string]$PhoneOtpSmsEnabled = $env:LUMINA_PHONE_OTP_SMS_ENABLED,
+  [string]$PhoneOtpTestMode = $env:LUMINA_PHONE_OTP_TEST_MODE,
+  [string]$PhoneOtpSenderId = $env:LUMINA_PHONE_OTP_SENDER_ID,
+  [string]$PhoneOtpTemplate = $env:LUMINA_PHONE_OTP_TEMPLATE,
+  [string]$PhoneOtpSmsType = $env:LUMINA_PHONE_OTP_SMS_TYPE,
   [string]$GoogleClientId = $env:LUMINA_GOOGLE_CLIENT_ID,
   [string]$GoogleClientSecret = $env:LUMINA_GOOGLE_CLIENT_SECRET,
   [string]$GitHubClientId = $env:LUMINA_GITHUB_CLIENT_ID,
@@ -52,6 +57,21 @@ $policyName = "$AppName-persistence-access".ToLower()
 $oauthEnvironmentLines = @()
 if (-not [string]::IsNullOrWhiteSpace($OAuthBaseUrl)) {
   $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_OAUTH_BASE_URL" -Value $OAuthBaseUrl)
+}
+if (-not [string]::IsNullOrWhiteSpace($PhoneOtpSmsEnabled)) {
+  $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_PHONE_OTP_SMS_ENABLED" -Value $PhoneOtpSmsEnabled)
+}
+if (-not [string]::IsNullOrWhiteSpace($PhoneOtpTestMode)) {
+  $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_PHONE_OTP_TEST_MODE" -Value $PhoneOtpTestMode)
+}
+if (-not [string]::IsNullOrWhiteSpace($PhoneOtpSenderId)) {
+  $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_PHONE_OTP_SENDER_ID" -Value $PhoneOtpSenderId)
+}
+if (-not [string]::IsNullOrWhiteSpace($PhoneOtpTemplate)) {
+  $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_PHONE_OTP_TEMPLATE" -Value $PhoneOtpTemplate)
+}
+if (-not [string]::IsNullOrWhiteSpace($PhoneOtpSmsType)) {
+  $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_PHONE_OTP_SMS_TYPE" -Value $PhoneOtpSmsType)
 }
 if (-not [string]::IsNullOrWhiteSpace($GoogleClientId) -and -not [string]::IsNullOrWhiteSpace($GoogleClientSecret)) {
   $oauthEnvironmentLines += (To-SystemdEnvironmentLine -Key "LUMINA_GOOGLE_CLIENT_ID" -Value $GoogleClientId)
@@ -153,6 +173,13 @@ $rolePolicy = @"
         "dynamodb:DeleteItem"
       ],
       "Resource": "$tableArn"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "*"
     }
   ]
 }

@@ -1,6 +1,9 @@
 import http from "node:http";
 import { promises as fs } from "node:fs";
+import crypto from "node:crypto";
+import { execFile } from "node:child_process";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createSessionToken, hashPassword, verifyPassword } from "./lib/auth.js";
 import {
@@ -37,6 +40,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.join(__dirname, "public");
 const port = process.env.PORT || 3000;
+const execFileAsync = promisify(execFile);
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -47,6 +51,9 @@ const mimeTypes = {
 };
 
 const SOCIAL_PROVIDERS = new Set(["google", "github", "linkedin"]);
+const phoneChallengeCooldownMs = 60 * 1000;
+const phoneChallengeTtlMs = 5 * 60 * 1000;
+const phoneChallengeMaxAttempts = 5;
 const OAUTH_PROVIDER_CONFIG = {
   google: {
     clientIdKey: "LUMINA_GOOGLE_CLIENT_ID",
@@ -74,6 +81,7 @@ const OAUTH_PROVIDER_CONFIG = {
   }
 };
 const phoneChallenges = new Map();
+const phoneThrottleByNumber = new Map();
 const oauthStates = new Map();
 const videoJobTimers = new Map();
 
@@ -551,9 +559,15 @@ async function handleLogin(body, response) {
 }
 
 function buildProviderCapabilities() {
+  const phoneEnabled = isPhoneSmsEnabled() || isPhoneOtpTestModeEnabled();
+
   return [
     { id: "email", status: "active", mode: "password" },
-    { id: "phone", status: "active", mode: "otp-demo" },
+    {
+      id: "phone",
+      status: phoneEnabled ? "active" : "disabled",
+      mode: isPhoneSmsEnabled() ? "otp-sms" : isPhoneOtpTestModeEnabled() ? "otp-test" : "unconfigured"
+    },
     ...Array.from(SOCIAL_PROVIDERS).map((provider) => ({
       id: provider,
       status: isOAuthEnabled(provider) ? "oauth-ready" : "quick-login",
@@ -927,6 +941,90 @@ function buildOAuthCallbackPage({ ok, provider = "", token = "", message = "" })
 </html>`;
 }
 
+function isPhoneOtpTestModeEnabled() {
+  return process.env.LUMINA_PHONE_OTP_TEST_MODE === "true";
+}
+
+function isPhoneSmsEnabled() {
+  return process.env.LUMINA_PHONE_OTP_SMS_ENABLED === "true" || Boolean(process.env.LUMINA_PHONE_OTP_SNS_ENABLED === "true");
+}
+
+function getSmsAwsRegion() {
+  return process.env.NEXUS_AWS_REGION || process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || "us-east-1";
+}
+
+function getSmsAwsCommand() {
+  return process.env.NEXUS_AWS_COMMAND || "aws";
+}
+
+function hashOtpCode(code) {
+  return crypto.createHash("sha256").update(String(code || "")).digest("hex");
+}
+
+function timingSafeOtpMatch(expectedHash, candidateCode) {
+  if (!expectedHash || !candidateCode) {
+    return false;
+  }
+
+  const expected = Buffer.from(String(expectedHash), "hex");
+  const candidate = Buffer.from(hashOtpCode(candidateCode), "hex");
+  if (expected.length !== candidate.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(expected, candidate);
+}
+
+function buildPhoneOtpMessage(code) {
+  const template = String(
+    process.env.LUMINA_PHONE_OTP_TEMPLATE
+    || "Lumina Learn AI verification code: {{CODE}}. It expires in 5 minutes."
+  );
+
+  return template.replaceAll("{{CODE}}", String(code));
+}
+
+async function sendPhoneOtpSms(phone, code) {
+  const args = [
+    "sns",
+    "publish",
+    "--region",
+    getSmsAwsRegion(),
+    "--phone-number",
+    `+${phone}`,
+    "--message",
+    buildPhoneOtpMessage(code),
+    "--output",
+    "json"
+  ];
+
+  const senderId = String(process.env.LUMINA_PHONE_OTP_SENDER_ID || "").trim();
+  const smsType = String(process.env.LUMINA_PHONE_OTP_SMS_TYPE || "Transactional").trim();
+  const attributes = {};
+
+  if (senderId) {
+    attributes["AWS.SNS.SMS.SenderID"] = {
+      DataType: "String",
+      StringValue: senderId
+    };
+  }
+
+  if (smsType) {
+    attributes["AWS.SNS.SMS.SMSType"] = {
+      DataType: "String",
+      StringValue: smsType
+    };
+  }
+
+  if (Object.keys(attributes).length) {
+    args.push("--message-attributes", JSON.stringify(attributes));
+  }
+
+  await execFileAsync(getSmsAwsCommand(), args, {
+    maxBuffer: 8 * 1024 * 1024
+  });
+}
+
 async function handlePhoneRequest(body, response) {
   const phone = sanitizePhone(body.phone);
   if (!phone) {
@@ -934,20 +1032,64 @@ async function handlePhoneRequest(body, response) {
     return;
   }
 
+  prunePhoneChallenges();
+
+  const recentRequest = phoneThrottleByNumber.get(phone);
+  const now = Date.now();
+  if (recentRequest && (now - recentRequest.lastRequestedAt) < phoneChallengeCooldownMs) {
+    const waitSeconds = Math.max(1, Math.ceil((phoneChallengeCooldownMs - (now - recentRequest.lastRequestedAt)) / 1000));
+    sendJson(response, 429, {
+      error: `Please wait ${waitSeconds} seconds before requesting another phone code.`
+    });
+    return;
+  }
+
+  if (!isPhoneSmsEnabled() && !isPhoneOtpTestModeEnabled()) {
+    sendJson(response, 503, {
+      error: "Phone verification is not configured on this deployment yet."
+    });
+    return;
+  }
+
   const challengeId = createSessionToken().slice(0, 16);
   const code = String(Math.floor(100000 + (Math.random() * 900000)));
   phoneChallenges.set(challengeId, {
     phone,
-    code,
-    expiresAt: Date.now() + (5 * 60 * 1000)
+    codeHash: hashOtpCode(code),
+    expiresAt: now + phoneChallengeTtlMs,
+    attemptCount: 0,
+    createdAt: now
+  });
+  phoneThrottleByNumber.set(phone, {
+    challengeId,
+    lastRequestedAt: now
   });
 
-  sendJson(response, 200, {
+  if (isPhoneSmsEnabled()) {
+    try {
+      await sendPhoneOtpSms(phone, code);
+    } catch (error) {
+      phoneChallenges.delete(challengeId);
+      sendJson(response, 502, {
+        error: "Phone code could not be delivered right now. Please try again shortly."
+      });
+      return;
+    }
+  }
+
+  const payload = {
     challengeId,
-    delivery: "simulated",
-    code,
-    message: "Use this code to verify phone login. In production this should be delivered via SMS."
-  });
+    delivery: isPhoneSmsEnabled() ? "sms" : "test",
+    message: isPhoneSmsEnabled()
+      ? "Verification code sent to your phone."
+      : "Phone verification test mode is enabled for this environment."
+  };
+
+  if (isPhoneOtpTestModeEnabled()) {
+    payload.testCode = code;
+  }
+
+  sendJson(response, 200, payload);
 }
 
 async function handlePhoneVerify(body, response) {
@@ -966,7 +1108,14 @@ async function handlePhoneVerify(body, response) {
     return;
   }
 
-  if (challenge.code !== code) {
+  if (!timingSafeOtpMatch(challenge.codeHash, code)) {
+    challenge.attemptCount = Number(challenge.attemptCount || 0) + 1;
+    if (challenge.attemptCount >= phoneChallengeMaxAttempts) {
+      phoneChallenges.delete(challengeId);
+      sendJson(response, 429, { error: "Too many invalid verification attempts. Request a new code." });
+      return;
+    }
+
     sendJson(response, 401, { error: "Invalid phone verification code." });
     return;
   }
@@ -983,7 +1132,7 @@ async function handlePhoneVerify(body, response) {
   user.auth.providers = user.auth.providers ?? {};
   user.auth.providers.phone = {
     linkedAt: user.auth.providers.phone?.linkedAt || new Date().toISOString(),
-    mode: "otp-demo",
+    mode: isPhoneSmsEnabled() ? "otp-sms" : "otp-test",
     phone: challenge.phone
   };
   user.progress.missionHistory = user.progress.missionHistory ?? [];
@@ -994,6 +1143,22 @@ async function handlePhoneVerify(body, response) {
 
   const updated = await updateUserRecord(user);
   await issueSessionForUser(updated, response);
+}
+
+function prunePhoneChallenges() {
+  const now = Date.now();
+
+  for (const [challengeId, challenge] of phoneChallenges.entries()) {
+    if ((challenge.expiresAt || 0) < now) {
+      phoneChallenges.delete(challengeId);
+    }
+  }
+
+  for (const [phone, throttle] of phoneThrottleByNumber.entries()) {
+    if ((throttle.lastRequestedAt || 0) + phoneChallengeCooldownMs < now) {
+      phoneThrottleByNumber.delete(phone);
+    }
+  }
 }
 
 async function issueSessionForUser(user, response) {

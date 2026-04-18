@@ -41,9 +41,13 @@ phoneRequestForm.addEventListener("submit", async (event) => {
       body: JSON.stringify(payload)
     });
     phoneChallengeId = response.challengeId;
-    codeHint.textContent = `Demo code: ${response.code}`;
+    codeHint.textContent = response.delivery === "sms"
+      ? "A verification code was sent to your phone."
+      : response.testCode
+        ? `Test code: ${response.testCode}`
+        : "Verification challenge created.";
     phoneVerifyBlock.classList.remove("hidden");
-    setFlash(flashRoot, "Phone code sent. Verify now.");
+    setFlash(flashRoot, response.message || "Phone code sent. Verify now.");
   } catch (error) {
     setFlash(flashRoot, error.message, "error");
   }
