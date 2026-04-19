@@ -88,11 +88,32 @@ function isMissingRefError(message) {
   );
 }
 
-function toFriendlyCloneError(error, ref = "") {
+function toFriendlyCloneError(error, ref = "", repoUrl = "") {
   const stderr = String(error?.stderr || error?.message || "").trim();
+  const urlHint = repoUrl ? ` (${repoUrl})` : "";
 
   if (/not recognized|ENOENT/i.test(stderr) || error?.code === "ENOENT") {
     return "Git is not available locally. Upload a ZIP file instead.";
+  }
+
+  if (/repository .* not found|remote:\s*repository not found|fatal:\s*repository .* not found/i.test(stderr)) {
+    return `Repository not found${urlHint}. Check the owner/repo path and make sure the repository is public.`;
+  }
+
+  if (
+    /authentication failed|could not read username|terminal prompts disabled|permission denied|access denied/i.test(
+      stderr
+    )
+  ) {
+    return `Repository access failed${urlHint}. If it is private, use a public mirror or upload a ZIP archive.`;
+  }
+
+  if (
+    /could not resolve host|name or service not known|failed to connect|connection timed out|network is unreachable/i.test(
+      stderr
+    )
+  ) {
+    return "Network error while cloning the repository. Retry in a moment or upload a ZIP archive.";
   }
 
   if (ref && isMissingRefError(stderr)) {
@@ -248,7 +269,7 @@ async function cloneRepository(repoUrl, ref = "") {
       await cloneDefaultBranch(repoUrl, workingDir);
     }
   } catch (error) {
-    throw new Error(toFriendlyCloneError(error, ref));
+    throw new Error(toFriendlyCloneError(error, ref, repoUrl));
   }
 
   return {
