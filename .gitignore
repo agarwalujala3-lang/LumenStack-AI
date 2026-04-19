@@ -1,6 +1,9 @@
 node_modules/
 .env
 .runtime/
+.external/
+.runtime-*.png
+Screen Recording *.mp4
 coverage/
 dist/
 build/
