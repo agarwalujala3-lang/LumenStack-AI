@@ -119,6 +119,44 @@ function extractQuestionFocus(question) {
   return tokenize(normalized)[0] || "";
 }
 
+function isArchitectureLikeFocus(focusNormalized, prompt = "") {
+  const focusText = String(focusNormalized || "").toLowerCase();
+  const promptText = String(prompt || "").toLowerCase();
+  const keywords = ["architecture", "structure", "design", "system", "code flow", "flow"];
+
+  return keywords.some(
+    (keyword) => focusText === keyword || focusText.includes(keyword) || promptText.includes(keyword)
+  );
+}
+
+function toReadableFocusLabel(focusNormalized, focusKey) {
+  const focusText = String(focusNormalized || "")
+    .toLowerCase()
+    .replace(/^(the|a|an|this|that)\s+/, "")
+    .replace(/\s+(in|on|at|for|to|from|with|about|of)$/, "")
+    .trim();
+
+  const genericTokens = new Set([
+    "app",
+    "application",
+    "project",
+    "repo",
+    "repository",
+    "codebase",
+    "logic",
+    "flow",
+    "system",
+    "this",
+    "that"
+  ]);
+
+  if (!focusText || genericTokens.has(focusText) || genericTokens.has(String(focusKey || "").toLowerCase())) {
+    return "That area";
+  }
+
+  return focusText;
+}
+
 function toTokenSet(value) {
   return new Set(tokenize(value));
 }
@@ -613,7 +651,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
   }
 
   if (!matches.length) {
-    if (["architecture", "structure", "design", "system"].includes(focusNormalized)) {
+    if (isArchitectureLikeFocus(focusNormalized, prompt)) {
       const architectureNarrative = buildArchitectureNarrative(analysis);
       return {
         answer: architectureNarrative.join(" "),
@@ -654,7 +692,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
       });
     }
 
-    if (["architecture", "structure", "design", "system", "logic"].includes(focusNormalized)) {
+    if (isArchitectureLikeFocus(focusNormalized, prompt) || focusNormalized === "logic") {
       const architectureNarrative = buildArchitectureNarrative(analysis);
       return {
         answer: architectureNarrative.join(" "),
@@ -672,7 +710,7 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
     return {
       answer: [
         CONCEPT_HINTS[focusKey] ||
-          `${focusNormalized || "That area"} is handled through the core service and module flow of this app, with logic split across focused components.`,
+          `${toReadableFocusLabel(focusNormalized, focusKey)} is handled through the core service and module flow of this app, with logic split across focused components.`,
         includeEvidenceInText && evidenceDescriptions.length
           ? `The clearest code evidence is ${formatList(evidenceDescriptions)}.`
           : "",
