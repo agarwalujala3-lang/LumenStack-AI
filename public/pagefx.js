@@ -76,15 +76,50 @@ function getIntroCopy() {
   };
 }
 
-function createIntroShutters(container) {
-  for (let index = 0; index < 8; index += 1) {
-    const shutter = document.createElement("span");
-    shutter.className = "prism-intro-shutter";
-    shutter.style.setProperty("--shutter-delay", `${index * 55}ms`);
-    shutter.style.setProperty("--shutter-shift-x", `${index % 2 === 0 ? -120 : 120}%`);
-    shutter.style.setProperty("--shutter-shift-y", `${index < 4 ? -16 : 16}%`);
-    container.appendChild(shutter);
+function createIntroWavefield() {
+  const wavefield = document.createElement("div");
+  wavefield.className = "prism-intro-wavefield";
+  wavefield.setAttribute("aria-hidden", "true");
+
+  const layerCount = 7;
+  const pointsPerLayer = 34;
+
+  for (let layerIndex = 0; layerIndex < layerCount; layerIndex += 1) {
+    const layer = document.createElement("div");
+    layer.className = "prism-intro-wave-layer";
+    layer.style.setProperty("--layer-delay", `${180 + layerIndex * 120}ms`);
+    layer.style.setProperty("--layer-opacity", `${0.34 + layerIndex * 0.08}`);
+    layer.style.setProperty("--layer-blur", `${Math.max(0, 10 - layerIndex)}px`);
+
+    for (let pointIndex = 0; pointIndex < pointsPerLayer; pointIndex += 1) {
+      const particle = document.createElement("span");
+      const progress = pointIndex / (pointsPerLayer - 1);
+      const baseY = 82 - layerIndex * 6.8;
+      const ridge = Math.sin(progress * Math.PI) * (12 + layerIndex * 1.8);
+      const ripple =
+        Math.sin(progress * Math.PI * (1.7 + layerIndex * 0.18) + layerIndex * 0.68) *
+        (3.2 + layerIndex * 0.42);
+      const depthOffset = Math.cos(progress * Math.PI * 2 + layerIndex * 0.44) * 1.8;
+      const particleY = baseY - ridge + ripple + depthOffset;
+      const particleSize = Math.max(1.8, 4.8 - layerIndex * 0.34 + ((pointIndex + layerIndex) % 4) * 0.18);
+      const particleDelay = 520 + layerIndex * 120 + pointIndex * 16;
+      const driftX = `${(pointIndex % 2 === 0 ? 1 : -1) * (1.2 + layerIndex * 0.18)}px`;
+      const driftY = `${-7 - layerIndex * 1.1}px`;
+
+      particle.className = "prism-intro-particle";
+      particle.style.setProperty("--particle-x", `${progress * 100}%`);
+      particle.style.setProperty("--particle-y", `${particleY}%`);
+      particle.style.setProperty("--particle-size", `${particleSize}px`);
+      particle.style.setProperty("--particle-delay", `${particleDelay}ms`);
+      particle.style.setProperty("--particle-drift-x", driftX);
+      particle.style.setProperty("--particle-drift-y", driftY);
+      layer.appendChild(particle);
+    }
+
+    wavefield.appendChild(layer);
   }
+
+  return wavefield;
 }
 
 function createIntroElement() {
@@ -93,31 +128,19 @@ function createIntroElement() {
   intro.className = "page-intro prism-intro";
   intro.setAttribute("aria-hidden", "true");
 
-  const shutters = document.createElement("div");
-  shutters.className = "prism-intro-shutters";
-  shutters.setAttribute("aria-hidden", "true");
-  createIntroShutters(shutters);
-
   const scan = document.createElement("div");
   scan.className = "prism-intro-sweep";
   scan.setAttribute("aria-hidden", "true");
 
+  const wavefield = createIntroWavefield();
+
+  const horizon = document.createElement("div");
+  horizon.className = "prism-intro-horizon";
+  horizon.setAttribute("aria-hidden", "true");
+
   const core = document.createElement("div");
   core.className = "prism-intro-core";
   core.innerHTML = `
-    <div class="prism-intro-orbit" aria-hidden="true">
-      <span class="prism-intro-ring ring-a"></span>
-      <span class="prism-intro-ring ring-b"></span>
-      <span class="prism-intro-ring ring-c"></span>
-      <span class="prism-intro-trace trace-a"></span>
-      <span class="prism-intro-trace trace-b"></span>
-      <span class="prism-intro-trace trace-c"></span>
-      <span class="prism-intro-node node-a"></span>
-      <span class="prism-intro-node node-b"></span>
-      <span class="prism-intro-node node-c"></span>
-      <span class="prism-intro-node node-d"></span>
-    </div>
-
     <div class="prism-intro-logo-copy">
       <span class="prism-intro-badge">${escapeHtml(badge)}</span>
       <div class="prism-intro-mark-stage">
@@ -131,8 +154,9 @@ function createIntroElement() {
     <p class="prism-intro-subcopy">${escapeHtml(text)}</p>
   `;
 
-  intro.appendChild(shutters);
   intro.appendChild(scan);
+  intro.appendChild(wavefield);
+  intro.appendChild(horizon);
   intro.appendChild(core);
   return intro;
 }
@@ -166,7 +190,7 @@ function runPageIntro() {
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 1100);
+    }, 1200);
   };
 
   document.body.classList.add("intro-active");
@@ -176,8 +200,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  window.setTimeout(settleIntro, 2300);
-  window.setTimeout(finishIntro, 4700);
+  window.setTimeout(settleIntro, 3200);
+  window.setTimeout(finishIntro, 6200);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", finishIntro, { once: true });
 }
