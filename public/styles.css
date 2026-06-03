@@ -1,4 +1,11 @@
 :root {
+  --bg-color: #050b14;
+  --accent-blue: #00f2ff;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --font-main: 'Inter', sans-serif;
+}
+:root {
   --bg: #e8f0f8;
   --bg-deep: #d4e0eb;
   --panel: rgba(246, 250, 255, 0.9);
@@ -1173,7 +1180,7 @@ body.route-enter.route-enter-active .page-shell {
 .page-route-glass.is-active::before {
   animation: routeGlassSweep 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-}
+
 
 .topbar,
 .panel,
