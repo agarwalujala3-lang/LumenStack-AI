@@ -8394,10 +8394,10 @@ html[data-theme="dark"] .cockpit-copy p {
   position: relative;
   z-index: 5;
   margin: 20px 0 0;
-  border-color: rgba(124, 218, 255, 0.12);
-  background: rgba(2, 11, 20, 0.72);
-  color: #edfaff;
-  box-shadow: none;
+  border-color: rgba(12, 47, 68, 0.1);
+  background: rgba(255, 255, 255, 0.86);
+  color: #07121d;
+  box-shadow: 0 18px 45px rgba(15, 37, 58, 0.08);
 }
 
 .concept-match .brand-lockup-copy .eyebrow {
@@ -8405,15 +8405,15 @@ html[data-theme="dark"] .cockpit-copy p {
 }
 
 .concept-match .brand-lockup-copy strong {
-  color: #ffffff;
+  color: #07121d;
   font-size: 1.05rem;
 }
 
 .concept-match .topbar-nav a,
 .concept-match .theme-toggle {
-  background: transparent;
-  border-color: transparent;
-  color: rgba(231, 243, 250, 0.78);
+  background: rgba(247, 251, 253, 0.9);
+  border-color: rgba(12, 47, 68, 0.08);
+  color: rgba(7, 18, 29, 0.72);
 }
 
 .concept-match .topbar-pills {
@@ -8427,6 +8427,7 @@ html[data-theme="dark"] .cockpit-copy p {
 
 .concept-hero {
   position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(470px, 1.05fr);
   gap: 42px;
@@ -8434,19 +8435,18 @@ html[data-theme="dark"] .cockpit-copy p {
   min-height: 610px;
   margin-top: -76px;
   padding: 130px 4px 58px;
-  color: #edfaff;
+  color: #07121d;
 }
 
 .concept-hero::before {
   content: "";
-  position: fixed;
-  inset: 0 0 auto;
+  position: absolute;
+  inset: -110px calc(50% - 50vw) -12px;
   z-index: -2;
-  height: 650px;
   background:
-    radial-gradient(circle at 68% 60%, rgba(28, 171, 226, 0.26), transparent 34%),
-    radial-gradient(circle at 26% 10%, rgba(20, 120, 156, 0.28), transparent 28%),
-    linear-gradient(135deg, #020710 0%, #071420 52%, #06101a 100%);
+    radial-gradient(circle at 68% 60%, rgba(39, 190, 230, 0.22), transparent 34%),
+    radial-gradient(circle at 26% 10%, rgba(47, 139, 182, 0.14), transparent 28%),
+    linear-gradient(135deg, #f8fcff 0%, #eef8fc 52%, #f7fafc 100%);
 }
 
 .concept-hero::after {
@@ -8458,9 +8458,9 @@ html[data-theme="dark"] .cockpit-copy p {
   z-index: -1;
   height: 300px;
   background:
-    radial-gradient(ellipse at 68% 70%, rgba(48, 194, 255, 0.3), transparent 36%),
-    repeating-radial-gradient(ellipse at 65% 84%, rgba(76, 213, 255, 0.28) 0 2px, transparent 3px 18px);
-  opacity: 0.72;
+    radial-gradient(ellipse at 68% 70%, rgba(48, 194, 255, 0.18), transparent 36%),
+    repeating-radial-gradient(ellipse at 65% 84%, rgba(76, 213, 255, 0.18) 0 2px, transparent 3px 18px);
+  opacity: 0.58;
   mask-image: linear-gradient(180deg, transparent, black 26%, transparent 88%);
 }
 
@@ -8473,10 +8473,10 @@ html[data-theme="dark"] .cockpit-copy p {
 .concept-pill {
   width: fit-content;
   padding: 8px 14px;
-  border: 1px solid rgba(116, 222, 255, 0.24);
+  border: 1px solid rgba(17, 132, 170, 0.18);
   border-radius: 999px;
-  background: rgba(7, 28, 42, 0.72);
-  color: #aeefff;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0d6f95;
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.11em;
@@ -8486,20 +8486,20 @@ html[data-theme="dark"] .cockpit-copy p {
 .concept-hero h1 {
   margin: 0;
   max-width: 610px;
-  color: #ffffff;
+  color: #07121d;
   font-size: clamp(3.1rem, 6.2vw, 5.6rem);
   line-height: 0.95;
 }
 
 .concept-hero h1 span {
   display: block;
-  color: #52d9ff;
+  color: #00a8d7;
 }
 
 .concept-hero p {
   max-width: 570px;
   margin: 0;
-  color: rgba(226, 242, 249, 0.84);
+  color: rgba(51, 71, 84, 0.84);
   font-size: 1.02rem;
   line-height: 1.75;
 }
@@ -8531,18 +8531,18 @@ html[data-theme="dark"] .cockpit-copy p {
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  border: 1px solid rgba(83, 212, 255, 0.5);
+  border: 1px solid rgba(16, 169, 211, 0.42);
   border-radius: 6px;
   box-shadow: 0 0 16px rgba(83, 212, 255, 0.22);
 }
 
 .concept-feature-row strong {
-  color: #eefbff;
+  color: #0d2230;
   font-size: 0.82rem;
 }
 
 .concept-feature-row p {
-  color: rgba(201, 220, 229, 0.72);
+  color: rgba(74, 93, 105, 0.78);
   font-size: 0.72rem;
   line-height: 1.4;
 }
@@ -8554,7 +8554,7 @@ html[data-theme="dark"] .cockpit-copy p {
 }
 
 .concept-trust small {
-  color: rgba(218, 234, 241, 0.62);
+  color: rgba(76, 95, 106, 0.72);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -8562,12 +8562,12 @@ html[data-theme="dark"] .cockpit-copy p {
 }
 
 .concept-trust strong {
-  color: rgba(238, 248, 252, 0.72);
+  color: rgba(18, 42, 56, 0.72);
   font-size: 1.16rem;
 }
 
 .concept-trust a {
-  color: rgba(238, 248, 252, 0.82);
+  color: rgba(18, 42, 56, 0.82);
   font-size: 1.02rem;
   font-weight: 900;
   text-decoration: none;
@@ -8575,7 +8575,7 @@ html[data-theme="dark"] .cockpit-copy p {
 
 .concept-trust a:hover,
 .concept-trust a:focus-visible {
-  color: #52d9ff;
+  color: #008cba;
 }
 
 .concept-overview-card,
@@ -9190,6 +9190,125 @@ html[data-theme="dark"] .cockpit-copy p {
     linear-gradient(165deg, transparent 45%, rgba(239, 68, 68, 0.85) 46%, transparent 48%),
     linear-gradient(12deg, transparent 45%, rgba(22, 163, 74, 0.85) 46%, transparent 48%),
     repeating-linear-gradient(0deg, #edf2f6 0 1px, transparent 1px 18px);
+}
+
+.positive-list li,
+.risk-list li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.positive-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #58e0c2;
+  box-shadow: 0 0 12px rgba(88, 224, 194, 0.46);
+}
+
+.risk-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.48em;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid #ff8d6b;
+  filter: drop-shadow(0 0 8px rgba(255, 141, 107, 0.35));
+}
+
+.concept-lower-grid {
+  border-top: 0;
+  box-shadow: inset 0 1px 0 rgba(221, 231, 238, 0.74);
+}
+
+html[data-theme="dark"] .concept-match {
+  background: #050d16;
+}
+
+html[data-theme="dark"] .concept-match .topbar {
+  border-color: rgba(124, 218, 255, 0.12);
+  background: rgba(2, 11, 20, 0.72);
+  color: #edfaff;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .concept-match .brand-lockup-copy strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .concept-match .topbar-nav a,
+html[data-theme="dark"] .concept-match .theme-toggle {
+  background: transparent;
+  border-color: transparent;
+  color: rgba(231, 243, 250, 0.78);
+}
+
+html[data-theme="dark"] .concept-hero {
+  color: #edfaff;
+}
+
+html[data-theme="dark"] .concept-hero::before {
+  background:
+    radial-gradient(circle at 68% 60%, rgba(28, 171, 226, 0.26), transparent 34%),
+    radial-gradient(circle at 26% 10%, rgba(20, 120, 156, 0.28), transparent 28%),
+    linear-gradient(135deg, #020710 0%, #071420 52%, #06101a 100%);
+}
+
+html[data-theme="dark"] .concept-hero::after {
+  background:
+    radial-gradient(ellipse at 68% 70%, rgba(48, 194, 255, 0.3), transparent 36%),
+    repeating-radial-gradient(ellipse at 65% 84%, rgba(76, 213, 255, 0.28) 0 2px, transparent 3px 18px);
+  opacity: 0.72;
+}
+
+html[data-theme="dark"] .concept-pill {
+  border-color: rgba(116, 222, 255, 0.24);
+  background: rgba(7, 28, 42, 0.72);
+  color: #aeefff;
+}
+
+html[data-theme="dark"] .concept-hero h1 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .concept-hero h1 span {
+  color: #52d9ff;
+}
+
+html[data-theme="dark"] .concept-hero p {
+  color: rgba(226, 242, 249, 0.84);
+}
+
+html[data-theme="dark"] .concept-feature-row article > span {
+  border-color: rgba(83, 212, 255, 0.5);
+}
+
+html[data-theme="dark"] .concept-feature-row strong {
+  color: #eefbff;
+}
+
+html[data-theme="dark"] .concept-feature-row p {
+  color: rgba(201, 220, 229, 0.72);
+}
+
+html[data-theme="dark"] .concept-trust small {
+  color: rgba(218, 234, 241, 0.62);
+}
+
+html[data-theme="dark"] .concept-trust a {
+  color: rgba(238, 248, 252, 0.82);
+}
+
+html[data-theme="dark"] .concept-trust a:hover,
+html[data-theme="dark"] .concept-trust a:focus-visible {
+  color: #52d9ff;
 }
 
 @media (max-width: 1050px) {
