@@ -1,11 +1,19 @@
 export class APIClient {
-  async analyzeRepository(formData) {
-    const response = await fetch('/api/analyze', {
+  async streamChat(analysisData, onToken) {
+    const response = await fetch('/api/chat/stream', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ analysis: analysisData })
     });
-    
-    if (!response.ok) throw new Error('Analysis request failed.');
-    return response.json();
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      onToken(chunk); // Send every chunk to the UI immediately
+    }
   }
 }

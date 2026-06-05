@@ -1,39 +1,60 @@
-import { tsParticles } from "tsparticles-slim";
-
-/**
- * UIController: Manages virtual effects, animations, and DOM state.
- */
 export class UIController {
-  
-  // 1. System Initialization
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, callback) { this.events[event] = callback; }
+  trigger(event, data) { if (this.events[event]) this.events[event](data); }
+
   initializeSystem() {
     this.initParticles();
-    console.log("Professional UI System Initialized with Particle Effects.");
+    console.log("UI System Initialized.");
   }
 
-  // 2. High-fidelity background effect
-  initParticles() {
-    tsParticles.load("tsparticles", {
-      particles: {
-        color: { value: "#00f2ff" },
-        links: { enable: true, color: "#00f2ff", opacity: 0.2 },
-        move: { enable: true, speed: 0.5 },
-        number: { value: 60 }
-      },
-      background: { color: "transparent" }
+  async initParticles() {
+    const container = document.getElementById("tsparticles");
+    if (!container) {
+      console.warn("Particle container '#tsparticles' not found. Skipping particle initialization.");
+      return;
+    }
+
+    try {
+      await this.loadParticleRuntime();
+      window.tsParticles.load("tsparticles", {
+        particles: {
+          color: { value: "#00f2ff" },
+          links: { enable: true, color: "#00f2ff", opacity: 0.2 },
+          move: { enable: true, speed: 0.5 },
+          number: { value: 60 }
+        },
+        background: { color: "transparent" }
+      });
+    } catch (error) {
+      console.warn("Particle runtime unavailable. Continuing without background particles.", error);
+    }
+  }
+
+  loadParticleRuntime() {
+    if (window.tsParticles) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "/vendor/tsparticles/tsparticles.slim.bundle.min.js";
+      script.async = true;
+      script.onload = () => (window.tsParticles ? resolve() : reject(new Error("tsParticles did not initialize.")));
+      script.onerror = () => reject(new Error("Unable to load tsParticles runtime."));
+      document.head.appendChild(script);
     });
   }
-
-  // 3. Cinematic Loading State
-  showLoadingState(message) {
-    const overlay = document.createElement('div');
-    overlay.id = 'loading-overlay';
-    overlay.innerHTML = `<div class="spinner"></div><p>${message}</p>`;
-    document.body.appendChild(overlay);
+  clearChatBubble() {
+    const bubble = document.getElementById('ai-chat-bubble');
+    if (bubble) bubble.textContent = "";
   }
 
-  hideLoadingState() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) overlay.remove();
+  updateChatBubble(text) {
+    const bubble = document.getElementById('ai-chat-bubble');
+    if (bubble) bubble.textContent += text;
   }
 }

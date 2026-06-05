@@ -6,7 +6,7 @@ const fs = require("fs");
 
 const { prepareSource, getSupportedSourcePlatforms } = require("./services/sourceService");
 const { analyzeCodebase } = require("./services/analyzerService");
-const { generateInsights } = require("./services/aiService");
+const { generateInsights, generateStreamingInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
 const { answerQuestion } = require("./services/chatService");
 const { answerSystemQuestion } = require("./services/systemChatService");
@@ -16,7 +16,9 @@ const {
   getAnalysisSession,
   getWebhookReport,
   saveWorkspaceReport,
-  getWorkspaceReport
+  getWorkspaceReport,
+  getSavedProjects,
+  saveProject
 } = require("./services/sessionStore");
 
 const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
@@ -191,6 +193,10 @@ function createApp() {
     "/vendor/mermaid",
     express.static(path.join(process.cwd(), "node_modules", "mermaid", "dist"))
   );
+  app.use(
+    "/vendor/tsparticles",
+    express.static(path.join(process.cwd(), "node_modules", "tsparticles-slim"))
+  );
 
   app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
@@ -199,6 +205,36 @@ function createApp() {
   app.get("/api/platforms", (_req, res) => {
     res.json({
       providers: getSupportedSourcePlatforms()
+    });
+  });
+
+  app.post("/api/auth/demo", (req, res) => {
+    const name = String(req.body?.name || "Recruiter").trim();
+    res.json({
+      user: {
+        id: "demo-recruiter",
+        name,
+        role: "Recruiter demo viewer",
+        owner: "Ujala Agarwal",
+        email: "agarwalujala3@gmail.com"
+      },
+      token: "demo-recruiter-token"
+    });
+  });
+
+  app.get("/api/projects", (req, res) => {
+    const userId = String(req.query.userId || "demo-recruiter");
+    res.json({
+      projects: getSavedProjects(userId)
+    });
+  });
+
+  app.post("/api/projects", (req, res) => {
+    const userId = String(req.body?.userId || "demo-recruiter");
+    const project = saveProject(userId, req.body || {});
+    res.status(201).json({
+      project,
+      projects: getSavedProjects(userId)
     });
   });
 
@@ -350,6 +386,27 @@ function createApp() {
       res.status(500).json({
         error: error.message || "Unable to answer the question."
       });
+    }
+  });
+
+  app.post("/api/chat/stream", async (req, res) => {
+    const analysis = req.body?.analysis;
+
+    if (!analysis) {
+      return res.status(400).send("analysis is required.");
+    }
+
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Transfer-Encoding", "chunked");
+
+    try {
+      await generateStreamingInsights(analysis, (token) => {
+        res.write(token);
+      });
+    } catch {
+      res.write("\n\n[System: Error processing stream]");
+    } finally {
+      res.end();
     }
   });
 

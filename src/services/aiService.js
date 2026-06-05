@@ -160,6 +160,49 @@ async function generateInsights(analysis) {
   }
 }
 
+async function generateStreamingInsights(analysis, onToken) {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is not configured.");
+  }
+
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+
+  const promptPayload = {
+    summary: analysis.summary,
+    modules: analysis.modules.slice(0, 10),
+    dependencies: analysis.dependencies.slice(0, 20)
+  };
+
+  try {
+    const stream = await client.chat.completions.create({
+      model,
+      messages: [
+        { 
+          role: "system", 
+          content: "You are an expert software architect. Respond in Markdown. Be concise and developer-focused." 
+        },
+        { 
+          role: "user", 
+          content: JSON.stringify(promptPayload, null, 2) 
+        }
+      ],
+      stream: true, 
+    });
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || "";
+      if (content) {
+        onToken(content); 
+      }
+    }
+  } catch (error) {
+    onToken("\n\n[System: AI analysis stream interrupted. Please try again.]");
+    throw error;
+  }
+}
+
 module.exports = {
-  generateInsights
+  generateInsights,
+  generateStreamingInsights
 };

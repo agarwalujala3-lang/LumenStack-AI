@@ -1,8 +1,3 @@
-/**
- * LumenStack AI - Professional Entrypoint
- * Orchestrates the modular UI and API systems.
- */
-
 import { UIController } from './modules/UIController.js';
 import { APIClient } from './modules/APIClient.js';
 
@@ -14,13 +9,19 @@ class App {
   }
 
   init() {
-    // 1. Initialize UI (Parallax, Animations, Spotlight)
     this.ui.initializeSystem();
-    
-    // 2. Log initialization for verification
+    this.setupEventListeners();
     console.log("LumenStack AI Pro Orchestrator Active.");
+  }
+
+  setupEventListeners() {
+    this.ui.on('chat', async (analysisData) => {
+      this.ui.clearChatBubble();
+      await this.api.streamChat(analysisData, (token) => {
+        this.ui.updateChatBubble(token);
+      });
+    });
   }
 }
 
-// Ensure the app initializes once the DOM is ready
 document.addEventListener('DOMContentLoaded', () => new App());
