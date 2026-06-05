@@ -1,0 +1,426 @@
+/* Critical live-site shell. Loaded last so the recruiter UI never falls back to plain text. */
+html {
+  background: #f6f9fc;
+}
+
+body.concept-match {
+  margin: 0;
+  min-height: 100vh;
+  background: #f6f9fc;
+  color: #07121d;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.concept-match .page-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+body.concept-match .topbar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 72px;
+  margin: 20px 0 0;
+  padding: 14px 18px;
+  border: 1px solid rgba(12, 47, 68, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 45px rgba(15, 37, 58, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+body.concept-match .brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body.concept-match .brand-lockup-image {
+  width: 150px;
+  height: auto;
+}
+
+body.concept-match .brand-lockup-copy .eyebrow {
+  display: none;
+}
+
+body.concept-match .brand-lockup-copy strong {
+  color: #07121d;
+  font-size: 1rem;
+}
+
+body.concept-match .topbar-nav,
+body.concept-match .topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body.concept-match .topbar-nav a,
+body.concept-match .theme-toggle,
+body.concept-match .secondary-button,
+body.concept-match .ghost-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid rgba(12, 47, 68, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(7, 18, 29, 0.76);
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+body.concept-match .primary-button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #13c7e8, #56e2ff);
+  color: #04111a;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 16px 34px rgba(19, 143, 185, 0.22);
+}
+
+body.concept-match .compact-button {
+  min-height: 40px;
+  padding-inline: 16px;
+}
+
+body.concept-match .topbar-pills,
+body.concept-match > .page-shell > .hero-stage,
+body.concept-match > .page-shell > #live-metrics-ribbon,
+body.concept-match > .page-shell > .signal-board,
+body.concept-match > .page-shell > .platform-pillars,
+body.concept-match > .page-shell > .dimension-lab,
+body.concept-match > .page-shell > .provider-showcase,
+body.concept-match > .page-shell > .release-roadmap,
+body.concept-match > .page-shell > #recruiter-cockpit {
+  display: none !important;
+}
+
+body.concept-match .concept-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(470px, 1.05fr);
+  gap: 42px;
+  align-items: center;
+  min-height: 610px;
+  margin-top: -76px;
+  padding: 130px 4px 58px;
+}
+
+body.concept-match .concept-hero::before {
+  content: "";
+  position: absolute;
+  inset: -110px calc(50% - 50vw) -12px;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 68% 60%, rgba(39, 190, 230, 0.22), transparent 34%),
+    radial-gradient(circle at 26% 10%, rgba(47, 139, 182, 0.14), transparent 28%),
+    linear-gradient(135deg, #f8fcff 0%, #eef8fc 52%, #f7fafc 100%);
+}
+
+body.concept-match .concept-hero::after {
+  content: "";
+  position: absolute;
+  right: -10vw;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 300px;
+  background:
+    radial-gradient(ellipse at 68% 70%, rgba(48, 194, 255, 0.18), transparent 36%),
+    repeating-radial-gradient(ellipse at 65% 84%, rgba(76, 213, 255, 0.18) 0 2px, transparent 3px 18px);
+  opacity: 0.58;
+  mask-image: linear-gradient(180deg, transparent, black 26%, transparent 88%);
+}
+
+body.concept-match .concept-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+body.concept-match .concept-pill {
+  width: fit-content;
+  padding: 8px 14px;
+  border: 1px solid rgba(17, 132, 170, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #0d6f95;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+body.concept-match .concept-hero h1 {
+  margin: 0;
+  max-width: 610px;
+  color: #07121d;
+  font-size: clamp(3.1rem, 6.2vw, 5.6rem);
+  line-height: 0.95;
+}
+
+body.concept-match .concept-hero h1 span {
+  display: block;
+  color: #00a8d7;
+}
+
+body.concept-match .concept-hero p {
+  max-width: 570px;
+  margin: 0;
+  color: rgba(51, 71, 84, 0.84);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+body.concept-match .concept-hero-actions,
+body.concept-match .concept-feature-row,
+body.concept-match .concept-trust div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+body.concept-match .concept-feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 10px;
+}
+
+body.concept-match .concept-feature-row article {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 4px 10px;
+}
+
+body.concept-match .concept-feature-row article > span {
+  grid-row: span 2;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 1px solid rgba(16, 169, 211, 0.42);
+  border-radius: 6px;
+}
+
+body.concept-match .concept-feature-row strong {
+  color: #0d2230;
+  font-size: 0.82rem;
+}
+
+body.concept-match .concept-feature-row p {
+  color: rgba(74, 93, 105, 0.78);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+body.concept-match .concept-trust {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+body.concept-match .concept-trust small {
+  color: rgba(76, 95, 106, 0.72);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body.concept-match .concept-trust a {
+  color: rgba(18, 42, 56, 0.82);
+  font-size: 1.02rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+body.concept-match .concept-overview-card,
+body.concept-match .concept-product-shell,
+body.concept-match .concept-benefits article,
+body.concept-match .concept-benefits > div,
+body.concept-match .auth-copy,
+body.concept-match .auth-console {
+  border: 1px solid rgba(28, 59, 83, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 60px rgba(15, 37, 58, 0.12);
+}
+
+body.concept-match .concept-overview-card {
+  overflow: hidden;
+  align-self: center;
+  background: rgba(7, 18, 29, 0.9);
+  color: #effbff;
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg);
+}
+
+body.concept-match .overview-window-bar,
+body.concept-match .product-shell-header,
+body.concept-match .product-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(178, 228, 246, 0.1);
+}
+
+body.concept-match .overview-card-body {
+  padding: 22px;
+}
+
+body.concept-match .overview-grid {
+  display: grid;
+  grid-template-columns: 1.15fr repeat(4, 0.72fr);
+  gap: 10px;
+}
+
+body.concept-match .health-ring-card,
+body.concept-match .mini-health,
+body.concept-match .key-findings-card,
+body.concept-match .architecture-map-card {
+  padding: 14px;
+  border: 1px solid rgba(178, 228, 246, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+body.concept-match .concept-benefits,
+body.concept-match .auth-projects-showcase {
+  display: grid;
+  gap: 14px;
+  align-items: stretch;
+  margin: 0 0 28px;
+}
+
+body.concept-match .concept-benefits {
+  grid-template-columns: 1.45fr repeat(4, 1fr);
+  padding: 30px 0;
+}
+
+body.concept-match .concept-cockpit-app {
+  display: grid;
+  grid-template-columns: 138px minmax(0, 1fr);
+  overflow: hidden;
+  margin: 0 0 32px;
+  border: 1px solid rgba(28, 59, 83, 0.14);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 37, 58, 0.12);
+}
+
+body.concept-match .concept-sidebar,
+body.concept-match .architecture-workbench {
+  background: #06111c;
+  color: #eafaff;
+}
+
+body.concept-match .architecture-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  margin: 12px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+body.concept-match .auth-projects-showcase {
+  grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1.2fr);
+  gap: 20px;
+}
+
+html[data-theme="dark"] body.concept-match {
+  background: #050d16;
+  color: #edfaff;
+}
+
+html[data-theme="dark"] body.concept-match .topbar {
+  border-color: rgba(124, 218, 255, 0.12);
+  background: rgba(2, 11, 20, 0.72);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] body.concept-match .brand-lockup-copy strong,
+html[data-theme="dark"] body.concept-match .concept-hero h1 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] body.concept-match .topbar-nav a,
+html[data-theme="dark"] body.concept-match .theme-toggle {
+  background: transparent;
+  border-color: transparent;
+  color: rgba(231, 243, 250, 0.78);
+}
+
+html[data-theme="dark"] body.concept-match .concept-hero::before {
+  background:
+    radial-gradient(circle at 68% 60%, rgba(28, 171, 226, 0.26), transparent 34%),
+    radial-gradient(circle at 26% 10%, rgba(20, 120, 156, 0.28), transparent 28%),
+    linear-gradient(135deg, #020710 0%, #071420 52%, #06101a 100%);
+}
+
+html[data-theme="dark"] body.concept-match .concept-hero h1 span {
+  color: #52d9ff;
+}
+
+html[data-theme="dark"] body.concept-match .concept-hero p {
+  color: rgba(226, 242, 249, 0.84);
+}
+
+html[data-theme="dark"] body.concept-match .concept-pill {
+  border-color: rgba(116, 222, 255, 0.24);
+  background: rgba(7, 28, 42, 0.72);
+  color: #aeefff;
+}
+
+@media (max-width: 1050px) {
+  body.concept-match .concept-hero,
+  body.concept-match .concept-benefits,
+  body.concept-match .concept-cockpit-app,
+  body.concept-match .auth-projects-showcase,
+  body.concept-match .architecture-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  body.concept-match .concept-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  body.concept-match .page-shell {
+    width: min(100% - 28px, 1180px);
+  }
+
+  body.concept-match .topbar,
+  body.concept-match .topbar-nav,
+  body.concept-match .topbar-actions,
+  body.concept-match .concept-feature-row,
+  body.concept-match .overview-grid {
+    align-items: stretch;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  body.concept-match .concept-hero h1 {
+    font-size: 3rem;
+  }
+}
