@@ -22,14 +22,83 @@ const {
 } = require("./services/sessionStore");
 
 const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
+const requestBuckets = new Map();
+
+function applySecurityHeaders(_req, res, next) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      "font-src 'self' data:",
+      "connect-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self' mailto:"
+    ].join("; ")
+  );
+  next();
+}
+
+function createRateLimit({ windowMs = 60_000, limit = 80 } = {}) {
+  return (req, res, next) => {
+    const key = `${req.ip || req.socket.remoteAddress || "unknown"}:${req.path}`;
+    const now = Date.now();
+    const bucket = requestBuckets.get(key) || { count: 0, resetAt: now + windowMs };
+
+    if (bucket.resetAt <= now) {
+      bucket.count = 0;
+      bucket.resetAt = now + windowMs;
+    }
+
+    bucket.count += 1;
+    requestBuckets.set(key, bucket);
+
+    if (bucket.count > limit) {
+      return res.status(429).json({
+        error: "Too many requests. Please wait a moment and try again."
+      });
+    }
+
+    return next();
+  };
+}
+
+function isZipUpload(file) {
+  const name = String(file?.originalname || "").toLowerCase();
+  const mime = String(file?.mimetype || "").toLowerCase();
+  return name.endsWith(".zip") || mime === "application/zip" || mime === "application/x-zip-compressed";
+}
 
 function createUploadMiddleware() {
   return multer({
     dest: uploadRoot,
     limits: {
-      fileSize: 50 * 1024 * 1024
+      fileSize: 50 * 1024 * 1024,
+      files: 2,
+      fields: 8
+    },
+    fileFilter(_req, file, callback) {
+      if (!isZipUpload(file)) {
+        return callback(new Error("Only ZIP archives are supported for uploads."));
+      }
+
+      return callback(null, true);
     }
   });
+}
+
+function normalizeShortText(value, fallback = "") {
+  return String(value || fallback)
+    .replace(/[<>]/g, "")
+    .trim()
+    .slice(0, 160);
 }
 
 function getUploadedFile(files, fieldName) {
@@ -118,6 +187,8 @@ function createApp() {
   const upload = createUploadMiddleware();
 
   fs.mkdirSync(uploadRoot, { recursive: true });
+  app.disable("x-powered-by");
+  app.use(applySecurityHeaders);
 
   app.post("/api/github/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const secret = process.env.GITHUB_WEBHOOK_SECRET || "";
@@ -186,8 +257,9 @@ function createApp() {
     });
   });
 
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: "1mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+  app.use("/api", createRateLimit({ windowMs: 60_000, limit: 90 }));
   app.use(express.static(path.join(process.cwd(), "public")));
   app.use(
     "/vendor/mermaid",
@@ -209,7 +281,7 @@ function createApp() {
   });
 
   app.post("/api/auth/demo", (req, res) => {
-    const name = String(req.body?.name || "Recruiter").trim();
+    const name = normalizeShortText(req.body?.name, "Recruiter");
     res.json({
       user: {
         id: "demo-recruiter",
@@ -231,7 +303,11 @@ function createApp() {
 
   app.post("/api/projects", (req, res) => {
     const userId = String(req.body?.userId || "demo-recruiter");
-    const project = saveProject(userId, req.body || {});
+    const project = saveProject(userId, {
+      ...req.body,
+      name: normalizeShortText(req.body?.name, "Untitled architecture review"),
+      repository: normalizeShortText(req.body?.repository, "unknown/repository")
+    });
     res.status(201).json({
       project,
       projects: getSavedProjects(userId)
@@ -462,6 +538,18 @@ function createApp() {
 
   app.get("*", (_req, res) => {
     res.sendFile(path.join(process.cwd(), "public", "index.html"));
+  });
+
+  app.use((error, _req, res, _next) => {
+    if (error instanceof multer.MulterError || /zip|upload|file/i.test(error.message || "")) {
+      return res.status(400).json({
+        error: error.message || "Upload failed."
+      });
+    }
+
+    return res.status(500).json({
+      error: "Unexpected server error."
+    });
   });
 
   return app;

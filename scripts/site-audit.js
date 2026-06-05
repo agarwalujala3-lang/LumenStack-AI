@@ -37,6 +37,9 @@ function extractButtons(html) {
     hasHandler:
       /type=["']submit["']/i.test(button) ||
       /data-live-action=/i.test(button) ||
+      /data-open-command/i.test(button) ||
+      /data-start-tour/i.test(button) ||
+      /data-tour-action=/i.test(button) ||
       /data-device-action=/i.test(button) ||
       /data-cockpit-tab=/i.test(button) ||
       /data-diagram=/i.test(button) ||
