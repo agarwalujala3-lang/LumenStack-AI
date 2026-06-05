@@ -125,11 +125,11 @@
       </div>
 
       <nav class="topbar-nav" aria-label="Primary">
-        <a href="#analyze-panel">Product</a>
-        <a href="#concept-cockpit">Solutions</a>
-        <a href="/workspaces.html">Resources</a>
-        <a href="/integrations.html">Docs</a>
-        <a href="#auth-projects">Saved Projects</a>
+        <a href="/">Home</a>
+        <a href="/product.html">Product</a>
+        <a href="/case-study.html">Case Study</a>
+        <a href="/saved-projects.html">Saved Projects</a>
+        <a href="/contact.html">Hire Ujala</a>
       </nav>
 
       <div class="topbar-actions">
@@ -197,8 +197,8 @@
       <div class="concept-overview-card">
         <div class="overview-window-bar">
           <strong>acme/checkout-service</strong>
-          <span>Updated 2m ago</span>
-          <button type="button">Refresh</button>
+          <span data-updated-label>Updated 2m ago</span>
+          <button type="button" data-live-action="refresh">Refresh</button>
         </div>
         <div class="overview-card-body">
           <div class="overview-title">
@@ -262,9 +262,9 @@
             <p>Explore, analyze, and act on insights that matter.</p>
           </div>
           <div class="action-row tight">
-            <button class="secondary-button" type="button">Share</button>
-            <button class="secondary-button" type="button">Compare</button>
-            <button class="primary-button compact-button" type="button">Export</button>
+            <button class="secondary-button" type="button" data-live-action="share">Share</button>
+            <button class="secondary-button" type="button" data-live-action="compare">Compare</button>
+            <button class="primary-button compact-button" type="button" data-live-action="export">Export</button>
           </div>
         </div>
         <div class="product-controls">
@@ -1345,6 +1345,7 @@
   <script src="/vendor/mermaid/mermaid.min.js"></script>
   <script type="module" src="/app.js"></script>
   <script src="/recruiter-cockpit.js"></script>
+  <script src="/site-actions.js"></script>
   <script src="/pagefx.js"></script>
 </body>
 

@@ -7,7 +7,8 @@
     "start": "node --env-file-if-exists=.env server.js",
     "dev": "node --env-file-if-exists=.env --watch server.js",
     "smoke": "node --env-file-if-exists=.env scripts/smoke-test.js",
-    "openai:check": "node --env-file-if-exists=.env scripts/openai-check.js"
+    "openai:check": "node --env-file-if-exists=.env scripts/openai-check.js",
+    "site:audit": "node --env-file-if-exists=.env scripts/site-audit.js"
   },
   "keywords": [
     "architecture",
