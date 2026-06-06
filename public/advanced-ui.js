@@ -2,6 +2,11 @@
   const commands = [
     { label: "Run live analyzer", hint: "Open the repository intake form", url: "/#analyze-panel" },
     { label: "Open product page", hint: "See product workflow and metrics", url: "/product.html" },
+    { label: "Open architecture page", hint: "See the system design map", url: "/architecture.html" },
+    { label: "Open evaluation page", hint: "Review quality and release confidence", url: "/evaluate.html" },
+    { label: "Open issues page", hint: "Inspect risk queue and remediation flow", url: "/issues.html" },
+    { label: "Open dependencies page", hint: "Review package and manifest pressure", url: "/dependencies.html" },
+    { label: "Open reports page", hint: "Export and share decision-ready briefs", url: "/reports.html" },
     { label: "Read case study", hint: "Recruiter-focused project narrative", url: "/case-study.html" },
     { label: "Try saved projects", hint: "Demo auth and saved reviews", url: "/saved-projects.html" },
     { label: "Contact Ujala", hint: "Email, LinkedIn, GitHub, portfolio", url: "/contact.html" },

@@ -3,6 +3,11 @@ const { createApp } = require("../src/app");
 const pages = [
   "/",
   "/product.html",
+  "/architecture.html",
+  "/evaluate.html",
+  "/issues.html",
+  "/dependencies.html",
+  "/reports.html",
   "/case-study.html",
   "/saved-projects.html",
   "/contact.html",
@@ -46,7 +51,7 @@ function extractButtons(html) {
       /data-cockpit-tab=/i.test(button) ||
       /data-diagram=/i.test(button) ||
       /class=["'][^"']*diagram-tab/i.test(button) ||
-      /id=["'](theme-toggle|demo-auth-button|clear-form|copy-mermaid|download-report|download-json|copy-docs)["']/i.test(button)
+      /id=["'](theme-toggle|demo-auth-button|clear-form|copy-mermaid|download-report|download-json|copy-docs|zoom-out-diagram|zoom-reset-diagram|zoom-in-diagram)["']/i.test(button)
   }));
 }
 

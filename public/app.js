@@ -68,7 +68,10 @@ const copyMermaidButton = document.getElementById("copy-mermaid");
 const copyDocsButton = document.getElementById("copy-docs");
 const downloadReportButton = document.getElementById("download-report");
 const downloadJsonButton = document.getElementById("download-json");
-const diagramTabs = [...document.querySelectorAll(".diagram-tab")];
+const zoomOutDiagramButton = document.getElementById("zoom-out-diagram");
+const zoomResetDiagramButton = document.getElementById("zoom-reset-diagram");
+const zoomInDiagramButton = document.getElementById("zoom-in-diagram");
+const diagramTabs = [...document.querySelectorAll("[data-diagram]")];
 const comparisonPanel = document.getElementById("comparison-panel");
 const comparisonSummaryElement = document.getElementById("comparison-summary");
 const comparisonStatsElement = document.getElementById("comparison-stats");
@@ -91,6 +94,7 @@ let analysisId = "";
 let exportUrls = null;
 let currentDiagrams = {};
 let currentDiagramKey = "architecture";
+let currentDiagramZoom = 1;
 let lastDocumentation = "";
 let overlayTimer = 0;
 let overlayMessageTimer = 0;
@@ -1688,7 +1692,7 @@ function renderEntrypoints(summary) {
   for (const entrypoint of summary.entrypoints.slice(0, 6)) {
     const item = createElement("article", "stack-item spotlight-card");
     item.appendChild(createElement("span", "file-meta-label", "Entrypoint"));
-    item.appendChild(createElement("strong", "", entrypoint));
+    item.appendChild(createPathTitle(entrypoint));
     entrypointsElement.appendChild(item);
   }
 }
@@ -1774,13 +1778,18 @@ function renderModules(modules) {
     const card = createElement("article", "module-card spotlight-card");
     card.appendChild(createElement("span", "file-meta-label", "Module"));
     card.appendChild(createElement("strong", "", `${module.name} (${module.fileCount})`));
-    card.appendChild(
-      createElement(
-        "p",
-        "",
-        module.examples.length ? `Example files: ${module.examples.join(", ")}` : "No example files recorded."
-      )
-    );
+    const examples = createElement("div", "module-example-list");
+    examples.appendChild(createElement("span", "file-meta-label", "Example files"));
+
+    if (module.examples.length) {
+      for (const example of module.examples.slice(0, 3)) {
+        examples.appendChild(createPathTitle(example, "file-path-title compact-path"));
+      }
+    } else {
+      examples.appendChild(createElement("p", "", "No example files recorded."));
+    }
+
+    card.appendChild(examples);
     modulesElement.appendChild(card);
   }
 }
@@ -1837,7 +1846,7 @@ function renderFiles(files) {
 
     const meta = createElement("div", "file-meta");
     const imports = formatImportPreview(file.imports);
-    meta.textContent = `${file.module} | imports: ${imports} | classes: ${file.classCount} | functions: ${file.functionCount}`;
+    meta.textContent = `${file.module} - imports: ${imports} - classes: ${file.classCount} - functions: ${file.functionCount}`;
     meta.title = sanitize(file.path);
     card.appendChild(meta);
     filesElement.appendChild(card);
@@ -1906,6 +1915,14 @@ function resetChat() {
   appendChatBubble("system", "Ask about architecture, files, modules, dependencies, or where logic lives.");
 }
 
+function applyDiagramZoom() {
+  const zoomLabel = `${Math.round(currentDiagramZoom * 100)}%`;
+  diagramElement?.style.setProperty("--diagram-zoom", String(currentDiagramZoom));
+  if (zoomResetDiagramButton) {
+    zoomResetDiagramButton.textContent = zoomLabel;
+  }
+}
+
 async function renderCurrentDiagram() {
   const diagram = currentDiagrams[currentDiagramKey] || currentDiagrams.architecture || "";
   diagramElement.replaceChildren();
@@ -1925,11 +1942,14 @@ async function renderCurrentDiagram() {
   try {
     const graphId = `graph-${currentDiagramKey}-${Date.now()}`;
     const { svg } = await window.mermaid.render(graphId, diagram);
-    diagramElement.innerHTML = svg;
+    const viewport = createElement("div", "diagram-viewport");
+    viewport.innerHTML = svg;
+    diagramElement.appendChild(viewport);
   } catch {
     diagramElement.appendChild(createElement("pre", "text-block", diagram));
   }
 
+  applyDiagramZoom();
   animateStream(diagramElement);
 }
 
@@ -2098,6 +2118,21 @@ downloadJsonButton.addEventListener("click", async () => {
   } catch (error) {
     setStatus(error.message || "JSON export failed.", "error");
   }
+});
+
+zoomOutDiagramButton?.addEventListener("click", async () => {
+  currentDiagramZoom = Math.max(0.5, Number((currentDiagramZoom - 0.15).toFixed(2)));
+  applyDiagramZoom();
+});
+
+zoomResetDiagramButton?.addEventListener("click", async () => {
+  currentDiagramZoom = 1;
+  applyDiagramZoom();
+});
+
+zoomInDiagramButton?.addEventListener("click", async () => {
+  currentDiagramZoom = Math.min(2.2, Number((currentDiagramZoom + 0.15).toFixed(2)));
+  applyDiagramZoom();
 });
 
 topChatForm?.addEventListener("submit", async (event) => {

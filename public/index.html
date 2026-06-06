@@ -249,12 +249,12 @@
     <section id="concept-cockpit" class="concept-cockpit-app" aria-label="AI architecture cockpit preview">
       <aside class="concept-sidebar" aria-label="Architecture cockpit sections">
         <img src="/brand-favicon.svg" alt="" />
-        <button class="active" type="button" data-concept-tab="overview">Overview</button>
-        <button type="button" data-concept-tab="architecture">Architecture</button>
-        <button type="button" data-concept-tab="evaluate">Evaluate</button>
-        <button type="button" data-concept-tab="issues">Issues</button>
-        <button type="button" data-concept-tab="dependencies">Dependencies</button>
-        <button type="button" data-concept-tab="reports">Reports</button>
+        <a class="active" href="/product.html">Overview</a>
+        <a href="/architecture.html">Architecture</a>
+        <a href="/evaluate.html">Evaluate</a>
+        <a href="/issues.html">Issues</a>
+        <a href="/dependencies.html">Dependencies</a>
+        <a href="/reports.html">Reports</a>
         <div class="sidebar-user"><span>UA</span><strong>Ujala Agarwal</strong></div>
       </aside>
       <div class="concept-product-shell">
@@ -1371,6 +1371,9 @@
                 <h2>Switch between generated Mermaid diagrams</h2>
               </div>
               <div class="action-row tight">
+                <button id="zoom-out-diagram" class="secondary-button" type="button">Zoom Out</button>
+                <button id="zoom-reset-diagram" class="secondary-button" type="button">100%</button>
+                <button id="zoom-in-diagram" class="secondary-button" type="button">Zoom In</button>
                 <button id="copy-mermaid" class="secondary-button" type="button">Copy Diagram</button>
                 <button id="download-report" class="secondary-button" type="button">Download MD</button>
                 <button id="download-json" class="secondary-button" type="button">Download JSON</button>

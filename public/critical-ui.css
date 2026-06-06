@@ -380,8 +380,12 @@ body.concept-match .concept-sidebar img {
   margin: 0 auto 8px;
 }
 
-body.concept-match .concept-sidebar button {
+body.concept-match .concept-sidebar button,
+body.concept-match .concept-sidebar a {
   min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid transparent;
   border-radius: 10px;
   background: transparent;
@@ -389,11 +393,14 @@ body.concept-match .concept-sidebar button {
   font: inherit;
   font-size: 0.78rem;
   font-weight: 900;
+  text-decoration: none;
   cursor: pointer;
 }
 
 body.concept-match .concept-sidebar button:hover,
-body.concept-match .concept-sidebar button.active {
+body.concept-match .concept-sidebar button.active,
+body.concept-match .concept-sidebar a:hover,
+body.concept-match .concept-sidebar a.active {
   border-color: rgba(17, 132, 170, 0.16);
   background: rgba(83, 212, 255, 0.12);
   color: #075775;
@@ -1142,8 +1149,14 @@ html[data-theme="dark"] body.concept-match .concept-sidebar button {
   color: rgba(231, 243, 250, 0.76);
 }
 
+html[data-theme="dark"] body.concept-match .concept-sidebar a {
+  color: rgba(231, 243, 250, 0.76);
+}
+
 html[data-theme="dark"] body.concept-match .concept-sidebar button:hover,
-html[data-theme="dark"] body.concept-match .concept-sidebar button.active {
+html[data-theme="dark"] body.concept-match .concept-sidebar button.active,
+html[data-theme="dark"] body.concept-match .concept-sidebar a:hover,
+html[data-theme="dark"] body.concept-match .concept-sidebar a.active {
   border-color: rgba(116, 222, 255, 0.22);
   background: rgba(83, 212, 255, 0.1);
   color: #aeefff;
@@ -1228,5 +1241,250 @@ html[data-theme="dark"] .security-proof-panel p {
 
   .timeline-panel article:last-child {
     border-bottom: 0;
+  }
+}
+
+/* Results QA pass: wide dashboards, readable cards, clear light mode, and zoomable diagrams. */
+body.concept-match .main-grid,
+body.concept-match .results {
+  width: min(1580px, calc(100vw - 56px));
+  margin-inline: calc((min(1180px, calc(100vw - 48px)) - min(1580px, calc(100vw - 56px))) / 2);
+}
+
+body.concept-match .overview-grid {
+  grid-template-columns: minmax(420px, 0.82fr) minmax(620px, 1.18fr);
+  align-items: stretch;
+}
+
+body.concept-match .signal-panel .signal-groups {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr) minmax(180px, 0.8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+body.concept-match .signal-panel .stack-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+body.concept-match .panel,
+body.concept-match .module-card,
+body.concept-match .stack-item,
+body.concept-match .file-card,
+body.concept-match .dependency-item,
+body.concept-match .relationship-item,
+body.concept-match .finding-card,
+body.concept-match .source-profile-card,
+body.concept-match .signal-insight-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+body.concept-match .file-path-title,
+body.concept-match .compact-path,
+body.concept-match .stack-item strong,
+body.concept-match .module-card strong,
+body.concept-match .file-card strong,
+body.concept-match .dependency-item strong,
+body.concept-match .relationship-row strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+body.concept-match .module-example-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+body.concept-match .module-example-list .compact-path {
+  padding: 7px 9px;
+  border: 1px solid rgba(17, 132, 170, 0.13);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.68);
+  color: #214052;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+body.concept-match .text-block {
+  max-height: 520px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+body.concept-match .diagram-surface {
+  --diagram-zoom: 1;
+  min-height: 520px;
+  max-height: 72vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background:
+    linear-gradient(rgba(17, 132, 170, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 132, 170, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, #f8fcff, #eef8fc);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+body.concept-match .diagram-viewport {
+  display: inline-block;
+  min-width: max-content;
+  transform: scale(var(--diagram-zoom));
+  transform-origin: top left;
+}
+
+body.concept-match .diagram-viewport svg {
+  display: block;
+  min-width: 980px;
+  max-width: none;
+  height: auto;
+}
+
+body.concept-match .security-proof-grid article {
+  background: rgba(248, 252, 255, 0.94);
+  color: #07121d;
+}
+
+body.concept-match .fusion-visual {
+  min-height: 520px;
+}
+
+body.concept-match .fusion-glass-card,
+body.concept-match .fusion-node {
+  max-width: 220px;
+  overflow: hidden;
+}
+
+body.concept-match .fusion-glass-card strong,
+body.concept-match .fusion-node strong {
+  overflow-wrap: anywhere;
+}
+
+.subpage-orbit-grid {
+  position: relative;
+  display: grid;
+  min-height: 460px;
+  overflow: hidden;
+  border: 1px solid rgba(28, 59, 83, 0.12);
+  border-radius: 18px;
+  background:
+    linear-gradient(rgba(17, 132, 170, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 132, 170, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 52% 50%, rgba(83, 212, 255, 0.24), transparent 34%),
+    rgba(255, 255, 255, 0.94);
+  background-size: 32px 32px, 32px 32px, auto, auto;
+  box-shadow: 0 24px 70px rgba(15, 37, 58, 0.1);
+}
+
+.subpage-orbit-grid article {
+  position: absolute;
+  width: min(230px, 34vw);
+  padding: 18px;
+  border: 1px solid rgba(17, 132, 170, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 45px rgba(15, 37, 58, 0.12);
+  animation: nodeFloat 5.4s ease-in-out infinite;
+}
+
+.subpage-orbit-grid article:nth-child(1) { left: 8%; top: 16%; }
+.subpage-orbit-grid article:nth-child(2) { left: 38%; top: 8%; animation-delay: -0.8s; }
+.subpage-orbit-grid article:nth-child(3) { right: 9%; top: 24%; animation-delay: -1.4s; }
+.subpage-orbit-grid article:nth-child(4) { left: 20%; bottom: 12%; animation-delay: -2s; }
+.subpage-orbit-grid article:nth-child(5) { right: 22%; bottom: 10%; animation-delay: -2.6s; }
+
+.subpage-orbit-grid span {
+  color: #00a8d7;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.subpage-orbit-grid h2 {
+  margin: 8px 0;
+  color: #07121d;
+  font-size: 1.2rem;
+}
+
+.subpage-orbit-grid p {
+  margin: 0;
+  color: rgba(51, 71, 84, 0.82);
+  line-height: 1.55;
+}
+
+html[data-theme="dark"] body.concept-match .diagram-surface {
+  background:
+    linear-gradient(rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, #071522, #0a2031);
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
+html[data-theme="dark"] body.concept-match .module-example-list .compact-path {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(226, 242, 249, 0.86);
+}
+
+html[data-theme="dark"] body.concept-match .security-proof-grid article {
+  background: rgba(255, 255, 255, 0.055);
+  color: #edfaff;
+}
+
+html[data-theme="dark"] .subpage-orbit-grid {
+  border-color: rgba(124, 218, 255, 0.14);
+  background:
+    linear-gradient(rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 52% 50%, rgba(83, 212, 255, 0.18), transparent 34%),
+    rgba(7, 18, 29, 0.88);
+  background-size: 32px 32px, 32px 32px, auto, auto;
+}
+
+html[data-theme="dark"] .subpage-orbit-grid article {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(5, 17, 28, 0.9);
+}
+
+html[data-theme="dark"] .subpage-orbit-grid h2 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .subpage-orbit-grid p {
+  color: rgba(226, 242, 249, 0.78);
+}
+
+@media (max-width: 1180px) {
+  body.concept-match .main-grid,
+  body.concept-match .results {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  body.concept-match .overview-grid,
+  body.concept-match .signal-panel .signal-groups {
+    grid-template-columns: 1fr;
+  }
+
+  body.concept-match .signal-panel .stack-list {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .subpage-orbit-grid {
+    min-height: auto;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .subpage-orbit-grid article {
+    position: static;
+    width: auto;
   }
 }

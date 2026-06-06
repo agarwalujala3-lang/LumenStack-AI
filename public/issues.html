@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Issues | LumenStack AI</title>
+    <meta name="description" content="Issues page for LumenStack AI with risk queue, hotspot review, and remediation workflow." />
+    <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/critical-ui.css" />
+  </head>
+  <body class="concept-match subpage">
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand-lockup" href="/"><img class="brand-lockup-image" src="/brand-lockup.svg" alt="LumenStack AI" /><span class="subpage-brand-note">Issues</span></a>
+        <nav class="topbar-nav" aria-label="Primary">
+          <a href="/">Home</a><a href="/product.html">Product</a><a href="/case-study.html">Case Study</a><a href="/saved-projects.html">Saved Projects</a><a href="/contact.html">Hire Ujala</a>
+        </nav>
+        <div class="topbar-actions">
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">Dark Mode</button>
+          <button class="secondary-button compact-button" type="button" data-open-command>Command</button>
+          <a class="primary-button compact-button" href="/#analyze-panel">Find Issues</a>
+        </div>
+      </header>
+      <main class="subpage-main">
+        <section class="subpage-hero">
+          <span class="concept-pill">Risk queue</span>
+          <h1>Issues are organized for action, not dumped as unreadable noise.</h1>
+          <p>LumenStack AI groups findings by severity, explains why each risk matters, and points users toward the files worth opening first.</p>
+        </section>
+        <section class="timeline-panel">
+          <article><span>Detect</span><h2>Hotspots</h2><p>Large files, import-heavy modules, and complex zones are ranked by review value.</p></article>
+          <article><span>Explain</span><h2>Risk reason</h2><p>Each finding includes a practical explanation and engineering impact.</p></article>
+          <article><span>Act</span><h2>Review path</h2><p>Users can jump to chat, diagrams, compare mode, or exports from the same workflow.</p></article>
+        </section>
+        <section class="subpage-orbit-grid" aria-label="Issue remediation flow">
+          <article><span>Critical</span><h2>Boundary failures</h2><p>Authentication, uploads, webhook verification, and external service edges.</p></article>
+          <article><span>High</span><h2>Architecture pressure</h2><p>Oversized modules, dense coupling, and unclear ownership areas.</p></article>
+          <article><span>Medium</span><h2>Maintainability</h2><p>Repeated patterns, weak separation, and missing error-handling clues.</p></article>
+          <article><span>Low</span><h2>Cleanups</h2><p>Naming, small dead zones, and polish tasks that make the repo easier to maintain.</p></article>
+          <article><span>Brief</span><h2>Export plan</h2><p>Turn the review into a Markdown or recruiter-friendly summary.</p></article>
+        </section>
+      </main>
+    </div>
+    <script src="/theme.js"></script><script src="/site-actions.js"></script><script src="/advanced-ui.js"></script>
+  </body>
+</html>
