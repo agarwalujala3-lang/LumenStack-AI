@@ -247,14 +247,14 @@
     </section>
 
     <section id="concept-cockpit" class="concept-cockpit-app" aria-label="AI architecture cockpit preview">
-      <aside class="concept-sidebar">
+      <aside class="concept-sidebar" aria-label="Architecture cockpit sections">
         <img src="/brand-favicon.svg" alt="" />
-        <a class="active" href="#concept-cockpit">Overview</a>
-        <a href="#concept-cockpit">Architecture</a>
-        <a href="#concept-cockpit">Evaluate</a>
-        <a href="#concept-cockpit">Issues</a>
-        <a href="#concept-cockpit">Dependencies</a>
-        <a href="#concept-cockpit">Reports</a>
+        <button class="active" type="button" data-concept-tab="overview">Overview</button>
+        <button type="button" data-concept-tab="architecture">Architecture</button>
+        <button type="button" data-concept-tab="evaluate">Evaluate</button>
+        <button type="button" data-concept-tab="issues">Issues</button>
+        <button type="button" data-concept-tab="dependencies">Dependencies</button>
+        <button type="button" data-concept-tab="reports">Reports</button>
         <div class="sidebar-user"><span>UA</span><strong>Ujala Agarwal</strong></div>
       </aside>
       <div class="concept-product-shell">
@@ -273,9 +273,9 @@
           <label>Repository <span>acme/checkout-service</span></label>
           <label>Branch <span>main</span></label>
           <label>Scan <span>Today, 9:41 AM</span></label>
-          <label>View <span>System Architecture</span></label>
+          <label>View <span id="concept-view-label">System Architecture</span></label>
         </div>
-        <div class="architecture-workbench">
+        <div class="architecture-workbench" data-concept-panel="overview">
           <article class="system-map-panel">
             <div class="section-title-row">
               <div>
@@ -297,24 +297,105 @@
           </article>
           <article class="ai-evaluation-panel">
             <div class="diagram-tabs">
-              <button class="diagram-tab active" type="button">AI Evaluation</button>
-              <button class="diagram-tab" type="button">Component Details</button>
+              <button class="diagram-tab active" type="button" data-concept-detail="evaluation">AI Evaluation</button>
+              <button class="diagram-tab" type="button" data-concept-detail="components">Component Details</button>
             </div>
-            <div class="confidence-block">
-              <div class="health-ring compact"><strong>82%</strong></div>
-              <div><strong>High</strong><p>Based on analysis of 3,142 files</p></div>
+            <div id="concept-detail-content"></div>
+          </article>
+        </div>
+        <div class="architecture-workbench concept-panel hidden" data-concept-panel="architecture">
+          <article class="system-map-panel">
+            <div class="section-title-row">
+              <div>
+                <h3>3D System Flow</h3>
+                <p>Animated service stack showing intake, analysis, graph, AI, and export movement.</p>
+              </div>
             </div>
-            <h4>Top Strengths</h4>
+            <div class="holo-stage" aria-hidden="true">
+              <span class="holo-ring ring-one"></span>
+              <span class="holo-ring ring-two"></span>
+              <span class="holo-ring ring-three"></span>
+              <span class="holo-node node-intake">Intake</span>
+              <span class="holo-node node-analyze">Analyze</span>
+              <span class="holo-node node-graph">Graph</span>
+              <span class="holo-node node-ai">AI</span>
+              <span class="holo-node node-export">Export</span>
+            </div>
+          </article>
+          <article class="ai-evaluation-panel">
+            <h3>Architecture Layers</h3>
             <ul class="positive-list">
-              <li>Clear service boundaries</li>
-              <li>Good separation of concerns</li>
-              <li>Effective use of caching</li>
+              <li>Source adapters: GitHub, GitLab, Bitbucket, Azure, ZIP.</li>
+              <li>Analysis services: modules, dependencies, classes, relationships.</li>
+              <li>Experience layer: diagrams, chat, exports, saved reviews.</li>
             </ul>
-            <h4>Top Risks</h4>
+          </article>
+        </div>
+        <div class="architecture-workbench concept-panel hidden" data-concept-panel="evaluate">
+          <article class="system-map-panel">
+            <h3>Release Readiness Simulator</h3>
+            <div class="simulator-grid">
+              <label>Test Depth <input type="range" min="35" max="100" value="72" data-sim-input="tests" /></label>
+              <label>Security Hygiene <input type="range" min="35" max="100" value="81" data-sim-input="security" /></label>
+              <label>Module Clarity <input type="range" min="35" max="100" value="76" data-sim-input="clarity" /></label>
+            </div>
+          </article>
+          <article class="ai-evaluation-panel">
+            <span class="sim-score-label">Projected confidence</span>
+            <strong id="sim-score" class="sim-score">76</strong>
+            <p id="sim-copy">Balanced release posture. Increase test depth to improve confidence.</p>
+          </article>
+        </div>
+        <div class="architecture-workbench concept-panel hidden" data-concept-panel="issues">
+          <article class="system-map-panel">
+            <h3>Risk Queue</h3>
+            <div class="risk-board">
+              <span>Critical auth edge</span>
+              <span>Large checkout module</span>
+              <span>Missing error boundary</span>
+              <span>Dependency drift</span>
+            </div>
+          </article>
+          <article class="ai-evaluation-panel">
+            <h3>Action Plan</h3>
             <ul class="risk-list">
-              <li>High coupling between services</li>
-              <li>Large Checkout Service component</li>
-              <li>Missing error handling in 8 modules</li>
+              <li>Split checkout orchestration into smaller service boundaries.</li>
+              <li>Add error handling checks to payment and notification paths.</li>
+              <li>Review dependency ownership before release approval.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="architecture-workbench concept-panel hidden" data-concept-panel="dependencies">
+          <article class="system-map-panel">
+            <h3>Dependency Pressure Map</h3>
+            <div class="dependency-orbit" aria-hidden="true">
+              <span>express</span><span>openai</span><span>multer</span><span>mermaid</span><span>adm-zip</span>
+            </div>
+          </article>
+          <article class="ai-evaluation-panel">
+            <h3>Dependency Notes</h3>
+            <ul class="positive-list">
+              <li>Small backend dependency footprint.</li>
+              <li>ZIP handling isolated behind upload validation.</li>
+              <li>Mermaid bundled locally for stable diagram rendering.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="architecture-workbench concept-panel hidden" data-concept-panel="reports">
+          <article class="system-map-panel">
+            <h3>Recruiter Report Pack</h3>
+            <div class="report-pack">
+              <button class="secondary-button" type="button" data-live-action="export">Download brief</button>
+              <button class="secondary-button" type="button" data-open-command>Open command center</button>
+              <a class="primary-button compact-button" href="/contact.html">Hire Ujala</a>
+            </div>
+          </article>
+          <article class="ai-evaluation-panel">
+            <h3>What gets exported</h3>
+            <ul class="positive-list">
+              <li>Candidate identity and job-application positioning.</li>
+              <li>Product capability summary and live deployment URL.</li>
+              <li>Engineering highlights for recruiter and AI review.</li>
             </ul>
           </article>
         </div>

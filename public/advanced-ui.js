@@ -32,6 +32,45 @@
     }
   ];
 
+  const cockpitPanels = {
+    overview: {
+      label: "System Architecture",
+      detail: {
+        evaluation: `
+          <div class="confidence-block">
+            <div class="health-ring compact"><strong>82%</strong></div>
+            <div><strong>High</strong><p>Based on analysis of 3,142 files</p></div>
+          </div>
+          <h4>Top Strengths</h4>
+          <ul class="positive-list">
+            <li>Clear service boundaries</li>
+            <li>Good separation of concerns</li>
+            <li>Effective use of caching</li>
+          </ul>
+          <h4>Top Risks</h4>
+          <ul class="risk-list">
+            <li>High coupling between services</li>
+            <li>Large Checkout Service component</li>
+            <li>Missing error handling in 8 modules</li>
+          </ul>
+        `,
+        components: `
+          <div class="component-detail-grid">
+            <article><strong>API Gateway</strong><span>Routes traffic and policy decisions.</span></article>
+            <article><strong>Checkout</strong><span>Highest pressure module, 18 dependencies.</span></article>
+            <article><strong>Payments</strong><span>External boundary with security review needs.</span></article>
+            <article><strong>Data Layer</strong><span>PostgreSQL, Redis, and object storage.</span></article>
+          </div>
+        `
+      }
+    },
+    architecture: { label: "3D System Flow" },
+    evaluate: { label: "Release Readiness Simulator" },
+    issues: { label: "Risk Queue" },
+    dependencies: { label: "Dependency Pressure Map" },
+    reports: { label: "Recruiter Report Pack" }
+  };
+
   function createPalette() {
     const palette = document.createElement("div");
     palette.className = "command-palette";
@@ -219,4 +258,90 @@
   });
 
   input.addEventListener("input", () => renderCommands(input.value));
+
+  const conceptTabs = Array.from(document.querySelectorAll("[data-concept-tab]"));
+  const conceptPanels = Array.from(document.querySelectorAll("[data-concept-panel]"));
+  const conceptViewLabel = document.getElementById("concept-view-label");
+  const detailContent = document.getElementById("concept-detail-content");
+
+  function renderConceptDetail(detailName = "evaluation") {
+    if (!detailContent) {
+      return;
+    }
+
+    const detail = cockpitPanels.overview.detail[detailName] || cockpitPanels.overview.detail.evaluation;
+    detailContent.innerHTML = detail;
+    document.querySelectorAll("[data-concept-detail]").forEach((button) => {
+      button.classList.toggle("active", button.dataset.conceptDetail === detailName);
+      button.setAttribute("aria-pressed", String(button.dataset.conceptDetail === detailName));
+    });
+  }
+
+  function activateConceptPanel(panelName = "overview") {
+    const nextPanel = cockpitPanels[panelName] ? panelName : "overview";
+
+    conceptTabs.forEach((tab) => {
+      const isActive = tab.dataset.conceptTab === nextPanel;
+      tab.classList.toggle("active", isActive);
+      tab.setAttribute("aria-selected", String(isActive));
+    });
+
+    conceptPanels.forEach((panel) => {
+      panel.classList.toggle("hidden", panel.dataset.conceptPanel !== nextPanel);
+      panel.classList.toggle("is-switching", panel.dataset.conceptPanel === nextPanel);
+    });
+
+    if (conceptViewLabel) {
+      conceptViewLabel.textContent = cockpitPanels[nextPanel].label;
+    }
+  }
+
+  function updateSimulatorScore() {
+    const inputs = Array.from(document.querySelectorAll("[data-sim-input]"));
+    const score = document.getElementById("sim-score");
+    const copy = document.getElementById("sim-copy");
+
+    if (!inputs.length || !score || !copy) {
+      return;
+    }
+
+    const values = inputs.map((input) => Number(input.value) || 0);
+    const average = Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+    score.textContent = String(average);
+    copy.textContent =
+      average >= 86
+        ? "Excellent release posture. This looks ready for stakeholder review."
+        : average >= 74
+          ? "Balanced release posture. Increase the lowest signal to improve confidence."
+          : "Needs attention before release. Start with tests and security hygiene.";
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element
+      ? event.target.closest("[data-concept-tab], [data-concept-detail]")
+      : null;
+
+    if (!target) {
+      return;
+    }
+
+    if (target.matches("[data-concept-tab]")) {
+      activateConceptPanel(target.dataset.conceptTab);
+      return;
+    }
+
+    if (target.matches("[data-concept-detail]")) {
+      renderConceptDetail(target.dataset.conceptDetail);
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    if (event.target instanceof Element && event.target.matches("[data-sim-input]")) {
+      updateSimulatorScore();
+    }
+  });
+
+  renderConceptDetail();
+  activateConceptPanel("overview");
+  updateSimulatorScore();
 })();

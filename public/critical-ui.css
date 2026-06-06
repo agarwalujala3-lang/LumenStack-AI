@@ -117,7 +117,6 @@ body.concept-match > .page-shell > .hero-stage,
 body.concept-match > .page-shell > #live-metrics-ribbon,
 body.concept-match > .page-shell > .signal-board,
 body.concept-match > .page-shell > .platform-pillars,
-body.concept-match > .page-shell > .dimension-lab,
 body.concept-match > .page-shell > .provider-showcase,
 body.concept-match > .page-shell > .release-roadmap,
 body.concept-match > .page-shell > #recruiter-cockpit {
@@ -355,8 +354,8 @@ body.concept-match .auth-projects-showcase,
 
 body.concept-match .concept-sidebar,
 body.concept-match .architecture-workbench {
-  background: #06111c;
-  color: #eafaff;
+  background: #f8fcff;
+  color: #07121d;
 }
 
 body.concept-match .architecture-workbench {
@@ -366,6 +365,201 @@ body.concept-match .architecture-workbench {
   overflow: hidden;
   border-radius: 12px;
 }
+
+body.concept-match .concept-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 12px;
+  border-right: 1px solid rgba(28, 59, 83, 0.1);
+}
+
+body.concept-match .concept-sidebar img {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 8px;
+}
+
+body.concept-match .concept-sidebar button {
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(7, 18, 29, 0.7);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body.concept-match .concept-sidebar button:hover,
+body.concept-match .concept-sidebar button.active {
+  border-color: rgba(17, 132, 170, 0.16);
+  background: rgba(83, 212, 255, 0.12);
+  color: #075775;
+}
+
+body.concept-match .sidebar-user {
+  display: grid;
+  gap: 6px;
+  margin-top: auto;
+  color: rgba(7, 18, 29, 0.72);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+body.concept-match .sidebar-user span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #07121d;
+  color: #eafaff;
+  font-weight: 900;
+}
+
+body.concept-match .architecture-workbench .system-map-panel,
+body.concept-match .architecture-workbench .ai-evaluation-panel {
+  padding: 22px;
+}
+
+body.concept-match .architecture-workbench h3,
+body.concept-match .architecture-workbench h4 {
+  margin: 0 0 10px;
+  color: #07121d;
+}
+
+body.concept-match .architecture-workbench p,
+body.concept-match .architecture-workbench li {
+  color: rgba(51, 71, 84, 0.82);
+}
+
+body.concept-match .concept-panel.hidden {
+  display: none;
+}
+
+body.concept-match .architecture-workbench.is-switching {
+  animation: cockpitSwitch 360ms ease both;
+}
+
+body.concept-match .component-detail-grid,
+body.concept-match .simulator-grid,
+body.concept-match .risk-board,
+body.concept-match .report-pack {
+  display: grid;
+  gap: 12px;
+}
+
+body.concept-match .component-detail-grid article,
+body.concept-match .risk-board span {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid rgba(28, 59, 83, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+body.concept-match .component-detail-grid span {
+  color: rgba(51, 71, 84, 0.76);
+  font-size: 0.84rem;
+}
+
+body.concept-match .simulator-grid label {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(28, 59, 83, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #0d2230;
+  font-weight: 900;
+}
+
+body.concept-match .simulator-grid input {
+  accent-color: #00a8d7;
+}
+
+body.concept-match .sim-score-label {
+  color: rgba(51, 71, 84, 0.72);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.concept-match .sim-score {
+  display: block;
+  margin: 8px 0;
+  color: #00a8d7;
+  font-size: clamp(3.2rem, 7vw, 5.4rem);
+  line-height: 1;
+}
+
+body.concept-match .holo-stage,
+body.concept-match .dependency-orbit {
+  position: relative;
+  min-height: 330px;
+  overflow: hidden;
+  border: 1px solid rgba(17, 132, 170, 0.14);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 55%, rgba(83, 212, 255, 0.24), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(235, 249, 255, 0.9));
+  perspective: 1000px;
+}
+
+body.concept-match .holo-ring {
+  position: absolute;
+  inset: 21%;
+  border: 1px solid rgba(0, 168, 215, 0.34);
+  border-radius: 50%;
+  transform: rotateX(66deg) rotateZ(0deg);
+  animation: holoSpin 9s linear infinite;
+}
+
+body.concept-match .holo-ring.ring-two {
+  inset: 30%;
+  animation-duration: 6.8s;
+  animation-direction: reverse;
+}
+
+body.concept-match .holo-ring.ring-three {
+  inset: 12%;
+  opacity: 0.46;
+  animation-duration: 13s;
+}
+
+body.concept-match .holo-node,
+body.concept-match .dependency-orbit span {
+  position: absolute;
+  display: grid;
+  min-width: 74px;
+  min-height: 38px;
+  place-items: center;
+  border: 1px solid rgba(17, 132, 170, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #075775;
+  font-size: 0.76rem;
+  font-weight: 900;
+  box-shadow: 0 14px 34px rgba(15, 37, 58, 0.12);
+  animation: nodeFloat 4.8s ease-in-out infinite;
+}
+
+body.concept-match .node-intake { left: 10%; top: 45%; }
+body.concept-match .node-analyze { left: 36%; top: 18%; animation-delay: -0.9s; }
+body.concept-match .node-graph { left: 48%; top: 49%; animation-delay: -1.4s; }
+body.concept-match .node-ai { right: 13%; top: 25%; animation-delay: -2s; }
+body.concept-match .node-export { right: 16%; bottom: 16%; animation-delay: -2.7s; }
+
+body.concept-match .dependency-orbit span:nth-child(1) { left: 10%; top: 45%; }
+body.concept-match .dependency-orbit span:nth-child(2) { left: 38%; top: 16%; }
+body.concept-match .dependency-orbit span:nth-child(3) { right: 13%; top: 45%; }
+body.concept-match .dependency-orbit span:nth-child(4) { left: 32%; bottom: 15%; }
+body.concept-match .dependency-orbit span:nth-child(5) { right: 25%; bottom: 22%; }
 
 body.concept-match .auth-projects-showcase {
   grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1.2fr);
@@ -873,6 +1067,23 @@ body.subpage .topbar {
   }
 }
 
+@keyframes cockpitSwitch {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes holoSpin {
+  to {
+    transform: rotateX(66deg) rotateZ(360deg);
+  }
+}
+
 @keyframes tourPulse {
   0%,
   100% {
@@ -899,6 +1110,82 @@ html[data-theme="dark"] body.subpage {
     radial-gradient(circle at 18% 8%, rgba(83, 212, 255, 0.14), transparent 28%),
     radial-gradient(circle at 82% 18%, rgba(88, 224, 194, 0.1), transparent 28%),
     #050d16;
+}
+
+html[data-theme="dark"] body.concept-match .concept-product-shell,
+html[data-theme="dark"] body.concept-match .concept-benefits article,
+html[data-theme="dark"] body.concept-match .concept-benefits > div,
+html[data-theme="dark"] body.concept-match .auth-copy,
+html[data-theme="dark"] body.concept-match .auth-console,
+html[data-theme="dark"] body.concept-match .security-proof-panel {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(7, 18, 29, 0.88);
+  color: #edfaff;
+}
+
+html[data-theme="dark"] body.concept-match .concept-cockpit-app {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(2, 11, 20, 0.92);
+}
+
+html[data-theme="dark"] body.concept-match .concept-sidebar,
+html[data-theme="dark"] body.concept-match .architecture-workbench {
+  background: #06111c;
+  color: #eafaff;
+}
+
+html[data-theme="dark"] body.concept-match .concept-sidebar {
+  border-right-color: rgba(124, 218, 255, 0.12);
+}
+
+html[data-theme="dark"] body.concept-match .concept-sidebar button {
+  color: rgba(231, 243, 250, 0.76);
+}
+
+html[data-theme="dark"] body.concept-match .concept-sidebar button:hover,
+html[data-theme="dark"] body.concept-match .concept-sidebar button.active {
+  border-color: rgba(116, 222, 255, 0.22);
+  background: rgba(83, 212, 255, 0.1);
+  color: #aeefff;
+}
+
+html[data-theme="dark"] body.concept-match .architecture-workbench h3,
+html[data-theme="dark"] body.concept-match .architecture-workbench h4,
+html[data-theme="dark"] body.concept-match .security-proof-panel h2,
+html[data-theme="dark"] body.concept-match .concept-benefits h2,
+html[data-theme="dark"] body.concept-match .auth-copy h2 {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] body.concept-match .architecture-workbench p,
+html[data-theme="dark"] body.concept-match .architecture-workbench li,
+html[data-theme="dark"] body.concept-match .security-proof-panel p,
+html[data-theme="dark"] body.concept-match .concept-benefits p,
+html[data-theme="dark"] body.concept-match .auth-copy p {
+  color: rgba(226, 242, 249, 0.78);
+}
+
+html[data-theme="dark"] body.concept-match .component-detail-grid article,
+html[data-theme="dark"] body.concept-match .risk-board span,
+html[data-theme="dark"] body.concept-match .simulator-grid label {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(255, 255, 255, 0.055);
+  color: #eafaff;
+}
+
+html[data-theme="dark"] body.concept-match .holo-stage,
+html[data-theme="dark"] body.concept-match .dependency-orbit {
+  border-color: rgba(124, 218, 255, 0.16);
+  background:
+    radial-gradient(circle at 50% 55%, rgba(83, 212, 255, 0.2), transparent 36%),
+    linear-gradient(135deg, rgba(3, 14, 24, 0.96), rgba(7, 28, 42, 0.92));
+}
+
+html[data-theme="dark"] body.concept-match .holo-node,
+html[data-theme="dark"] body.concept-match .dependency-orbit span {
+  border-color: rgba(124, 218, 255, 0.18);
+  background: rgba(5, 17, 28, 0.92);
+  color: #aeefff;
 }
 
 html[data-theme="dark"] .subpage-hero,

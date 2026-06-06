@@ -40,6 +40,8 @@ function extractButtons(html) {
       /data-open-command/i.test(button) ||
       /data-start-tour/i.test(button) ||
       /data-tour-action=/i.test(button) ||
+      /data-concept-tab=/i.test(button) ||
+      /data-concept-detail=/i.test(button) ||
       /data-device-action=/i.test(button) ||
       /data-cockpit-tab=/i.test(button) ||
       /data-diagram=/i.test(button) ||
