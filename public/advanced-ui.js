@@ -193,12 +193,16 @@
 
   function startTour() {
     tourIndex = 0;
+    document.documentElement.classList.add("tour-open");
+    document.body?.classList.add("tour-open");
     tour.classList.add("is-open");
     tour.setAttribute("aria-hidden", "false");
     renderTourStep();
   }
 
   function closeTour() {
+    document.documentElement.classList.remove("tour-open");
+    document.body?.classList.remove("tour-open");
     tour.classList.remove("is-open");
     tour.setAttribute("aria-hidden", "true");
   }

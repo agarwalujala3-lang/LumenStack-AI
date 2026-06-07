@@ -1244,28 +1244,34 @@ html[data-theme="dark"] .security-proof-panel p {
   }
 }
 
-/* Results QA pass: wide dashboards, readable cards, clear light mode, and zoomable diagrams. */
+/* Results QA pass: contained dashboards, readable cards, clear light mode, and zoomable diagrams. */
 body.concept-match .main-grid,
 body.concept-match .results {
-  width: min(1580px, calc(100vw - 56px));
-  margin-inline: calc((min(1180px, calc(100vw - 48px)) - min(1580px, calc(100vw - 56px))) / 2);
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  overflow-x: clip;
 }
 
 body.concept-match .overview-grid {
-  grid-template-columns: minmax(420px, 0.82fr) minmax(620px, 1.18fr);
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   align-items: stretch;
+}
+
+body.concept-match .six-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 body.concept-match .signal-panel .signal-groups {
   display: grid;
-  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr) minmax(180px, 0.8fr);
+  grid-template-columns: minmax(130px, 0.55fr) minmax(0, 1.1fr) minmax(170px, 0.75fr);
   gap: 18px;
   align-items: start;
 }
 
 body.concept-match .signal-panel .stack-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
   gap: 12px;
 }
 
@@ -1339,7 +1345,7 @@ body.concept-match .diagram-viewport {
 
 body.concept-match .diagram-viewport svg {
   display: block;
-  min-width: 980px;
+  min-width: min(980px, calc(100vw - 96px));
   max-width: none;
   height: auto;
 }
@@ -1350,18 +1356,74 @@ body.concept-match .security-proof-grid article {
 }
 
 body.concept-match .fusion-visual {
-  min-height: 520px;
+  min-height: 460px;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(88, 214, 255, 0.34), transparent 38%),
+    radial-gradient(circle at 12% 88%, rgba(107, 150, 255, 0.22), transparent 44%),
+    linear-gradient(rgba(24, 70, 108, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 70, 108, 0.07) 1px, transparent 1px),
+    linear-gradient(165deg, #f8fcff, #dff3ff 48%, #cce8fb);
+  background-size: auto, auto, 38px 38px, 38px 38px, auto;
 }
 
 body.concept-match .fusion-glass-card,
 body.concept-match .fusion-node {
   max-width: 220px;
   overflow: hidden;
+  border-color: rgba(17, 132, 170, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(221, 244, 255, 0.88)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.16), rgba(107, 150, 255, 0.1));
+  color: #07121d;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 18px 38px rgba(15, 37, 58, 0.14);
 }
 
 body.concept-match .fusion-glass-card strong,
 body.concept-match .fusion-node strong {
+  color: #07121d;
   overflow-wrap: anywhere;
+}
+
+body.concept-match .fusion-glass-card span,
+body.concept-match .fusion-node span {
+  color: #0d85aa;
+}
+
+body.concept-match .fusion-glass-card p {
+  color: rgba(51, 71, 84, 0.82);
+}
+
+body.concept-match .fusion-glass-card.glass-a {
+  top: 10%;
+  left: 34%;
+}
+
+body.concept-match .fusion-glass-card.glass-b {
+  top: 38%;
+  right: 8%;
+}
+
+body.concept-match .fusion-node.node-intake {
+  top: 32%;
+  left: 9%;
+}
+
+body.concept-match .fusion-node.node-graph {
+  top: 35%;
+  left: 43%;
+  right: auto;
+}
+
+body.concept-match .fusion-node.node-risk {
+  bottom: 24%;
+  left: 24%;
+}
+
+body.concept-match .fusion-node.node-brief {
+  right: 18%;
+  bottom: 13%;
 }
 
 .subpage-orbit-grid {
@@ -1486,5 +1548,38 @@ html[data-theme="dark"] .subpage-orbit-grid p {
   .subpage-orbit-grid article {
     position: static;
     width: auto;
+  }
+}
+
+/* Cursor and overflow safety overrides loaded after the legacy cursor rules. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@media (pointer: fine) {
+  html.cursor-enhanced .cursor-core,
+  html.cursor-enhanced .cursor-aura,
+  html.cursor-enhanced .cursor-trail,
+  body.cursor-enhanced .cursor-core,
+  body.cursor-enhanced .cursor-aura,
+  body.cursor-enhanced .cursor-trail {
+    z-index: 30050;
+  }
+
+  html.cursor-enhanced.tour-open,
+  html.cursor-enhanced.tour-open body,
+  html.cursor-enhanced.tour-open .guided-tour,
+  html.cursor-enhanced.tour-open .guided-tour *,
+  body.cursor-enhanced.tour-open,
+  body.cursor-enhanced.tour-open .guided-tour,
+  body.cursor-enhanced.tour-open .guided-tour * {
+    cursor: auto !important;
+  }
+
+  html.cursor-enhanced.tour-open .guided-tour button,
+  body.cursor-enhanced.tour-open .guided-tour button {
+    cursor: pointer !important;
   }
 }
