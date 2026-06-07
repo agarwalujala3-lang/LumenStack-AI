@@ -1362,7 +1362,7 @@ body.concept-match .fusion-visual {
   min-height: 460px;
   background:
     radial-gradient(circle at 72% 18%, rgba(88, 214, 255, 0.34), transparent 38%),
-    radial-gradient(circle at 12% 88%, rgba(107, 150, 255, 0.22), transparent 44%),
+    radial-gradient(circle at 12% 88%, rgba(74, 184, 236, 0.22), transparent 44%),
     linear-gradient(rgba(24, 70, 108, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(24, 70, 108, 0.07) 1px, transparent 1px),
     linear-gradient(165deg, #f8fcff, #dff3ff 48%, #cce8fb);
@@ -1376,7 +1376,7 @@ body.concept-match .fusion-node {
   border-color: rgba(17, 132, 170, 0.2);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(221, 244, 255, 0.88)),
-    linear-gradient(145deg, rgba(88, 214, 255, 0.16), rgba(107, 150, 255, 0.1));
+    linear-gradient(145deg, rgba(88, 214, 255, 0.16), rgba(74, 184, 236, 0.1));
   color: #07121d;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
@@ -1755,7 +1755,7 @@ html[data-theme="dark"] body.concept-match .fusion-node {
   border-color: rgba(124, 218, 255, 0.14);
   background:
     linear-gradient(180deg, rgba(11, 31, 48, 0.96), rgba(5, 17, 28, 0.92)),
-    linear-gradient(145deg, rgba(88, 214, 255, 0.14), rgba(107, 150, 255, 0.1));
+    linear-gradient(145deg, rgba(88, 214, 255, 0.14), rgba(74, 184, 236, 0.1));
   color: #edfaff;
 }
 
@@ -1773,7 +1773,7 @@ html[data-theme="dark"] body.concept-match .fusion-glass-card p {
 html[data-theme="dark"] body.concept-match .fusion-visual {
   background:
     radial-gradient(circle at 72% 18%, rgba(88, 214, 255, 0.18), transparent 38%),
-    radial-gradient(circle at 12% 88%, rgba(107, 150, 255, 0.14), transparent 44%),
+    radial-gradient(circle at 12% 88%, rgba(74, 184, 236, 0.14), transparent 44%),
     linear-gradient(rgba(116, 222, 255, 0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(116, 222, 255, 0.06) 1px, transparent 1px),
     linear-gradient(165deg, rgba(3, 14, 24, 0.96), rgba(7, 28, 42, 0.92));
@@ -1784,6 +1784,220 @@ html[data-theme="dark"] body.concept-match .evidence-chip {
   border-color: rgba(124, 218, 255, 0.14);
   background: rgba(255, 255, 255, 0.055);
   color: rgba(226, 242, 249, 0.86);
+}
+
+/* Final sky-blue palette pass. Loaded last to remove leftover lavender washes. */
+:root {
+  --bg: #eaf8ff;
+  --bg-deep: #d6efff;
+  --panel: rgba(248, 253, 255, 0.78);
+  --panel-strong: rgba(255, 255, 255, 0.92);
+  --ink: #071726;
+  --muted: #456477;
+  --muted-soft: #6f90a4;
+  --accent: #0ea5d7;
+  --accent-strong: #087aa8;
+  --accent-soft: rgba(66, 190, 241, 0.24);
+  --cyan: #58d6ff;
+  --amber: #0b8fc1;
+  --amber-soft: rgba(88, 214, 255, 0.2);
+  --line: rgba(18, 124, 169, 0.14);
+  --line-strong: rgba(18, 124, 169, 0.24);
+  --shadow: 0 24px 58px rgba(18, 99, 142, 0.14);
+  --hero-shadow: 0 36px 90px rgba(18, 99, 142, 0.2);
+}
+
+html {
+  background: #eaf8ff;
+}
+
+body.concept-match {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 218, 255, 0.34), transparent 28%),
+    radial-gradient(circle at 84% 10%, rgba(183, 235, 255, 0.5), transparent 26%),
+    linear-gradient(180deg, #f7fdff 0%, #eaf8ff 48%, #d8f1ff 100%);
+}
+
+body.concept-match::before {
+  background:
+    radial-gradient(circle at 22% 30%, rgba(101, 206, 255, 0.2), transparent 18%),
+    radial-gradient(circle at 76% 66%, rgba(74, 184, 236, 0.16), transparent 19%);
+  opacity: 0.82;
+}
+
+body.concept-match::after {
+  background: linear-gradient(rgba(77, 188, 238, 0.08), rgba(255, 255, 255, 0.04));
+}
+
+body.concept-match .topbar,
+body.concept-match .panel,
+body.concept-match .hero-panel,
+body.concept-match .signal-board,
+body.concept-match .feature-marquee,
+body.concept-match .showcase-card,
+body.concept-match .upload-surface,
+body.concept-match .compare-fields,
+body.concept-match .toggle-row,
+body.concept-match .status-panel,
+body.concept-match .preview-card,
+body.concept-match .workspace-preset-card,
+body.concept-match .profile-card,
+body.concept-match .signal-insight-card,
+body.concept-match .integration-card,
+body.concept-match .stack-item,
+body.concept-match .relationship-item,
+body.concept-match .dependency-item,
+body.concept-match .file-card,
+body.concept-match .module-card,
+body.concept-match .finding-card,
+body.concept-match .chat-bubble,
+body.concept-match .metric-card,
+body.concept-match .diagram-surface,
+body.concept-match input[type="url"],
+body.concept-match input[type="text"],
+body.concept-match #chat-question,
+body.concept-match .prompt-cycler {
+  border-color: rgba(18, 124, 169, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(229, 247, 255, 0.82)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(88, 214, 255, 0.14));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 42px rgba(18, 99, 142, 0.11);
+}
+
+body.concept-match .topbar-nav a,
+body.concept-match .theme-toggle,
+body.concept-match .ghost-button,
+body.concept-match .secondary-button,
+body.concept-match .diagram-tab,
+body.concept-match .top-pill,
+body.concept-match .panel-badge,
+body.concept-match .result-pill,
+body.concept-match .chip,
+body.concept-match .comparison-chip,
+body.concept-match .showcase-pill,
+body.concept-match .prompt-tags span,
+body.concept-match .marquee-track span {
+  border-color: rgba(18, 124, 169, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(221, 244, 255, 0.84)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(88, 214, 255, 0.16));
+  color: #145a7a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 12px 28px rgba(18, 99, 142, 0.1);
+}
+
+body.concept-match .topbar-nav a:hover,
+body.concept-match .topbar-nav a[aria-current="page"] {
+  border-color: rgba(14, 165, 215, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(205, 238, 255, 0.88)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(88, 214, 255, 0.2));
+  color: #083f5a;
+}
+
+body.concept-match .theme-toggle-track {
+  background: linear-gradient(135deg, rgba(170, 231, 255, 0.78), rgba(48, 181, 236, 0.34));
+}
+
+body.concept-match .theme-toggle-thumb {
+  background: linear-gradient(180deg, #ffffff, #dff6ff);
+  box-shadow: 0 8px 18px rgba(18, 99, 142, 0.18);
+}
+
+body.concept-match .hero-panel {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(124, 218, 255, 0.4), transparent 28%),
+    radial-gradient(circle at 88% 14%, rgba(179, 234, 255, 0.46), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(224, 246, 255, 0.68));
+}
+
+body.concept-match .hero-panel::before {
+  background: radial-gradient(circle, rgba(88, 214, 255, 0.24), transparent 70%);
+}
+
+body.concept-match .hero-ribbon,
+body.concept-match .prompt-cycler {
+  color: #125a7a;
+}
+
+body.concept-match .prompt-cycler::before {
+  color: #0b8fc1;
+}
+
+body.concept-match .prompt-cycler::after {
+  background: radial-gradient(circle, rgba(88, 214, 255, 0.18), transparent 68%);
+}
+
+body.concept-match .eyebrow,
+body.concept-match .group-label,
+body.concept-match .metric-card span,
+body.concept-match .preview-card span,
+body.concept-match .signal-card span,
+body.concept-match .file-meta-label {
+  color: #4d7f99;
+}
+
+body.concept-match .scan-lines span {
+  background: linear-gradient(90deg, rgba(159, 231, 255, 0.2), rgba(14, 165, 215, 0.8), rgba(103, 216, 255, 0.78));
+  box-shadow: 0 8px 18px rgba(18, 99, 142, 0.12);
+}
+
+body.concept-match .health-ring-card span,
+body.concept-match .mini-health span,
+body.concept-match .key-findings-card span,
+body.concept-match .architecture-map-card span {
+  color: #48687c;
+}
+
+body.concept-match .mini-health strong {
+  color: #071726;
+}
+
+body.concept-match .mini-health small {
+  color: #c17d00;
+}
+
+body.concept-match .key-findings-card p {
+  color: #5c7486;
+}
+
+body.concept-match .key-findings-card strong {
+  color: #09b8e5;
+}
+
+body.concept-match .architecture-canvas {
+  border-color: rgba(14, 148, 196, 0.16);
+  background:
+    radial-gradient(circle at 48% 42%, rgba(45, 188, 239, 0.22), transparent 34%),
+    linear-gradient(rgba(41, 137, 180, 0.095) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 137, 180, 0.095) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(249, 253, 255, 0.98), rgba(222, 244, 255, 0.84));
+  background-size: auto, 32px 32px, 32px 32px, auto;
+}
+
+body.concept-match .architecture-canvas::before {
+  border-color: rgba(14, 148, 196, 0.34);
+}
+
+body.concept-match .architecture-canvas::after,
+body.concept-match .mini-network::after {
+  background: conic-gradient(from 90deg, transparent, rgba(14, 165, 215, 0.34), transparent 38%);
+  opacity: 0.56;
+}
+
+body.concept-match .mini-network::before,
+body.concept-match .mini-network::after {
+  border-color: rgba(14, 148, 196, 0.34);
+}
+
+html[data-theme="dark"] body.concept-match {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(52, 185, 238, 0.18), transparent 28%),
+    radial-gradient(circle at 84% 12%, rgba(74, 159, 216, 0.16), transparent 28%),
+    linear-gradient(180deg, #07121d 0%, #0b1c2b 52%, #102b40 100%);
 }
 
 @media (max-width: 980px) {
