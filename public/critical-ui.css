@@ -279,8 +279,10 @@ body.concept-match .auth-console {
 body.concept-match .concept-overview-card {
   overflow: hidden;
   align-self: center;
-  background: rgba(7, 18, 29, 0.9);
-  color: #effbff;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(83, 212, 255, 0.24), transparent 35%),
+    linear-gradient(145deg, #f8fcff, #dff3ff 58%, #cfeeff);
+  color: #07121d;
   transform: perspective(1200px) rotateY(-4deg) rotateX(2deg);
   transition: transform 260ms ease, box-shadow 260ms ease;
 }
@@ -316,9 +318,10 @@ body.concept-match .mini-health,
 body.concept-match .key-findings-card,
 body.concept-match .architecture-map-card {
   padding: 14px;
-  border: 1px solid rgba(178, 228, 246, 0.12);
+  border: 1px solid rgba(17, 132, 170, 0.14);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.78);
+  color: #07121d;
 }
 
 body.concept-match .concept-benefits,
@@ -1581,5 +1584,211 @@ body {
   html.cursor-enhanced.tour-open .guided-tour button,
   body.cursor-enhanced.tour-open .guided-tour button {
     cursor: pointer !important;
+  }
+}
+
+/* Multi-use product launcher and final theme consistency pass. */
+body.concept-match .use-case-expansion {
+  display: grid;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr);
+  gap: 22px;
+  align-items: stretch;
+  margin: 0 0 32px;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid rgba(17, 132, 170, 0.14);
+  border-radius: 18px;
+  background:
+    linear-gradient(rgba(17, 132, 170, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 132, 170, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(83, 212, 255, 0.22), transparent 34%),
+    linear-gradient(145deg, #f8fcff, #e5f6ff 54%, #d8effd);
+  background-size: 30px 30px, 30px 30px, auto, auto;
+  box-shadow: 0 24px 70px rgba(15, 37, 58, 0.1);
+}
+
+body.concept-match .use-case-copy h2 {
+  margin: 14px 0;
+  color: #07121d;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+}
+
+body.concept-match .use-case-copy p {
+  margin: 0;
+  color: rgba(51, 71, 84, 0.82);
+  line-height: 1.75;
+}
+
+body.concept-match .use-case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+body.concept-match .use-case-grid button {
+  display: grid;
+  gap: 8px;
+  min-height: 164px;
+  padding: 18px;
+  border: 1px solid rgba(17, 132, 170, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #07121d;
+  text-align: left;
+  box-shadow: 0 16px 34px rgba(15, 37, 58, 0.09);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+body.concept-match .use-case-grid button:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 168, 215, 0.34);
+  box-shadow: 0 24px 48px rgba(15, 37, 58, 0.14);
+}
+
+body.concept-match .use-case-grid span {
+  color: #0d85aa;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+body.concept-match .use-case-grid strong {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+body.concept-match .use-case-grid small {
+  color: rgba(51, 71, 84, 0.74);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+body.concept-match .signal-insight-card p {
+  overflow-wrap: anywhere;
+}
+
+body.concept-match .evidence-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+body.concept-match .evidence-chip-row .file-meta-label {
+  flex-basis: 100%;
+}
+
+body.concept-match .evidence-chip {
+  max-width: 100%;
+  padding: 7px 9px;
+  border: 1px solid rgba(17, 132, 170, 0.14);
+  border-radius: 10px;
+  background: rgba(235, 249, 255, 0.86);
+  color: #31546a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+body.concept-match .evidence-chip.muted {
+  color: rgba(49, 84, 106, 0.72);
+}
+
+body.concept-match .fusion-command-deck {
+  border-color: rgba(17, 132, 170, 0.14);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(83, 212, 255, 0.2), transparent 34%),
+    linear-gradient(145deg, #f8fcff, #e5f6ff 58%, #d8effd);
+  color: #07121d;
+}
+
+body.concept-match .fusion-command-deck h2,
+body.concept-match .fusion-command-deck strong {
+  color: #07121d;
+}
+
+body.concept-match .fusion-command-deck p {
+  color: rgba(51, 71, 84, 0.82);
+}
+
+html[data-theme="dark"] body.concept-match .concept-overview-card {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(83, 212, 255, 0.16), transparent 35%),
+    rgba(7, 18, 29, 0.92);
+  color: #effbff;
+}
+
+html[data-theme="dark"] body.concept-match .health-ring-card,
+html[data-theme="dark"] body.concept-match .mini-health,
+html[data-theme="dark"] body.concept-match .key-findings-card,
+html[data-theme="dark"] body.concept-match .architecture-map-card {
+  border-color: rgba(178, 228, 246, 0.12);
+  background: rgba(255, 255, 255, 0.045);
+  color: #effbff;
+}
+
+html[data-theme="dark"] body.concept-match .use-case-expansion,
+html[data-theme="dark"] body.concept-match .fusion-command-deck {
+  border-color: rgba(124, 218, 255, 0.14);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(83, 212, 255, 0.14), transparent 34%),
+    linear-gradient(145deg, rgba(5, 17, 28, 0.94), rgba(8, 27, 42, 0.9));
+  color: #edfaff;
+}
+
+html[data-theme="dark"] body.concept-match .use-case-copy h2,
+html[data-theme="dark"] body.concept-match .fusion-command-deck h2,
+html[data-theme="dark"] body.concept-match .fusion-command-deck strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] body.concept-match .use-case-copy p,
+html[data-theme="dark"] body.concept-match .fusion-command-deck p {
+  color: rgba(226, 242, 249, 0.78);
+}
+
+html[data-theme="dark"] body.concept-match .use-case-grid button,
+html[data-theme="dark"] body.concept-match .fusion-glass-card,
+html[data-theme="dark"] body.concept-match .fusion-node {
+  border-color: rgba(124, 218, 255, 0.14);
+  background:
+    linear-gradient(180deg, rgba(11, 31, 48, 0.96), rgba(5, 17, 28, 0.92)),
+    linear-gradient(145deg, rgba(88, 214, 255, 0.14), rgba(107, 150, 255, 0.1));
+  color: #edfaff;
+}
+
+html[data-theme="dark"] body.concept-match .use-case-grid strong,
+html[data-theme="dark"] body.concept-match .fusion-glass-card strong,
+html[data-theme="dark"] body.concept-match .fusion-node strong {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] body.concept-match .use-case-grid small,
+html[data-theme="dark"] body.concept-match .fusion-glass-card p {
+  color: rgba(226, 242, 249, 0.76);
+}
+
+html[data-theme="dark"] body.concept-match .fusion-visual {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(88, 214, 255, 0.18), transparent 38%),
+    radial-gradient(circle at 12% 88%, rgba(107, 150, 255, 0.14), transparent 44%),
+    linear-gradient(rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 222, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(165deg, rgba(3, 14, 24, 0.96), rgba(7, 28, 42, 0.92));
+  background-size: auto, auto, 38px 38px, 38px 38px, auto;
+}
+
+html[data-theme="dark"] body.concept-match .evidence-chip {
+  border-color: rgba(124, 218, 255, 0.14);
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(226, 242, 249, 0.86);
+}
+
+@media (max-width: 980px) {
+  body.concept-match .use-case-expansion,
+  body.concept-match .use-case-grid {
+    grid-template-columns: 1fr;
   }
 }

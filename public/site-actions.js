@@ -88,11 +88,79 @@
     showToast("Architecture overview refreshed.");
   }
 
+  const useCases = {
+    "pr-review": {
+      label: "PR review mode",
+      status: "PR review mode selected. Add current and baseline sources to compare merge risk.",
+      compare: true,
+      question: "What changed most between baseline and current architecture?"
+    },
+    "security-radar": {
+      label: "Security radar",
+      status: "Security radar selected. Run analysis to inspect risky boundaries, config, uploads, and dependency exposure.",
+      compare: false,
+      question: "Which files or modules look risky from a security perspective?"
+    },
+    "onboarding-guide": {
+      label: "Onboarding guide",
+      status: "Onboarding guide selected. Run analysis to explain modules, entrypoints, and system flow for a new developer.",
+      compare: false,
+      question: "Explain this codebase to a new developer."
+    },
+    "dependency-audit": {
+      label: "Dependency audit",
+      status: "Dependency audit selected. Run analysis to inspect manifests, package pressure, and upgrade risk.",
+      compare: false,
+      question: "Which dependencies shape this project the most?"
+    },
+    "migration-plan": {
+      label: "Migration plan",
+      status: "Migration plan selected. Run analysis to identify architecture zones before platform or framework changes.",
+      compare: true,
+      question: "What should be checked before migrating this application?"
+    },
+    "release-brief": {
+      label: "Release brief",
+      status: "Release brief selected. Run analysis and export a stakeholder-ready architecture decision report.",
+      compare: true,
+      question: "Create a release readiness summary for stakeholders."
+    }
+  };
+
+  function launchUseCase(trigger) {
+    const useCase = useCases[trigger?.dataset?.useCase] || useCases["pr-review"];
+    const compareToggle = document.getElementById("compare-toggle");
+    const statusText = document.querySelector("#status p");
+    const chatQuestion = document.getElementById("chat-question");
+
+    if (!document.getElementById("analyze-panel")) {
+      window.location.href = `/?useCase=${encodeURIComponent(trigger?.dataset?.useCase || "pr-review")}#analyze-panel`;
+      return;
+    }
+
+    if (compareToggle) {
+      compareToggle.checked = useCase.compare;
+      compareToggle.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    if (statusText) {
+      statusText.textContent = useCase.status;
+    }
+
+    if (chatQuestion) {
+      chatQuestion.placeholder = useCase.question;
+    }
+
+    document.getElementById("analyze-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    showToast(`${useCase.label} ready.`);
+  }
+
   const actions = {
     share: shareSite,
     compare: openCompare,
     export: exportSampleReport,
     refresh: refreshOverview,
+    "use-case": launchUseCase,
     demo: () => {
       document.getElementById("concept-cockpit")?.scrollIntoView({ behavior: "smooth", block: "start" });
       showToast("Opening the architecture cockpit preview.");
@@ -124,4 +192,11 @@
       showToast("Action could not complete in this browser.");
     }
   });
+
+  const initialUseCase = new URLSearchParams(window.location.search).get("useCase");
+  if (initialUseCase) {
+    window.setTimeout(() => {
+      launchUseCase({ dataset: { useCase: initialUseCase } });
+    }, 150);
+  }
 })();

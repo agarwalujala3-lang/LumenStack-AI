@@ -487,6 +487,37 @@ function createPathTitle(pathValue, className = "file-path-title") {
   return element;
 }
 
+function summarizeSignalDetail(signal) {
+  const detail = sanitize(signal?.detail || "");
+
+  if (!signal?.evidence?.length) {
+    return detail;
+  }
+
+  return detail
+    .replace(/\s+in\s+.+\.$/, ".")
+    .replace(/\s+via\s+.+\.$/, ".")
+    .replace(/\s+from\s+.+\.$/, ".")
+    .replace(/\s+at\s+.+\.$/, ".");
+}
+
+function createEvidenceList(paths = []) {
+  const wrapper = createElement("div", "evidence-chip-row");
+  wrapper.appendChild(createElement("span", "file-meta-label", "Evidence"));
+
+  for (const pathValue of paths.slice(0, 4)) {
+    const chip = createElement("span", "evidence-chip", summarizePath(pathValue, { maxLength: 34, headCount: 1, tailCount: 2 }));
+    chip.title = sanitize(pathValue);
+    wrapper.appendChild(chip);
+  }
+
+  if (paths.length > 4) {
+    wrapper.appendChild(createElement("span", "evidence-chip muted", `+${paths.length - 4} more`));
+  }
+
+  return wrapper;
+}
+
 function formatImportPreview(imports, limit = 4) {
   if (!imports?.length) {
     return "none detected";
@@ -1662,10 +1693,10 @@ function renderPlatformSignals(signals) {
     const card = createElement("article", "signal-insight-card spotlight-card");
     card.appendChild(createElement("span", "file-meta-label", signal.category));
     card.appendChild(createElement("strong", "", signal.name));
-    card.appendChild(createElement("p", "", signal.detail));
+    card.appendChild(createElement("p", "", summarizeSignalDetail(signal)));
 
     if (signal.evidence?.length) {
-      card.appendChild(createElement("div", "file-meta", `Evidence: ${signal.evidence.join(", ")}`));
+      card.appendChild(createEvidenceList(signal.evidence));
     }
 
     platformSignalsElement.appendChild(card);
