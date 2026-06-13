@@ -36,8 +36,14 @@ function buildSecurityTxt() {
 }
 
 function applySecurityHeaders(_req, res, next) {
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-Download-Options", "noopen");
+  res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+  res.setHeader("Origin-Agent-Cluster", "?1");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
   res.setHeader(
@@ -49,9 +55,12 @@ function applySecurityHeaders(_req, res, next) {
       "img-src 'self' data:",
       "font-src 'self' data:",
       "connect-src 'self'",
+      "object-src 'none'",
+      "manifest-src 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",
-      "form-action 'self' mailto:"
+      "form-action 'self' mailto:",
+      "upgrade-insecure-requests"
     ].join("; ")
   );
   next();

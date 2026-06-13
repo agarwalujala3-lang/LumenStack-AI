@@ -2,8 +2,13 @@ const { createApp } = require("../src/app");
 
 const requiredHeaders = [
   "content-security-policy",
+  "strict-transport-security",
   "x-content-type-options",
   "x-frame-options",
+  "x-download-options",
+  "x-permitted-cross-domain-policies",
+  "cross-origin-opener-policy",
+  "cross-origin-resource-policy",
   "referrer-policy",
   "permissions-policy"
 ];
@@ -21,6 +26,13 @@ async function main() {
     for (const header of requiredHeaders) {
       if (!home.headers.get(header)) {
         failures.push(`Missing security header: ${header}`);
+      }
+    }
+
+    const contentSecurityPolicy = home.headers.get("content-security-policy") || "";
+    for (const directive of ["object-src 'none'", "frame-ancestors 'none'", "upgrade-insecure-requests"]) {
+      if (!contentSecurityPolicy.includes(directive)) {
+        failures.push(`CSP is missing directive: ${directive}`);
       }
     }
 
