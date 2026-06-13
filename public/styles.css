@@ -262,6 +262,14 @@ strong,
     radial-gradient(circle at 18% 12%, rgba(107, 150, 255, 0.1), transparent 28%),
     radial-gradient(circle at 84% 18%, rgba(88, 214, 255, 0.08), transparent 28%),
     linear-gradient(180deg, #02070c 0%, #06111a 52%, #081723 100%);
+  opacity: 1;
+  transition: opacity 520ms ease, visibility 520ms ease;
+}
+
+.page-intro.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .page-intro::before {
@@ -9350,6 +9358,64 @@ html[data-theme="dark"] .concept-trust a:focus-visible {
 
   .concept-match .topbar {
     margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .concept-match .brand-lockup {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .concept-match .brand-lockup-image {
+    width: 132px;
+    max-width: 42vw;
+  }
+
+  .concept-match .brand-lockup-copy strong {
+    font-size: 0.88rem;
+    line-height: 1.15;
+    text-align: right;
+  }
+
+  .concept-match .topbar-nav,
+  .concept-match .topbar-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .concept-match .topbar-nav::-webkit-scrollbar,
+  .concept-match .topbar-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .concept-match .topbar-nav a,
+  .concept-match .topbar-actions > * {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 36px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .concept-match .theme-toggle {
+    min-width: 124px;
+  }
+
+  .concept-match .demo-button {
+    min-width: 112px;
   }
 
   .concept-hero h1 {
@@ -9364,6 +9430,8 @@ html[data-theme="dark"] .concept-trust a:focus-visible {
 
   .concept-hero {
     min-height: auto;
+    margin-top: 16px;
+    padding-top: 28px;
   }
 }
 

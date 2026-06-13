@@ -280,7 +280,7 @@ function runPageIntro() {
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 1300);
+    }, 760);
   };
 
   document.body.classList.add("intro-active");
@@ -291,8 +291,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  settleTimer = window.setTimeout(settleIntro, 3600);
-  finishTimer = window.setTimeout(finishIntro, 6800);
+  settleTimer = window.setTimeout(settleIntro, 900);
+  finishTimer = window.setTimeout(finishIntro, 2400);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", handleKeyDown, { once: true });
 }

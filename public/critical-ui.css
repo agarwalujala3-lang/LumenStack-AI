@@ -639,14 +639,81 @@ html[data-theme="dark"] body.concept-match .concept-pill {
     width: min(100% - 28px, 1180px);
   }
 
-  body.concept-match .topbar,
+  body.concept-match .topbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-height: 0;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  body.concept-match .brand-lockup {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  body.concept-match .brand-lockup-image {
+    width: 132px;
+    max-width: 42vw;
+  }
+
+  body.concept-match .brand-lockup-copy strong {
+    max-width: 9rem;
+    font-size: 0.86rem;
+    line-height: 1.15;
+    text-align: right;
+  }
+
   body.concept-match .topbar-nav,
-  body.concept-match .topbar-actions,
+  body.concept-match .topbar-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  body.concept-match .topbar-nav::-webkit-scrollbar,
+  body.concept-match .topbar-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.concept-match .topbar-nav a,
+  body.concept-match .topbar-actions > * {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  body.concept-match .theme-toggle {
+    min-width: 124px;
+  }
+
+  body.concept-match .primary-button {
+    min-width: 112px;
+  }
+
   body.concept-match .concept-feature-row,
   body.concept-match .overview-grid {
     align-items: stretch;
     flex-direction: column;
     grid-template-columns: 1fr;
+  }
+
+  body.concept-match .concept-hero {
+    min-height: auto;
+    margin-top: 16px;
+    padding-top: 28px;
   }
 
   body.concept-match .concept-hero h1 {

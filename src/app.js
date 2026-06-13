@@ -23,6 +23,17 @@ const {
 
 const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
 const requestBuckets = new Map();
+const publicBaseUrl = "https://lumenstack-ai.onrender.com";
+
+function buildSecurityTxt() {
+  return [
+    "Contact: mailto:agarwalujala3@gmail.com",
+    `Canonical: ${publicBaseUrl}/.well-known/security.txt`,
+    "Preferred-Languages: en",
+    "Policy: https://github.com/agarwalujala3-lang/LumenStack-AI/security/policy",
+    "Hiring-Note: LumenStack AI is maintained as a recruiter-ready full-stack security-conscious demo."
+  ].join("\n");
+}
 
 function applySecurityHeaders(_req, res, next) {
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -189,6 +200,10 @@ function createApp() {
   fs.mkdirSync(uploadRoot, { recursive: true });
   app.disable("x-powered-by");
   app.use(applySecurityHeaders);
+
+  app.get(["/.well-known/security.txt", "/security.txt"], (_req, res) => {
+    res.type("text/plain").send(`${buildSecurityTxt()}\n`);
+  });
 
   app.post("/api/github/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const secret = process.env.GITHUB_WEBHOOK_SECRET || "";

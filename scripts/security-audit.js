@@ -24,6 +24,13 @@ async function main() {
       }
     }
 
+    const securityTxt = await fetch(`${base}/.well-known/security.txt`);
+    const securityText = await securityTxt.text();
+
+    if (!securityTxt.ok || !securityText.includes("Contact: mailto:")) {
+      failures.push("security.txt disclosure endpoint is missing or incomplete.");
+    }
+
     const badUpload = new FormData();
     badUpload.append("codebase", new Blob(["not a zip"], { type: "text/plain" }), "bad.txt");
     const uploadResponse = await fetch(`${base}/api/analyze`, {

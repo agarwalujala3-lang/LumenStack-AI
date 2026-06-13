@@ -4,6 +4,10 @@ node_modules/
 .external/
 .runtime-*.png
 Screen Recording *.mp4
+*.mp4
+*.mov
+*.webm
 coverage/
 dist/
 build/
+LumenStack-AI/

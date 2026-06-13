@@ -22,6 +22,22 @@ const IGNORED_DIRS = new Set([
   ".vscode"
 ]);
 
+const IGNORED_FILE_EXTENSIONS = new Set([
+  ".avi",
+  ".gif",
+  ".jpeg",
+  ".jpg",
+  ".m4v",
+  ".mov",
+  ".mp3",
+  ".mp4",
+  ".ogg",
+  ".png",
+  ".webm",
+  ".webp",
+  ".zip"
+]);
+
 const CODE_FILE_TYPES = {
   ".js": "JavaScript",
   ".jsx": "JavaScript",
@@ -271,6 +287,21 @@ function shouldSkipHiddenEntry(entryName) {
 function isTextBuffer(buffer) {
   const sample = buffer.subarray(0, Math.min(buffer.length, 512));
   return !sample.includes(0);
+}
+
+async function isNestedRepositoryRoot(rootPath, candidatePath) {
+  const relativePath = path.relative(rootPath, candidatePath);
+
+  if (!relativePath || relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
+    return false;
+  }
+
+  try {
+    const metadata = await fs.stat(path.join(candidatePath, ".git"));
+    return metadata.isDirectory() || metadata.isFile();
+  } catch {
+    return false;
+  }
 }
 
 function getModuleName(relativePath) {
@@ -1052,7 +1083,7 @@ async function walkDirectory(rootPath, currentPath, state) {
     const relativePath = toPosixPath(path.relative(rootPath, fullPath));
 
     if (entry.isDirectory()) {
-      if (IGNORED_DIRS.has(entry.name)) {
+      if (IGNORED_DIRS.has(entry.name) || await isNestedRepositoryRoot(rootPath, fullPath)) {
         continue;
       }
 
@@ -1060,10 +1091,15 @@ async function walkDirectory(rootPath, currentPath, state) {
       continue;
     }
 
+    const extension = path.extname(entry.name).toLowerCase();
+
+    if (IGNORED_FILE_EXTENSIONS.has(extension)) {
+      continue;
+    }
+
     state.totalFiles += 1;
     state.allFiles.push(relativePath);
 
-    const extension = path.extname(entry.name).toLowerCase();
     const isCodeFile = Boolean(CODE_FILE_TYPES[extension]);
     const isManifest = MANIFEST_FILES.has(entry.name);
 
