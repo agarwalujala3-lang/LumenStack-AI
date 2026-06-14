@@ -175,15 +175,6 @@ function createIntroMotionField() {
       }
     }
 
-    const sweepX = ((elapsed * 170) % (width + 260)) - 260;
-    const sweepGradient = context.createLinearGradient(sweepX, 0, sweepX + 260, 0);
-    sweepGradient.addColorStop(0, "rgba(116, 214, 255, 0)");
-    sweepGradient.addColorStop(0.46, "rgba(116, 214, 255, 0.06)");
-    sweepGradient.addColorStop(0.6, "rgba(188, 244, 255, 0.18)");
-    sweepGradient.addColorStop(1, "rgba(116, 214, 255, 0)");
-    context.fillStyle = sweepGradient;
-    context.fillRect(0, 0, width, height);
-
     frameId = window.requestAnimationFrame(drawFrame);
   }
 
@@ -217,10 +208,6 @@ function createIntroElement() {
   intro.className = "page-intro prism-intro";
   intro.setAttribute("aria-hidden", "true");
 
-  const scan = document.createElement("div");
-  scan.className = "prism-intro-sweep";
-  scan.setAttribute("aria-hidden", "true");
-
   const motionField = createIntroMotionField();
 
   const core = document.createElement("div");
@@ -231,7 +218,6 @@ function createIntroElement() {
     </div>
   `;
 
-  intro.appendChild(scan);
   intro.appendChild(motionField.element);
   intro.appendChild(core);
   return {
@@ -280,7 +266,7 @@ function runPageIntro() {
     window.setTimeout(() => {
       intro.remove();
       document.body.classList.remove("intro-active");
-    }, 760);
+    }, 620);
   };
 
   document.body.classList.add("intro-active");
@@ -291,8 +277,8 @@ function runPageIntro() {
     intro.classList.add("is-entered");
   });
 
-  settleTimer = window.setTimeout(settleIntro, 900);
-  finishTimer = window.setTimeout(finishIntro, 2400);
+  settleTimer = window.setTimeout(settleIntro, 1500);
+  finishTimer = window.setTimeout(finishIntro, 3200);
   intro.addEventListener("pointerdown", finishIntro, { once: true });
   window.addEventListener("keydown", handleKeyDown, { once: true });
 }

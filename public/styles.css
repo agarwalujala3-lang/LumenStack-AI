@@ -5695,17 +5695,6 @@ html[data-theme="dark"] .relationship-weight {
   pointer-events: none;
 }
 
-.prism-intro-sweep {
-  position: absolute;
-  z-index: 2;
-  inset: 0 auto 0 -28%;
-  width: 30%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(126, 235, 255, 0.04), rgba(126, 235, 255, 0.22), rgba(255, 255, 255, 0));
-  filter: blur(26px);
-  animation: prismIntroSweep 2600ms cubic-bezier(0.16, 1, 0.3, 1) 540ms both;
-  pointer-events: none;
-}
-
 .prism-intro-field {
   position: absolute;
   inset: 0;
@@ -5780,11 +5769,6 @@ html[data-theme="dark"] .relationship-weight {
 .prism-intro.is-leaving .prism-intro-core {
   opacity: 0;
   transition: opacity 340ms ease;
-}
-
-.prism-intro.is-leaving .prism-intro-sweep {
-  opacity: 0;
-  transition: opacity 240ms ease;
 }
 
 html[data-theme="dark"] .brand-lockup-image {
@@ -7547,22 +7531,6 @@ html[data-theme="dark"] #live-metrics-ribbon[data-engine="recovery"] .metrics-ri
   background-image:
     linear-gradient(rgba(116, 239, 255, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(116, 239, 255, 0.05) 1px, transparent 1px);
-}
-
-@keyframes prismIntroSweep {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0;
-  }
-
-  14% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translate3d(560%, 0, 0);
-    opacity: 0;
-  }
 }
 
 @keyframes prismIntroCoreDot {
