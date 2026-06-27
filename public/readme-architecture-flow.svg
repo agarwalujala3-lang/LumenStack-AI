@@ -1,0 +1,86 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI architecture command flow</title>
+  <desc id="desc">A high-level flow from source intake to analysis, diagrams, chat, quality gates, and exportable briefs.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FCFF"/>
+      <stop offset="1" stop-color="#DFF6FF"/>
+    </linearGradient>
+    <linearGradient id="dark" x1="96" y1="50" x2="1106" y2="363" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071827"/>
+      <stop offset="1" stop-color="#0B3047"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4FE7FF"/>
+      <stop offset="0.55" stop-color="#3EE6B4"/>
+      <stop offset="1" stop-color="#FFB84D"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#09253A" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" rx="30" fill="url(#bg)"/>
+  <rect x="54" y="44" width="1092" height="332" rx="28" fill="url(#dark)" filter="url(#shadow)"/>
+  <circle cx="1020" cy="82" r="190" fill="#5BE8FF" fill-opacity="0.16"/>
+  <circle cx="164" cy="354" r="220" fill="#8B7CFF" fill-opacity="0.12"/>
+
+  <text x="94" y="92" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="900">Architecture Intelligence Pipeline</text>
+  <text x="94" y="124" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">A practical product flow from source intake to review-ready technical proof.</text>
+
+  <g transform="translate(86 172)">
+    <path d="M152 74H236" stroke="#98F3FF" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M372 74H456" stroke="#98F3FF" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M592 74H676" stroke="#98F3FF" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M812 74H896" stroke="#98F3FF" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+
+    <g>
+      <rect width="152" height="148" rx="22" fill="#FFFFFF" fill-opacity="0.10" stroke="#A7F3FF" stroke-opacity="0.18"/>
+      <circle cx="76" cy="52" r="25" fill="#3EE6B4" fill-opacity="0.18" stroke="#3EE6B4"/>
+      <text x="57" y="59" fill="#9FFFE0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="900">01</text>
+      <text x="28" y="102" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="900">Intake</text>
+      <text x="25" y="126" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Git URL or ZIP</text>
+    </g>
+
+    <g transform="translate(220 0)">
+      <rect width="152" height="148" rx="22" fill="#FFFFFF" fill-opacity="0.10" stroke="#A7F3FF" stroke-opacity="0.18"/>
+      <circle cx="76" cy="52" r="25" fill="#5BE8FF" fill-opacity="0.16" stroke="#5BE8FF"/>
+      <text x="57" y="59" fill="#D7FBFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="900">02</text>
+      <text x="28" y="102" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="900">Analyze</text>
+      <text x="24" y="126" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Modules + risk</text>
+    </g>
+
+    <g transform="translate(440 0)">
+      <rect width="152" height="148" rx="22" fill="#FFFFFF" fill-opacity="0.10" stroke="#A7F3FF" stroke-opacity="0.18"/>
+      <circle cx="76" cy="52" r="25" fill="#FFB84D" fill-opacity="0.17" stroke="#FFB84D"/>
+      <text x="57" y="59" fill="#FFE0A3" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="900">03</text>
+      <text x="24" y="102" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="900">Visualize</text>
+      <text x="26" y="126" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Mermaid maps</text>
+    </g>
+
+    <g transform="translate(660 0)">
+      <rect width="152" height="148" rx="22" fill="#FFFFFF" fill-opacity="0.10" stroke="#A7F3FF" stroke-opacity="0.18"/>
+      <circle cx="76" cy="52" r="25" fill="#8B7CFF" fill-opacity="0.18" stroke="#AFA7FF"/>
+      <text x="57" y="59" fill="#DDD8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="900">04</text>
+      <text x="43" y="102" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="900">Chat</text>
+      <text x="24" y="126" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Ask the repo</text>
+    </g>
+
+    <g transform="translate(880 0)">
+      <rect width="152" height="148" rx="22" fill="#FFFFFF" fill-opacity="0.10" stroke="#A7F3FF" stroke-opacity="0.18"/>
+      <circle cx="76" cy="52" r="25" fill="#3EE6B4" fill-opacity="0.18" stroke="#3EE6B4"/>
+      <text x="57" y="59" fill="#9FFFE0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="900">05</text>
+      <text x="39" y="102" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="900">Export</text>
+      <text x="26" y="126" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">Briefs + JSON</text>
+    </g>
+  </g>
+
+  <g transform="translate(94 342)">
+    <rect width="226" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.09" stroke="#A7F3FF" stroke-opacity="0.14"/>
+    <text x="22" y="27" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900">Quality Gate: smoke + security</text>
+    <rect x="246" width="238" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.09" stroke="#A7F3FF" stroke-opacity="0.14"/>
+    <text x="268" y="27" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900">Governance: templates + Dependabot</text>
+    <rect x="504" width="222" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.09" stroke="#A7F3FF" stroke-opacity="0.14"/>
+    <text x="526" y="27" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900">Security: hardened headers</text>
+  </g>
+</svg>

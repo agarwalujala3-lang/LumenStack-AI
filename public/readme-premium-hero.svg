@@ -1,0 +1,124 @@
+<svg width="1200" height="680" viewBox="0 0 1200 680" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LumenStack AI premium README hero</title>
+  <desc id="desc">A cinematic dashboard preview for an AI architecture intelligence workspace.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="680" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06111F"/>
+      <stop offset="0.45" stop-color="#09253A"/>
+      <stop offset="1" stop-color="#071827"/>
+    </linearGradient>
+    <radialGradient id="aqua" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(952 129) rotate(132) scale(581 351)">
+      <stop stop-color="#5BE8FF" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#5BE8FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="violet" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(265 574) rotate(-33) scale(486 278)">
+      <stop stop-color="#8B7CFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8B7CFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="142" y1="112" x2="1057" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#B9F4FF" stop-opacity="0.07"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4FE7FF"/>
+      <stop offset="0.58" stop-color="#3EE6B4"/>
+      <stop offset="1" stop-color="#FFB84D"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.32"/>
+    </filter>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="680" rx="34" fill="url(#bg)"/>
+  <rect width="1200" height="680" rx="34" fill="url(#aqua)"/>
+  <rect width="1200" height="680" rx="34" fill="url(#violet)"/>
+
+  <g opacity="0.32">
+    <path d="M78 128H1124" stroke="#7CEAFF" stroke-opacity="0.16"/>
+    <path d="M78 216H1124" stroke="#7CEAFF" stroke-opacity="0.10"/>
+    <path d="M78 304H1124" stroke="#7CEAFF" stroke-opacity="0.10"/>
+    <path d="M78 392H1124" stroke="#7CEAFF" stroke-opacity="0.10"/>
+    <path d="M78 480H1124" stroke="#7CEAFF" stroke-opacity="0.10"/>
+    <path d="M170 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+    <path d="M330 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+    <path d="M490 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+    <path d="M650 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+    <path d="M810 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+    <path d="M970 68V615" stroke="#7CEAFF" stroke-opacity="0.08"/>
+  </g>
+
+  <rect x="72" y="54" width="1056" height="572" rx="28" fill="url(#panel)" stroke="#A7F3FF" stroke-opacity="0.18" filter="url(#softShadow)"/>
+  <rect x="96" y="82" width="1008" height="52" rx="18" fill="#071827" fill-opacity="0.68" stroke="#87EDFF" stroke-opacity="0.16"/>
+  <circle cx="126" cy="108" r="7" fill="#FF6B6B"/>
+  <circle cx="150" cy="108" r="7" fill="#FFB84D"/>
+  <circle cx="174" cy="108" r="7" fill="#3EE6B4"/>
+  <text x="216" y="113" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">LumenStack AI / architecture-command-center</text>
+  <text x="910" y="113" fill="#76F7C8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="800">LIVE QUALITY GATE</text>
+
+  <g transform="translate(118 180)">
+    <rect x="0" y="0" width="424" height="344" rx="24" fill="#061321" fill-opacity="0.62" stroke="#86EFFF" stroke-opacity="0.16"/>
+    <text x="28" y="48" fill="#7CEAFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900" letter-spacing="2">RECRUITER-READY AI PRODUCT</text>
+    <text x="28" y="105" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="48" font-weight="900">Architecture</text>
+    <text x="28" y="158" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="48" font-weight="900">intelligence</text>
+    <text x="28" y="210" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="48" font-weight="900">workspace.</text>
+    <text x="30" y="254" fill="#C4EFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Analyze repositories, generate diagrams,</text>
+    <text x="30" y="280" fill="#C4EFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">compare baselines, chat with code, and export briefs.</text>
+    <rect x="28" y="305" width="128" height="34" rx="17" fill="#3EE6B4" fill-opacity="0.18" stroke="#3EE6B4" stroke-opacity="0.42"/>
+    <text x="47" y="327" fill="#9FFFE0" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900">Smoke tested</text>
+    <rect x="166" y="305" width="132" height="34" rx="17" fill="#5BE8FF" fill-opacity="0.15" stroke="#5BE8FF" stroke-opacity="0.38"/>
+    <text x="186" y="327" fill="#C9F8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="900">Security audit</text>
+  </g>
+
+  <g transform="translate(585 165)">
+    <rect x="0" y="0" width="476" height="384" rx="26" fill="#081A2A" fill-opacity="0.82" stroke="#9FF5FF" stroke-opacity="0.22" filter="url(#softShadow)"/>
+    <rect x="24" y="24" width="428" height="58" rx="16" fill="#FFFFFF" fill-opacity="0.08"/>
+    <text x="48" y="59" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" font-weight="900">Architecture Overview</text>
+    <text x="340" y="59" fill="#76F7C8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">91 READY</text>
+
+    <g transform="translate(32 112)">
+      <rect width="156" height="202" rx="20" fill="#FFFFFF" fill-opacity="0.08" stroke="#A7F3FF" stroke-opacity="0.12"/>
+      <circle cx="78" cy="78" r="52" fill="none" stroke="#183D52" stroke-width="14"/>
+      <path d="M78 26a52 52 0 1 1-47.4 73.3" stroke="url(#accent)" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <text x="57" y="87" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="900">94</text>
+      <text x="28" y="158" fill="#BDEFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="800">review readiness</text>
+      <text x="28" y="180" fill="#6CF3C4" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="800">headers + audits + UX</text>
+    </g>
+
+    <g transform="translate(214 112)">
+      <rect width="226" height="126" rx="20" fill="#FFFFFF" fill-opacity="0.08" stroke="#A7F3FF" stroke-opacity="0.12"/>
+      <text x="20" y="32" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">Signal growth</text>
+      <rect x="22" y="80" width="18" height="24" rx="7" fill="#44D7FF"/>
+      <rect x="54" y="63" width="18" height="41" rx="7" fill="#4EE4E4"/>
+      <rect x="86" y="70" width="18" height="34" rx="7" fill="#3EE6B4"/>
+      <rect x="118" y="48" width="18" height="56" rx="7" fill="#79E8A0"/>
+      <rect x="150" y="38" width="18" height="66" rx="7" fill="#FFB84D"/>
+      <rect x="182" y="27" width="18" height="77" rx="7" fill="#8B7CFF"/>
+    </g>
+
+    <g transform="translate(214 260)">
+      <rect width="226" height="74" rx="20" fill="#FFFFFF" fill-opacity="0.08" stroke="#A7F3FF" stroke-opacity="0.12"/>
+      <circle cx="38" cy="37" r="9" fill="#3EE6B4" filter="url(#glow)"/>
+      <circle cx="92" cy="37" r="9" fill="#5BE8FF" filter="url(#glow)"/>
+      <circle cx="146" cy="37" r="9" fill="#FFB84D" filter="url(#glow)"/>
+      <circle cx="200" cy="37" r="9" fill="#8B7CFF" filter="url(#glow)"/>
+      <path d="M47 37H83M101 37H137M155 37H191" stroke="#9FF5FF" stroke-opacity="0.38" stroke-width="2"/>
+    </g>
+  </g>
+
+  <g transform="translate(146 558)">
+    <rect x="0" y="0" width="908" height="44" rx="22" fill="#FFFFFF" fill-opacity="0.08" stroke="#A7F3FF" stroke-opacity="0.14"/>
+    <text x="28" y="28" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">Repository URL</text>
+    <text x="178" y="28" fill="#80EFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Analyze</text>
+    <text x="308" y="28" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">Mermaid diagrams</text>
+    <text x="492" y="28" fill="#80EFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Codebase chat</text>
+    <text x="654" y="28" fill="#DDF8FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">Compare mode</text>
+    <text x="812" y="28" fill="#76F7C8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="900">Export brief</text>
+  </g>
+</svg>
