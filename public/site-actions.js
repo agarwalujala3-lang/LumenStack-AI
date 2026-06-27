@@ -19,6 +19,27 @@
     }, 2600);
   }
 
+  async function copyTextToClipboard(text) {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch {
+        // Fall back to a temporary textarea for restricted browser contexts.
+      }
+    }
+
+    const field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.left = "-9999px";
+    document.body.appendChild(field);
+    field.select();
+    document.execCommand("copy");
+    field.remove();
+  }
+
   function downloadTextFile(filename, content) {
     const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -43,7 +64,7 @@
       return;
     }
 
-    await navigator.clipboard?.writeText(shareData.url);
+    await copyTextToClipboard(shareData.url);
     showToast("Live site link copied.");
   }
 
@@ -155,10 +176,21 @@
     showToast(`${useCase.label} ready.`);
   }
 
+  async function copyProofBrief() {
+    const pitch = [
+      "LumenStack AI is a production-minded architecture intelligence workspace that turns repositories into diagrams, quality signals, compare views, codebase chat, and exportable briefs.",
+      "It demonstrates polished frontend product design, an Express analysis backend, security-conscious browser headers, automated audits, and live deployment readiness."
+    ].join(" ");
+
+    await copyTextToClipboard(pitch);
+    showToast("Project pitch copied.");
+  }
+
   const actions = {
     share: shareSite,
     compare: openCompare,
     export: exportSampleReport,
+    "copy-proof-brief": copyProofBrief,
     refresh: refreshOverview,
     "use-case": launchUseCase,
     demo: () => {
