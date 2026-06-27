@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible problem in LumenStack AI.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to improve LumenStack AI. Please include enough context to reproduce the issue.
+  - type: input
+    id: page
+    attributes:
+      label: Affected page or route
+      placeholder: "Example: /, /api/analyze, /health"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Go to...\n2. Click...\n3. See..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Live Render app
+        - Local development
+        - GitHub Actions
+        - Other
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots, or additional context

@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest a focused improvement for LumenStack AI.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user, reviewer, or developer need should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the product behavior, UI, API, or repository improvement.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Frontend UI
+        - Analyzer engine
+        - AI/chat
+        - Reports/exports
+        - Security
+        - GitHub/repo polish
+        - Deployment
+  - type: textarea
+    id: validation
+    attributes:
+      label: How should this be validated?
+      placeholder: "Example: smoke test, security audit, rendered desktop/mobile QA, API check"
