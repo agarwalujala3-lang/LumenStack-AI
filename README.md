@@ -13,7 +13,7 @@
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/agarwalujala3-lang/LumenStack-AI/actions/workflows/smoke.yml"><strong>Quality Gate</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="https://agarwalujala3-lang.github.io/ujala-portfolio/"><strong>Portfolio</strong></a>
+  <a href="https://ujala-portfolio-world.netlify.app/"><strong>Portfolio</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://www.linkedin.com/in/ujala-agarwal-30aa28283/"><strong>LinkedIn</strong></a>
 </p>
@@ -245,7 +245,7 @@ https://lumenstack-ai.onrender.com/health
 
 Built by **Ujala Agarwal**.
 
-- Portfolio: <https://agarwalujala3-lang.github.io/ujala-portfolio/>
+- Portfolio: <https://ujala-portfolio-world.netlify.app/>
 - LinkedIn: <https://www.linkedin.com/in/ujala-agarwal-30aa28283/>
 - GitHub: <https://github.com/agarwalujala3-lang>
 - Email: <agarwalujala3@gmail.com>
