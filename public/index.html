@@ -246,14 +246,23 @@
       <article><span>04</span><strong>Make better decisions</strong><p>AI-powered guidance tailored to your codebase.</p></article>
     </section>
 
-    <section class="visual-intelligence-deck" aria-label="Visual intelligence dashboard preview">
+    <section class="visual-intelligence-deck motion-target" aria-label="Visual intelligence dashboard preview"
+      data-visual-mode="quality" data-parallax="0.018">
       <div class="visual-deck-copy">
         <span class="concept-pill">Visual intelligence layer</span>
-        <h2>Architecture signals that feel instantly readable.</h2>
+        <h2>Architecture signals with the glow of a real control room.</h2>
         <p>
-          A recruiter-ready product surface with rich charts, module maps, security posture, and release signals in one
-          polished workspace.
+          A recruiter-ready product surface with cinematic glass panels, image-led system visuals, rich charts, module
+          maps, security posture, and release signals in one polished workspace.
         </p>
+        <div class="visual-mode-controls" role="tablist" aria-label="Visual intelligence views">
+          <button class="visual-mode-button active" type="button" data-visual-mode-trigger="quality"
+            aria-pressed="true">Quality</button>
+          <button class="visual-mode-button" type="button" data-visual-mode-trigger="security"
+            aria-pressed="false">Security</button>
+          <button class="visual-mode-button" type="button" data-visual-mode-trigger="release"
+            aria-pressed="false">Release</button>
+        </div>
         <div class="visual-signal-row">
           <span>Security Hardened</span>
           <span>Audit Scripts</span>
@@ -263,28 +272,47 @@
       </div>
 
       <div class="visual-dashboard-shell">
+        <div class="visual-dashboard-aurora" aria-hidden="true"></div>
         <div class="visual-dashboard-header">
           <div>
             <span class="visual-status-dot"></span>
             <strong>LumenStack Control Graph</strong>
           </div>
-          <small>Live quality preview</small>
+          <div class="visual-live-meta">
+            <span data-visual-primary-label>91 score</span>
+            <span>12 modules</span>
+            <span>4 audits</span>
+          </div>
         </div>
 
         <div class="visual-dashboard-grid">
+          <article class="visual-asset-panel">
+            <img src="/visual-lab-control-room.png"
+              alt="Abstract LumenStack AI architecture control room with glowing dashboard panels" loading="lazy" />
+            <div class="visual-asset-glass">
+              <span>Visual Lab</span>
+              <strong>Architecture intelligence surface</strong>
+              <small>Image asset + code-native telemetry</small>
+            </div>
+          </article>
+
           <article class="visual-score-panel">
             <span>Architecture Health</span>
             <div class="visual-score-ring" aria-hidden="true">
-              <strong>91</strong>
-              <small>Ready</small>
+              <strong data-visual-score>91</strong>
+              <small data-visual-score-label>Ready</small>
             </div>
-            <p>Security, UX, audit, and deploy posture are trending upward.</p>
+            <p data-visual-score-copy>Security, UX, audit, and deploy posture are trending upward.</p>
+            <div class="visual-mini-ledger">
+              <span><strong data-visual-ledger-a>+37%</strong> signal lift</span>
+              <span><strong data-visual-ledger-b>08</strong> graph nodes</span>
+            </div>
           </article>
 
           <article class="visual-chart-panel">
             <div class="visual-card-heading">
               <strong>Signal Growth</strong>
-              <span>+37%</span>
+              <span data-visual-trend>+37%</span>
             </div>
             <div class="visual-bars" aria-hidden="true">
               <i style="--bar: 48%"></i>
@@ -301,10 +329,26 @@
             </div>
           </article>
 
+          <article class="visual-line-panel">
+            <div class="visual-card-heading">
+              <strong>Release Confidence</strong>
+              <span data-visual-release>94%</span>
+            </div>
+            <div class="visual-line-chart" aria-hidden="true">
+              <span style="--x: 5%; --y: 68%"></span>
+              <span style="--x: 22%; --y: 56%"></span>
+              <span style="--x: 40%; --y: 46%"></span>
+              <span style="--x: 58%; --y: 34%"></span>
+              <span style="--x: 76%; --y: 28%"></span>
+              <span style="--x: 92%; --y: 18%"></span>
+            </div>
+            <p>Smoke, audit, security, and deployment signals shown as one decision curve.</p>
+          </article>
+
           <article class="visual-map-panel">
             <div class="visual-card-heading">
               <strong>Module Mesh</strong>
-              <span>8 nodes</span>
+              <span data-visual-node-count>8 nodes</span>
             </div>
             <div class="visual-mesh" aria-hidden="true">
               <span class="mesh-node mesh-core">Core</span>
@@ -316,6 +360,23 @@
               <span class="mesh-line mesh-line-b"></span>
               <span class="mesh-line mesh-line-c"></span>
               <span class="mesh-line mesh-line-d"></span>
+            </div>
+          </article>
+
+          <article class="visual-radar-panel">
+            <div class="visual-card-heading">
+              <strong>Trust Radar</strong>
+              <span data-visual-radar>Stable</span>
+            </div>
+            <div class="visual-radar-grid" aria-hidden="true">
+              <span class="radar-ring ring-one"></span>
+              <span class="radar-ring ring-two"></span>
+              <span class="radar-ring ring-three"></span>
+              <span class="radar-sweep"></span>
+              <i style="--x: 63%; --y: 28%"></i>
+              <i style="--x: 38%; --y: 44%"></i>
+              <i style="--x: 72%; --y: 62%"></i>
+              <i style="--x: 48%; --y: 72%"></i>
             </div>
           </article>
 
@@ -344,6 +405,7 @@
         </div>
       </div>
     </section>
+
     <section class="proof-brief-layer" aria-label="Recruiter proof brief">
       <div class="proof-brief-copy">
         <span class="concept-pill">Proof brief</span>

@@ -225,6 +225,108 @@
     }
   });
 
+
+  const visualModes = {
+    quality: {
+      primaryLabel: '91 score',
+      score: '91',
+      scoreLabel: 'Ready',
+      scoreCopy: 'Security, UX, audit, and deploy posture are trending upward.',
+      trend: '+37%',
+      release: '94%',
+      nodeCount: '8 nodes',
+      radar: 'Stable',
+      ledgerA: '+37%',
+      ledgerB: '08',
+      progress: '78%',
+      bars: ['48%', '64%', '58%', '78%', '88%', '96%']
+    },
+    security: {
+      primaryLabel: '88 secure',
+      score: '88',
+      scoreLabel: 'Hardened',
+      scoreCopy: 'Headers, upload controls, dependency pressure, and risky boundaries stay visible.',
+      trend: '+42%',
+      release: '92%',
+      nodeCount: '10 nodes',
+      radar: 'Protected',
+      ledgerA: '+42%',
+      ledgerB: '10',
+      progress: '74%',
+      bars: ['54%', '72%', '82%', '76%', '90%', '88%']
+    },
+    release: {
+      primaryLabel: '94 ready',
+      score: '94',
+      scoreLabel: 'Ship',
+      scoreCopy: 'Smoke checks, audit scripts, polished UI, and deployment evidence are bundled for review.',
+      trend: '+51%',
+      release: '97%',
+      nodeCount: '12 nodes',
+      radar: 'Launch',
+      ledgerA: '+51%',
+      ledgerB: '12',
+      progress: '86%',
+      bars: ['62%', '70%', '84%', '89%', '94%', '98%']
+    }
+  };
+
+  function setVisualText(deck, selector, value) {
+    const element = deck.querySelector(selector);
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function activateVisualMode(modeName) {
+    const deck = document.querySelector('.visual-intelligence-deck');
+
+    if (!deck) {
+      return;
+    }
+
+    const nextMode = visualModes[modeName] ? modeName : 'quality';
+    const mode = visualModes[nextMode];
+    deck.dataset.visualMode = nextMode;
+    deck.style.setProperty('--visual-progress', mode.progress);
+
+    setVisualText(deck, '[data-visual-primary-label]', mode.primaryLabel);
+    setVisualText(deck, '[data-visual-score]', mode.score);
+    setVisualText(deck, '[data-visual-score-label]', mode.scoreLabel);
+    setVisualText(deck, '[data-visual-score-copy]', mode.scoreCopy);
+    setVisualText(deck, '[data-visual-trend]', mode.trend);
+    setVisualText(deck, '[data-visual-release]', mode.release);
+    setVisualText(deck, '[data-visual-node-count]', mode.nodeCount);
+    setVisualText(deck, '[data-visual-radar]', mode.radar);
+    setVisualText(deck, '[data-visual-ledger-a]', mode.ledgerA);
+    setVisualText(deck, '[data-visual-ledger-b]', mode.ledgerB);
+
+    deck.querySelectorAll('.visual-bars i').forEach((bar, index) => {
+      bar.style.setProperty('--bar', mode.bars[index] || mode.bars[mode.bars.length - 1]);
+    });
+
+    deck.querySelectorAll('[data-visual-mode-trigger]').forEach((button) => {
+      const isActive = button.dataset.visualModeTrigger === nextMode;
+      button.classList.toggle('active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const trigger = event.target instanceof Element
+      ? event.target.closest('[data-visual-mode-trigger]')
+      : null;
+
+    if (!trigger) {
+      return;
+    }
+
+    event.preventDefault();
+    activateVisualMode(trigger.dataset.visualModeTrigger);
+    showToast(trigger.textContent.trim() + ' visual mode active.');
+  });
+
+  activateVisualMode('quality');
   const initialUseCase = new URLSearchParams(window.location.search).get("useCase");
   if (initialUseCase) {
     window.setTimeout(() => {

@@ -47,6 +47,7 @@ function extractButtons(html) {
       /data-tour-action=/i.test(button) ||
       /data-concept-tab=/i.test(button) ||
       /data-concept-detail=/i.test(button) ||
+      /data-visual-mode-trigger=/i.test(button) ||
       /data-device-action=/i.test(button) ||
       /data-cockpit-tab=/i.test(button) ||
       /data-diagram=/i.test(button) ||
