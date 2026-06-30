@@ -1,0 +1,129 @@
+<svg width="1400" height="620" viewBox="0 0 1400 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020710"/>
+      <stop offset="0.45" stop-color="#071727"/>
+      <stop offset="1" stop-color="#100b24"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="0.28" stop-color="#5ee5ff"/>
+      <stop offset="1" stop-color="#8b7cff"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.045"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(920 290) rotate(90) scale(320 520)">
+      <stop stop-color="#5ee5ff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#5ee5ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(390 120) rotate(90) scale(260 430)">
+      <stop stop-color="#8b7cff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#8b7cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.37 0 0 0 0 0.9 0 0 0 0 1 0 0 0 0.65 0" result="color"/>
+      <feMerge>
+        <feMergeNode in="color"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0V44" stroke="#7edde6" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1400" height="620" rx="34" fill="url(#bg)"/>
+  <rect width="1400" height="620" rx="34" fill="url(#grid)"/>
+  <rect width="1400" height="620" rx="34" fill="url(#glowA)"/>
+  <rect width="1400" height="620" rx="34" fill="url(#glowB)"/>
+
+  <g opacity="0.72">
+    <path d="M108 512C308 410 438 438 604 318C774 196 936 184 1268 92" stroke="#5ee5ff" stroke-opacity="0.2" stroke-width="2"/>
+    <path d="M78 430C266 352 462 360 642 244C854 108 1018 184 1324 126" stroke="#8b7cff" stroke-opacity="0.18" stroke-width="2"/>
+  </g>
+
+  <text x="70" y="94" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="800">Visual Intelligence Lab</text>
+  <text x="72" y="132" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">Glass UI, code-native charts, module mesh, trust radar, and release-ready proof signals.</text>
+
+  <g transform="translate(70 174)">
+    <rect width="360" height="314" rx="22" fill="url(#glass)" stroke="#8feeff" stroke-opacity="0.24"/>
+    <text x="28" y="46" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2">ARCHITECTURE HEALTH</text>
+    <circle cx="180" cy="156" r="88" fill="#07111d" stroke="#203346" stroke-width="24"/>
+    <path d="M180 68A88 88 0 1 1 102 196" stroke="url(#cyan)" stroke-width="24" stroke-linecap="round" filter="url(#softGlow)"/>
+    <text x="147" y="154" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="800">94</text>
+    <text x="142" y="184" fill="#55f0c2" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">READY</text>
+    <rect x="28" y="264" width="136" height="30" rx="9" fill="#ffffff" fill-opacity="0.08" stroke="#8feeff" stroke-opacity="0.18"/>
+    <text x="45" y="284" fill="#dff9ff" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">+51% signal lift</text>
+    <rect x="180" y="264" width="144" height="30" rx="9" fill="#ffffff" fill-opacity="0.08" stroke="#8feeff" stroke-opacity="0.18"/>
+    <text x="200" y="284" fill="#dff9ff" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">12 graph nodes</text>
+  </g>
+
+  <g transform="translate(462 174)">
+    <rect width="392" height="150" rx="20" fill="url(#glass)" stroke="#8feeff" stroke-opacity="0.22"/>
+    <text x="24" y="42" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="800">Signal Growth</text>
+    <text x="318" y="42" fill="#5ee5ff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">+37%</text>
+    <g transform="translate(28 62)">
+      <rect x="0" y="42" width="28" height="48" rx="8" fill="url(#cyan)" opacity="0.62"/>
+      <rect x="48" y="28" width="28" height="62" rx="8" fill="url(#cyan)" opacity="0.7"/>
+      <rect x="96" y="36" width="28" height="54" rx="8" fill="url(#cyan)" opacity="0.66"/>
+      <rect x="144" y="16" width="28" height="74" rx="8" fill="url(#cyan)" opacity="0.82"/>
+      <rect x="192" y="8" width="28" height="82" rx="8" fill="url(#cyan)" opacity="0.92"/>
+      <rect x="240" y="0" width="28" height="90" rx="8" fill="url(#cyan)" filter="url(#softGlow)"/>
+      <text x="296" y="24" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">UX</text>
+      <text x="296" y="52" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">SEC</text>
+      <text x="296" y="80" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">AI</text>
+    </g>
+  </g>
+
+  <g transform="translate(462 344)">
+    <rect width="392" height="144" rx="20" fill="url(#glass)" stroke="#8feeff" stroke-opacity="0.22"/>
+    <text x="24" y="42" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="800">Release Confidence</text>
+    <text x="320" y="42" fill="#ffbd5a" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">97%</text>
+    <path d="M30 104C82 98 104 82 146 78C196 72 212 50 256 46C306 42 326 28 362 22" stroke="url(#cyan)" stroke-width="4" stroke-linecap="round" filter="url(#softGlow)"/>
+    <g fill="#5ee5ff" stroke="#ffffff" stroke-width="2">
+      <circle cx="30" cy="104" r="6"/>
+      <circle cx="146" cy="78" r="6"/>
+      <circle cx="256" cy="46" r="6"/>
+      <circle cx="362" cy="22" r="6"/>
+    </g>
+  </g>
+
+  <g transform="translate(886 174)">
+    <rect width="444" height="314" rx="22" fill="url(#glass)" stroke="#8feeff" stroke-opacity="0.24"/>
+    <text x="26" y="44" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="800">Module Mesh</text>
+    <text x="354" y="44" fill="#5ee5ff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="800">12 nodes</text>
+    <g stroke="#5ee5ff" stroke-opacity="0.46" stroke-width="2">
+      <path d="M222 156L96 96"/>
+      <path d="M222 156L342 92"/>
+      <path d="M222 156L112 232"/>
+      <path d="M222 156L336 236"/>
+      <path d="M96 96L342 92" stroke-opacity="0.16"/>
+      <path d="M112 232L336 236" stroke-opacity="0.16"/>
+    </g>
+    <g font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="800" text-anchor="middle">
+      <rect x="178" y="130" width="88" height="52" rx="14" fill="#5ee5ff" fill-opacity="0.18" stroke="#8feeff" stroke-opacity="0.46"/>
+      <text x="222" y="162" fill="#ffffff">Core</text>
+      <rect x="54" y="74" width="84" height="44" rx="13" fill="#8b7cff" fill-opacity="0.18" stroke="#8feeff" stroke-opacity="0.36"/>
+      <text x="96" y="102" fill="#ffffff">UI</text>
+      <rect x="300" y="70" width="84" height="44" rx="13" fill="#5ee5ff" fill-opacity="0.14" stroke="#8feeff" stroke-opacity="0.36"/>
+      <text x="342" y="98" fill="#ffffff">API</text>
+      <rect x="70" y="210" width="84" height="44" rx="13" fill="#55f0c2" fill-opacity="0.16" stroke="#8feeff" stroke-opacity="0.36"/>
+      <text x="112" y="238" fill="#ffffff">AI</text>
+      <rect x="294" y="214" width="84" height="44" rx="13" fill="#ffbd5a" fill-opacity="0.16" stroke="#8feeff" stroke-opacity="0.36"/>
+      <text x="336" y="242" fill="#ffffff">Sec</text>
+    </g>
+  </g>
+
+  <g transform="translate(70 522)">
+    <rect width="1260" height="50" rx="16" fill="#ffffff" fill-opacity="0.07" stroke="#8feeff" stroke-opacity="0.16"/>
+    <text x="28" y="32" fill="#dff9ff" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="800">Validated signals:</text>
+    <text x="180" y="32" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">node --check</text>
+    <text x="344" y="32" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">npm run smoke</text>
+    <text x="530" y="32" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">npm run site:audit</text>
+    <text x="756" y="32" fill="#bfefff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="650">npm run security:audit</text>
+    <text x="1030" y="32" fill="#55f0c2" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="800">release-ready proof</text>
+  </g>
+</svg>

@@ -1,15 +1,15 @@
 <p align="center">
-  <img src="public/brand-lockup.svg" alt="LumenStack AI" width="430" />
+  <img src="public/brand-lockup.svg" alt="LumenStack AI" width="440" />
 </p>
 
 <h1 align="center">LumenStack AI</h1>
 
 <p align="center">
-  <strong>A high-end AI architecture intelligence workspace for repository analysis, diagrams, codebase chat, compare reviews, and stakeholder-ready engineering briefs.</strong>
+  <strong>Premium AI architecture intelligence for reading repositories like living systems: analyze, map, compare, explain, chat, and export decision-ready engineering briefs.</strong>
 </p>
 
 <p align="center">
-  <a href="https://lumenstack-ai.onrender.com/"><strong>Live Demo</strong></a>
+  <a href="https://lumenstack-ai.onrender.com/"><strong>Live Product</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/agarwalujala3-lang/LumenStack-AI/actions/workflows/smoke.yml"><strong>Quality Gate</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -20,116 +20,149 @@
 
 <p align="center">
   <a href="https://github.com/agarwalujala3-lang/LumenStack-AI/actions/workflows/smoke.yml"><img alt="Quality Gate" src="https://github.com/agarwalujala3-lang/LumenStack-AI/actions/workflows/smoke.yml/badge.svg" /></a>
-  <img alt="Node.js 20+" src="https://img.shields.io/badge/Node.js-20%2B-1f8ccb?style=for-the-badge" />
-  <img alt="Express" src="https://img.shields.io/badge/Express-API-101828?style=for-the-badge" />
-  <img alt="Mermaid diagrams" src="https://img.shields.io/badge/Mermaid-Diagrams-53d4ff?style=for-the-badge" />
-  <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-16a34a?style=for-the-badge" />
+  <img alt="Node.js 20+" src="https://img.shields.io/badge/Node.js-20%2B-101828?style=for-the-badge&amp;labelColor=0b1220&amp;color=53d4ff" />
+  <img alt="Express API" src="https://img.shields.io/badge/Express-API-101828?style=for-the-badge&amp;labelColor=0b1220&amp;color=8b7cff" />
+  <img alt="AI Architecture" src="https://img.shields.io/badge/AI-Architecture_Intelligence-101828?style=for-the-badge&amp;labelColor=0b1220&amp;color=55f0c2" />
+  <img alt="Security audited" src="https://img.shields.io/badge/Security-Audited-101828?style=for-the-badge&amp;labelColor=0b1220&amp;color=ffbd5a" />
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-101828?style=for-the-badge&amp;labelColor=0b1220&amp;color=ffffff" />
 </p>
 
 <p align="center">
-  <img src="public/readme-premium-hero.svg" alt="Premium LumenStack AI dashboard preview" width="100%" />
+  <img src="public/readme-premium-hero.svg" alt="LumenStack AI premium dashboard preview" width="100%" />
+</p>
+
+<p align="center">
+  <img src="public/readme-visual-intelligence-lab.svg" alt="LumenStack AI visual intelligence lab with score, charts, module graph, and trust radar" width="100%" />
 </p>
 
 ---
 
-## The Product In One Line
+## Product Promise
 
-**LumenStack AI turns a repository into a polished architecture command center: source intake, static analysis, quality signals, AI explanation, Mermaid diagrams, codebase chat, compare mode, and exportable technical briefs.**
+**LumenStack AI turns any supported codebase into an architecture command center.** It brings repository intake, static analysis, AI explanations, Mermaid diagrams, compare review, codebase chat, security-conscious UX, and exportable briefs into one polished engineering workspace.
 
-It is built as a serious portfolio-grade product: the interface looks like a premium SaaS dashboard, the backend performs real repository analysis, and the GitHub repo is packaged with quality gates, security notes, contribution guidance, issue templates, and Dependabot governance.
+This is not a plain portfolio demo. It is designed like a real product review surface: premium frontend, useful backend, trust signals, governance files, CI checks, and a GitHub README that helps a reviewer understand the build in minutes.
 
 <table>
   <tr>
     <td><strong>Product Signal</strong></td>
-    <td>Advanced responsive frontend with visual intelligence, proof brief, cockpit preview, polished motion, and recruiter-friendly story.</td>
+    <td>Glowing glass UI, visual intelligence lab, command palette, proof brief, architecture cockpit, responsive dashboard surfaces, and recruiter-friendly storytelling.</td>
   </tr>
   <tr>
     <td><strong>Engineering Signal</strong></td>
-    <td>Express API, repository/ZIP source handling, static analysis services, grounded chat, exports, and clear route boundaries.</td>
+    <td>Express API, repository and ZIP analysis, module/dependency detection, quality findings, diagrams, chat, compare mode, exports, and clear service boundaries.</td>
   </tr>
   <tr>
     <td><strong>Trust Signal</strong></td>
-    <td>Security headers, smoke test, security audit, GitHub Actions quality gate, Dependabot, security policy, and PR/issue templates.</td>
+    <td>Security headers, smoke test, site audit, security audit, GitHub Actions quality gate, Dependabot, issue templates, PR template, contribution guide, and security policy.</td>
   </tr>
 </table>
 
-## High-End Frontend Experience
+## Latest Product Iteration
 
-The frontend is designed to feel like a real architecture intelligence product, not a plain demo page.
+The latest upgrade pushes the app toward a higher-end AI product feel while keeping the interface useful and testable.
 
-| Surface | What the reviewer sees |
+| Upgrade | What changed |
 | --- | --- |
-| **Cinematic intro** | A short 3-4 second branded startup moment that sets the product tone. |
-| **Architecture cockpit** | A SaaS-style command workspace with system map, AI evaluation, components, and issue surfaces. |
-| **Visual intelligence deck** | Animated health score, chart bars, module mesh, and security/audit icon tiles. |
-| **Proof brief layer** | Recruiter-ready proof signals, release rail, review-readiness score, and copyable project pitch. |
-| **Live analyzer** | Real form controls for repository URL, ZIP uploads, compare mode, diagrams, chat, and exports. |
-| **Responsive polish** | Desktop and mobile layouts are validated for fit, interaction, and readable hierarchy. |
+| **Visual Intelligence Lab** | Added a cinematic glass dashboard with control-room imagery, chart panels, module mesh, radar, and icon tiles. |
+| **Interactive Modes** | Quality, Security, and Release tabs now update score, trend, radar, copy, and chart state in the real UI. |
+| **Premium Asset Layer** | Added a generated product visual at `public/visual-lab-control-room.png` and connected it to the live landing page. |
+| **Responsive Polish** | Desktop and mobile checks verified the section fits without horizontal overflow and keeps the visual hierarchy intact. |
+| **Audit Coverage** | Updated the site audit so the new visual-mode buttons are recognized as handled controls. |
+
+<p align="center">
+  <img src="public/visual-lab-control-room.png" alt="Abstract LumenStack AI control room visual" width="100%" />
+</p>
+
+## Why It Stands Out
+
+| Dimension | Reviewer takeaway |
+| --- | --- |
+| **First impression** | Looks like a serious AI/SaaS product, not a student assignment or default template. |
+| **Usefulness** | Actually analyzes repositories, extracts signals, generates diagrams, supports chat, and exports reports. |
+| **Depth** | Covers architecture, dependencies, modules, platform signals, risk findings, compare mode, and decision briefs. |
+| **Trust** | Ships with documented checks, CI, security policy, contribution guide, and audit scripts. |
+| **Story** | The README, case study, proof layer, and visual UI make the project easy to understand quickly. |
+
+## Core Capabilities
+
+| Capability | Details |
+| --- | --- |
+| **Repository intake** | Accepts public Git repository URLs, generic HTTPS Git sources, and ZIP uploads. |
+| **Static analysis** | Detects languages, files, modules, dependencies, relationships, entrypoints, framework signals, and platform clues. |
+| **Quality intelligence** | Produces quality score, hotspots, findings, platform signals, and review summaries. |
+| **Diagram generation** | Creates Mermaid architecture, sequence, class, and dependency diagrams. |
+| **AI explanation** | Uses OpenAI when configured, with deterministic fallback summaries when no key is present. |
+| **Codebase chat** | Answers questions against saved analysis context. |
+| **Compare mode** | Compares current and baseline sources for review, migration, and release decisions. |
+| **Exports** | Provides Markdown and JSON export routes for stakeholder-ready reports. |
+
+## Experience Surfaces
+
+| Surface | Purpose |
+| --- | --- |
+| **Cinematic intro** | Short 3-4 second branded start that sets a premium tone. |
+| **Visual intelligence deck** | Code-native score, charts, mode switching, module graph, radar, and control-room asset. |
+| **Architecture cockpit** | Product preview for evaluation, graph, issues, dependencies, and report workflows. |
+| **Proof brief layer** | Reviewer-ready proof signals and copyable project pitch. |
+| **Live analyzer** | Real repository URL, ZIP upload, compare mode, diagrams, chat, and exports. |
+| **Saved projects demo** | Lightweight demo auth and saved review surface for product direction. |
+
+## System Flow
 
 <p align="center">
   <img src="public/readme-architecture-flow.svg" alt="LumenStack AI architecture intelligence flow" width="100%" />
 </p>
 
-## What LumenStack AI Actually Does
-
-| Capability | Details |
-| --- | --- |
-| **Repository intake** | Accepts public Git repository URLs, generic HTTPS Git sources, and ZIP uploads. |
-| **Static analysis** | Detects languages, files, modules, dependencies, relationships, entrypoints, and framework signals. |
-| **Quality intelligence** | Produces quality score, hotspots, structural findings, platform signals, and review summaries. |
-| **Diagram generation** | Creates Mermaid architecture, sequence, class, and dependency diagrams. |
-| **AI explanation** | Uses OpenAI when configured, with deterministic fallback summaries when no key is present. |
-| **Codebase chat** | Answers questions against stored analysis context. |
-| **Compare mode** | Compares current and baseline sources to support review, migration, and release decisions. |
-| **Exports** | Provides Markdown and JSON export routes for stakeholder-ready reports. |
-
-## Architecture At A Glance
-
 ```mermaid
 flowchart LR
-  User[Reviewer or developer] --> UI[Premium frontend workspace]
-  UI --> API[Express API]
-  API --> Source[Source service]
-  Source --> Repo[Git URL or ZIP]
+  Reviewer[Reviewer or developer] --> Frontend[Premium frontend workspace]
+  Frontend --> API[Express API]
+  API --> Intake[Source service]
+  Intake --> Source[Git URL or ZIP archive]
   API --> Analyzer[Analyzer service]
-  Analyzer --> Signals[Modules, dependencies, relationships, findings]
+  Analyzer --> Signals[Languages, modules, dependencies, relationships, findings]
   Signals --> Diagrams[Mermaid diagrams]
-  Signals --> AI[AI service or fallback summary]
-  AI --> Chat[Codebase chat]
   Signals --> Export[Markdown and JSON exports]
+  Signals --> AI[AI service or fallback summaries]
+  AI --> Chat[Codebase chat]
 ```
 
 ## Repository Map
 
 | Path | Why it matters |
 | --- | --- |
-| [`src/app.js`](src/app.js) | Main Express app, routes, security headers, API orchestration, exports, and demo project APIs. |
-| [`src/services/analyzerService.js`](src/services/analyzerService.js) | Core analysis engine for modules, dependencies, relationships, language mix, findings, and diagrams. |
+| [`src/app.js`](src/app.js) | Express app, routes, security headers, API orchestration, exports, demo project APIs, and static pages. |
+| [`src/services/analyzerService.js`](src/services/analyzerService.js) | Core analysis engine for files, modules, dependencies, relationships, findings, language mix, and diagrams. |
 | [`src/services/sourceService.js`](src/services/sourceService.js) | Repository clone and ZIP source preparation. |
 | [`src/services/aiService.js`](src/services/aiService.js) | OpenAI integration with fallback architecture summaries. |
-| [`src/services/chatService.js`](src/services/chatService.js) | Grounded chat behavior using saved analysis context. |
-| [`public/index.html`](public/index.html) | Primary product surface and live analyzer structure. |
-| [`public/critical-ui.css`](public/critical-ui.css) | Premium visual system refinements loaded after the base stylesheet. |
-| [`public/site-actions.js`](public/site-actions.js) | Sharing, exporting, proof pitch copy, use-case actions, and UI feedback. |
+| [`src/services/chatService.js`](src/services/chatService.js) | Grounded chat over saved analysis context. |
+| [`public/index.html`](public/index.html) | Primary product surface, visual intelligence lab, proof sections, and analyzer structure. |
+| [`public/styles.css`](public/styles.css) | Core visual system, responsive layout, glass surfaces, animations, and premium UI polish. |
+| [`public/site-actions.js`](public/site-actions.js) | Share/export actions, proof pitch copy, use-case actions, visual mode switching, and UI feedback. |
+| [`scripts/site-audit.js`](scripts/site-audit.js) | Static site integrity audit for pages, assets, and handled buttons. |
 | [`.github/workflows/smoke.yml`](.github/workflows/smoke.yml) | GitHub Actions quality gate for smoke and security checks. |
 
 ## Quality And Security Proof
 
 | Check | Command | Purpose |
 | --- | --- | --- |
+| JavaScript syntax | `node --check public/site-actions.js` | Confirms the visual interaction layer parses cleanly. |
 | Smoke analysis | `npm run smoke` | Runs the analyzer against this repository and reports platform signals. |
+| Site audit | `npm run site:audit` | Checks 12 static pages, internal assets, and handled buttons. |
 | Security audit | `npm run security:audit` | Verifies security hardening expectations. |
-| Site audit | `npm run site:audit` | Checks static pages and live-site structure. |
-| CI install safety | `npm ci` | Used by GitHub Actions for clean dependency installation. |
+| Diff hygiene | `git diff --check` | Catches whitespace and patch integrity problems before commit. |
 
-The repository also includes:
+Recent validation after the visual intelligence upgrade:
 
-- `.github/PULL_REQUEST_TEMPLATE.md`
-- `.github/ISSUE_TEMPLATE/bug_report.yml`
-- `.github/ISSUE_TEMPLATE/feature_request.yml`
-- `.github/dependabot.yml`
-- `CONTRIBUTING.md`
-- `SECURITY.md`
+```text
+node --check public/site-actions.js
+npm run smoke
+npm run site:audit
+npm run security:audit
+```
+
+The repository also includes `.github` issue templates, a pull request template, Dependabot configuration, `CONTRIBUTING.md`, `SECURITY.md`, and MIT licensing.
 
 ## Tech Stack
 
@@ -142,8 +175,8 @@ The repository also includes:
 | AI | OpenAI API with fallback summaries |
 | Diagrams | Mermaid |
 | Frontend | HTML, CSS, Vanilla JavaScript |
-| Motion/visuals | CSS motion, tsParticles, SVG product graphics |
-| CI/Governance | GitHub Actions, Dependabot, templates |
+| Motion and visuals | CSS motion, tsParticles, SVG graphics, generated product imagery |
+| CI and governance | GitHub Actions, Dependabot, templates, audits |
 | Deployment | Render web service |
 
 ## Quick Start
@@ -223,14 +256,13 @@ Health check:
 https://lumenstack-ai.onrender.com/health
 ```
 
-## How To Review This Project Fast
+## Fast Review Path
 
-1. Open the live app and scan the first viewport.
-2. Look at the visual intelligence and proof brief sections.
-3. Run a public repository URL or upload a ZIP.
-4. Inspect modules, dependencies, diagrams, findings, and exports.
-5. Try compare mode and codebase chat.
-6. Review `src/services/analyzerService.js`, `src/app.js`, and `.github/workflows/smoke.yml`.
+1. Open the live product and scan the first viewport.
+2. Scroll to the Visual Intelligence Lab and switch Quality, Security, and Release modes.
+3. Try a public repository URL or upload a ZIP.
+4. Inspect modules, dependencies, diagrams, findings, chat, and exports.
+5. Review `src/services/analyzerService.js`, `src/app.js`, `public/site-actions.js`, and `.github/workflows/smoke.yml`.
 
 ## Roadmap
 
@@ -239,7 +271,7 @@ https://lumenstack-ai.onrender.com/health
 - Pull request review summaries and GitHub comment automation.
 - Dependency risk enrichment with registry metadata.
 - Historical quality trends across saved analyses.
-- Team dashboard for engineering review workflows.
+- Team dashboard for architecture review workflows.
 
 ## Author
 
