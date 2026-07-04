@@ -24,6 +24,7 @@ const {
 const uploadRoot = path.join(process.cwd(), ".runtime", "incoming");
 const requestBuckets = new Map();
 const publicBaseUrl = "https://lumenstack-ai.onrender.com";
+const serverStartedAt = new Date();
 
 function buildSecurityTxt() {
   return [
@@ -295,7 +296,37 @@ function createApp() {
   );
 
   app.get("/health", (_req, res) => {
-    res.json({ status: "ok" });
+    res.json({
+      status: "ok",
+      service: "lumenstack-ai",
+      version: "1.0.0",
+      uptimeSeconds: Math.round(process.uptime()),
+      startedAt: serverStartedAt.toISOString(),
+      checkedAt: new Date().toISOString()
+    });
+  });
+
+  app.get("/api/product-signals", (_req, res) => {
+    res.json({
+      product: "LumenStack AI",
+      liveUrl: publicBaseUrl,
+      capabilities: [
+        "repository intake",
+        "ZIP analysis",
+        "architecture diagrams",
+        "compare reviews",
+        "codebase chat",
+        "markdown and JSON exports"
+      ],
+      assurance: [
+        "security headers",
+        "rate limiting",
+        "ZIP-only upload validation",
+        "smoke audit",
+        "site audit",
+        "security audit"
+      ]
+    });
   });
 
   app.get("/api/platforms", (_req, res) => {
