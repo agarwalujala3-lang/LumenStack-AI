@@ -3283,3 +3283,297 @@ body.concept-match .fusion-command-deck {
     min-height: 210px;
   }
 }
+
+/* Final homepage cleanup pass: keep the polished glass system compact on desktop. */
+@media (min-width: 981px) {
+  body.concept-match .concept-hero {
+    padding: clamp(44px, 5vw, 72px) 0 clamp(30px, 4vw, 52px) !important;
+  }
+
+  body.concept-match .concept-hero-copy {
+    gap: 18px;
+  }
+
+  body.concept-match .concept-hero h1 {
+    font-size: clamp(2.85rem, 4.8vw, 4.6rem) !important;
+  }
+
+  body.concept-match .concept-hero p {
+    line-height: 1.62;
+  }
+
+  body.concept-match .concept-overview-card {
+    padding: 18px !important;
+  }
+
+  body.concept-match .overview-card-body {
+    gap: 12px;
+    padding: 18px;
+  }
+
+  body.concept-match .lumen-graph-stack {
+    min-height: 240px;
+  }
+
+  body.concept-match .health-ring-card,
+  body.concept-match .mini-health,
+  body.concept-match .key-findings-card,
+  body.concept-match .architecture-map-card {
+    padding: 12px;
+  }
+
+  body.concept-match .health-ring {
+    width: 96px;
+    height: 96px;
+    margin: 10px auto;
+  }
+
+  body.concept-match .mini-network {
+    min-height: 104px;
+  }
+}
+
+@media (min-width: 1051px) {
+  body.concept-match .visual-intelligence-deck {
+    grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr) !important;
+    gap: clamp(18px, 3vw, 34px);
+    align-items: center;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  body.concept-match .visual-deck-copy {
+    gap: 14px;
+  }
+
+  body.concept-match .visual-deck-copy h2 {
+    max-width: 14ch;
+    font-size: clamp(1.95rem, 3vw, 3rem);
+    line-height: 1.05;
+  }
+
+  body.concept-match .visual-deck-copy p {
+    max-width: 42ch;
+    line-height: 1.58;
+  }
+
+  body.concept-match .visual-signal-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 360px;
+  }
+
+  body.concept-match .visual-dashboard-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  body.concept-match .visual-asset-panel {
+    grid-column: span 7 !important;
+    grid-row: span 2;
+  }
+
+  body.concept-match .visual-score-panel,
+  body.concept-match .visual-chart-panel {
+    grid-column: span 5 !important;
+  }
+
+  body.concept-match .visual-line-panel {
+    grid-column: span 4 !important;
+  }
+
+  body.concept-match .visual-map-panel {
+    grid-column: span 5 !important;
+  }
+
+  body.concept-match .visual-radar-panel {
+    grid-column: span 3 !important;
+  }
+
+  body.concept-match .visual-icon-grid {
+    grid-column: 1 / -1 !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  body.concept-match .visual-asset-panel,
+  body.concept-match .visual-asset-panel img {
+    min-height: 260px;
+  }
+
+  body.concept-match .visual-score-panel,
+  body.concept-match .visual-chart-panel,
+  body.concept-match .visual-line-panel,
+  body.concept-match .visual-map-panel,
+  body.concept-match .visual-radar-panel {
+    min-height: 132px;
+    padding: 12px;
+  }
+
+  body.concept-match .visual-score-ring {
+    width: 112px;
+    height: 112px;
+  }
+
+  body.concept-match .visual-bars,
+  body.concept-match .visual-line-chart {
+    min-height: 104px;
+  }
+
+  body.concept-match .visual-mesh,
+  body.concept-match .visual-radar-grid {
+    min-height: 132px;
+  }
+}
+
+/* Mobile fit cleanup: keep the product signal, remove stacked slab overload. */
+@media (max-width: 640px) {
+  body.concept-match .concept-hero {
+    gap: 22px;
+  }
+
+  body.concept-match .concept-hero-copy {
+    gap: 16px;
+  }
+
+  body.concept-match .concept-feature-row {
+    gap: 10px;
+  }
+
+  body.concept-match .concept-feature-row article {
+    padding: 12px;
+  }
+
+  body.concept-match .concept-trust {
+    display: none;
+  }
+
+  body.concept-match .concept-overview-card {
+    padding: 12px !important;
+  }
+
+  body.concept-match .overview-window-bar {
+    padding: 12px;
+  }
+
+  body.concept-match .overview-card-body {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  body.concept-match .lumen-graph-stack {
+    min-height: 160px !important;
+  }
+
+  body.concept-match .overview-grid {
+    display: none !important;
+  }
+
+  body.concept-match .concept-benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px;
+  }
+
+  body.concept-match .concept-benefits > div,
+  body.concept-match .concept-benefits article {
+    padding: 14px;
+  }
+
+  body.concept-match .concept-benefits h2 {
+    font-size: 1.25rem;
+    line-height: 1.16;
+  }
+
+  body.concept-match .visual-intelligence-deck {
+    gap: 18px;
+    padding: 16px !important;
+  }
+
+  body.concept-match .visual-deck-copy {
+    gap: 12px;
+  }
+
+  body.concept-match .visual-deck-copy h2 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 10vw, 2.7rem);
+    line-height: 1.04;
+  }
+
+  body.concept-match .visual-deck-copy p {
+    line-height: 1.55;
+  }
+
+  body.concept-match .visual-signal-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
+
+  body.concept-match .visual-signal-row span {
+    min-height: 36px;
+    padding: 8px 9px;
+    white-space: normal;
+  }
+
+  body.concept-match .visual-dashboard-header {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  body.concept-match .visual-live-meta {
+    gap: 6px;
+  }
+
+  body.concept-match .visual-dashboard-grid {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  body.concept-match .visual-asset-panel,
+  body.concept-match .visual-asset-panel img {
+    min-height: 180px !important;
+  }
+
+  body.concept-match .visual-line-panel,
+  body.concept-match .visual-map-panel,
+  body.concept-match .visual-radar-panel {
+    display: none !important;
+  }
+
+  body.concept-match .visual-score-panel,
+  body.concept-match .visual-chart-panel {
+    padding: 12px;
+  }
+
+  body.concept-match .visual-score-ring {
+    width: 96px;
+    height: 96px;
+  }
+
+  body.concept-match .visual-bars {
+    min-height: 90px;
+  }
+
+  body.concept-match .visual-icon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  body.concept-match .concept-feature-row,
+  body.concept-match .visual-signal-row,
+  body.concept-match .visual-live-meta,
+  body.concept-match .visual-icon-grid,
+  body.concept-match .visual-mini-ledger,
+  body.concept-match .visual-score-panel p {
+    display: none !important;
+  }
+
+  body.concept-match .visual-dashboard-header {
+    min-height: 54px;
+  }
+
+  body.concept-match .visual-score-panel {
+    min-height: 190px;
+  }
+}

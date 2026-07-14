@@ -3,6 +3,11 @@
   const root = document.documentElement;
   const themePreferenceQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
 
+  function getLockedTheme() {
+    const lockedTheme = document.body?.dataset.themeLock || root.dataset.themeLock || "";
+    return lockedTheme === "dark" || lockedTheme === "light" ? lockedTheme : "";
+  }
+
   function bindMediaQueryChange(query, listener) {
     if (!query || typeof listener !== "function") {
       return;
@@ -27,6 +32,12 @@
   }
 
   function getPreferredTheme() {
+    const lockedTheme = getLockedTheme();
+
+    if (lockedTheme) {
+      return lockedTheme;
+    }
+
     const storedTheme = getStoredTheme();
 
     if (storedTheme === "dark" || storedTheme === "light") {
@@ -40,8 +51,11 @@
     const toggleButton = document.getElementById("theme-toggle");
     const label = document.getElementById("theme-toggle-label");
     const darkModeEnabled = theme === "dark";
+    const lockedTheme = getLockedTheme();
 
     if (toggleButton) {
+      toggleButton.hidden = Boolean(lockedTheme);
+      toggleButton.disabled = Boolean(lockedTheme);
       toggleButton.setAttribute("aria-pressed", String(darkModeEnabled));
       toggleButton.setAttribute(
         "aria-label",
@@ -56,13 +70,14 @@
 
   function applyTheme(theme, options = {}) {
     const { persist = true } = options;
-    const nextTheme = theme === "dark" ? "dark" : "light";
+    const lockedTheme = getLockedTheme();
+    const nextTheme = lockedTheme || (theme === "dark" ? "dark" : "light");
 
     root.setAttribute("data-theme", nextTheme);
     document.body?.setAttribute("data-theme", nextTheme);
     updateThemeToggle(nextTheme);
 
-    if (persist) {
+    if (persist && !lockedTheme) {
       try {
         window.localStorage.setItem(themeStorageKey, nextTheme);
       } catch {
@@ -82,11 +97,19 @@
       return;
     }
 
+    if (getLockedTheme()) {
+      return;
+    }
+
     const currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
     applyTheme(currentTheme === "dark" ? "light" : "dark");
   });
 
   bindMediaQueryChange(themePreferenceQuery, (event) => {
+    if (getLockedTheme()) {
+      return;
+    }
+
     if (getStoredTheme()) {
       return;
     }

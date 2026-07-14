@@ -176,7 +176,7 @@
     showToast(`${useCase.label} ready.`);
   }
 
-  async function copyProofBrief() {
+  async function copyProjectPitch() {
     const pitch = [
       "LumenStack AI is a production-minded architecture intelligence workspace that turns repositories into diagrams, quality signals, compare views, codebase chat, and exportable briefs.",
       "It demonstrates polished frontend product design, an Express analysis backend, security-conscious browser headers, automated audits, and live deployment readiness."
@@ -190,12 +190,12 @@
     share: shareSite,
     compare: openCompare,
     export: exportSampleReport,
-    "copy-proof-brief": copyProofBrief,
+    "copy-pitch": copyProjectPitch,
     refresh: refreshOverview,
     "use-case": launchUseCase,
     demo: () => {
-      document.getElementById("concept-cockpit")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      showToast("Opening the architecture cockpit preview.");
+      document.getElementById("analyze-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast("Opening the live analyzer.");
     },
     contact: () => {
       window.location.href = "mailto:agarwalujala3@gmail.com";

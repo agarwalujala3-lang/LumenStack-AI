@@ -6,8 +6,6 @@ const ambientParticles = document.getElementById("ambient-particles");
 const cursorCore = document.getElementById("cursor-core");
 const cursorAura = document.getElementById("cursor-aura");
 const cursorTrail = document.getElementById("cursor-trail");
-const themeToggleButton = document.getElementById("theme-toggle");
-const themeToggleLabel = document.getElementById("theme-toggle-label");
 const promptRotator = document.getElementById("prompt-rotator");
 const promptCycler = promptRotator?.closest(".prompt-cycler");
 const form = document.getElementById("analyze-form");
@@ -106,9 +104,7 @@ let heroClockTimer = 0;
 let metricsTickerTimer = 0;
 let dimensionLiveTimer = 0;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const themePreferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-const themeStorageKey = "lumenstack-theme";
 const cursorPositionStorageKey = "lumenstack-cursor-position";
 let currentTheme = "light";
 const metricsState = {
@@ -602,7 +598,7 @@ function stopMetricsTicker() {
 }
 
 function startMetricsTicker() {
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || !liveMetricsRibbonElement) {
     return;
   }
 
@@ -881,61 +877,6 @@ function setFileCaption(input, captionElement, emptyLabel) {
   captionElement.textContent = fileName ? `Selected: ${fileName}` : emptyLabel;
 }
 
-function getStoredTheme() {
-  try {
-    return window.localStorage.getItem(themeStorageKey) || "";
-  } catch {
-    return "";
-  }
-}
-
-function getPreferredTheme() {
-  const storedTheme = getStoredTheme();
-
-  if (storedTheme === "dark" || storedTheme === "light") {
-    return storedTheme;
-  }
-
-  return themePreferenceQuery.matches ? "dark" : "light";
-}
-
-function updateThemeToggle() {
-  if (!themeToggleButton || !themeToggleLabel) {
-    return;
-  }
-
-  const darkModeEnabled = currentTheme === "dark";
-  themeToggleButton.setAttribute("aria-pressed", String(darkModeEnabled));
-  themeToggleButton.setAttribute(
-    "aria-label",
-    darkModeEnabled ? "Switch to light mode" : "Switch to dark mode"
-  );
-  themeToggleLabel.textContent = darkModeEnabled ? "Light Mode" : "Dark Mode";
-}
-
-async function applyTheme(theme, options = {}) {
-  const { persist = true, rerender = true } = options;
-  currentTheme = theme === "dark" ? "dark" : "light";
-  body.dataset.theme = currentTheme;
-  configureMermaid(currentTheme);
-  updateThemeToggle();
-
-  if (persist) {
-    try {
-      window.localStorage.setItem(themeStorageKey, currentTheme);
-    } catch {
-      // Ignore private-mode/localStorage failures.
-    }
-  }
-
-  if (rerender && Object.keys(currentDiagrams).length) {
-    try {
-      await renderCurrentDiagram();
-    } catch {
-      // Keep the current view even if a rerender fails.
-    }
-  }
-}
 
 function animateCount(element, value) {
   const targetValue = Number(value || 0);

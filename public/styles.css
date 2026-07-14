@@ -10370,7 +10370,7 @@ body.concept-match::after {
 
 .lumen-graph-stack {
   position: relative;
-  min-height: 168px;
+  min-height: 240px;
   overflow: hidden;
   border: 1px solid var(--repair-line);
   border-radius: var(--repair-radius);
@@ -10443,10 +10443,11 @@ body.concept-match::after {
 }
 
 .visual-intelligence-deck {
-  grid-template-columns: 1fr;
-  gap: 24px;
+  grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(18px, 3vw, 34px);
+  align-items: center;
   margin: 10px 0 40px;
-  padding: clamp(20px, 4vw, 34px);
+  padding: clamp(22px, 3vw, 32px);
   border-radius: 24px;
   border-color: var(--repair-line);
   background:
@@ -10455,8 +10456,8 @@ body.concept-match::after {
 }
 
 .visual-deck-copy h2 {
-  max-width: 20ch;
-  font-size: clamp(2rem, 4vw, 3.7rem);
+  max-width: 12ch;
+  font-size: clamp(2rem, 3.2vw, 3.25rem);
   line-height: 1.06;
 }
 
@@ -10471,21 +10472,21 @@ body.concept-match::after {
 }
 
 .visual-dashboard-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 10px;
+  padding: 10px;
 }
 
-.visual-asset-panel,
+.visual-asset-panel { grid-column: span 7; grid-row: span 2; }
 .visual-icon-grid { grid-column: 1 / -1; }
 .visual-score-panel,
-.visual-chart-panel,
-.visual-line-panel,
-.visual-map-panel,
-.visual-radar-panel { grid-column: auto; }
+.visual-chart-panel { grid-column: span 5; }
+.visual-line-panel { grid-column: span 4; }
+.visual-map-panel { grid-column: span 5; }
+.visual-radar-panel { grid-column: span 3; }
 
 .visual-asset-panel,
-.visual-asset-panel img { min-height: 250px; }
+.visual-asset-panel img { min-height: 260px; }
 .visual-asset-glass { border-radius: 14px; }
 .visual-card-heading { min-width: 0; }
 
@@ -10493,6 +10494,141 @@ body.concept-match::after {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+
+@media (min-width: 981px) {
+  .concept-hero {
+    padding: clamp(44px, 5vw, 72px) 0 clamp(30px, 4vw, 52px);
+  }
+
+  .concept-hero-copy {
+    gap: 18px;
+  }
+
+  .concept-hero h1 {
+    font-size: clamp(2.85rem, 4.8vw, 4.6rem);
+  }
+
+  .concept-hero p {
+    line-height: 1.62;
+  }
+
+  .overview-card-body {
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .lumen-graph-stack {
+    min-height: 240px;
+  }
+
+  .health-ring-card,
+  .mini-health,
+  .key-findings-card,
+  .architecture-map-card {
+    padding: 12px;
+  }
+
+  .health-ring {
+    width: 96px;
+    height: 96px;
+    margin: 10px auto;
+  }
+
+  .mini-network {
+    min-height: 104px;
+  }
+}
+
+@media (min-width: 1051px) {
+  .visual-intelligence-deck {
+    grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(18px, 3vw, 34px);
+    align-items: center;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .visual-deck-copy {
+    gap: 14px;
+  }
+
+  .visual-deck-copy h2 {
+    max-width: 12ch;
+    font-size: clamp(2rem, 3.2vw, 3.25rem);
+    line-height: 1.05;
+  }
+
+  .visual-deck-copy p {
+    max-width: 42ch;
+    line-height: 1.58;
+  }
+
+  .visual-signal-row {
+    grid-template-columns: 1fr;
+    max-width: 330px;
+  }
+
+  .visual-dashboard-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .visual-asset-panel {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+
+  .visual-score-panel,
+  .visual-chart-panel {
+    grid-column: span 5;
+  }
+
+  .visual-line-panel {
+    grid-column: span 4;
+  }
+
+  .visual-map-panel {
+    grid-column: span 5;
+  }
+
+  .visual-radar-panel {
+    grid-column: span 3;
+  }
+
+  .visual-icon-grid {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .visual-asset-panel,
+  .visual-asset-panel img {
+    min-height: 260px;
+  }
+
+  .visual-score-panel,
+  .visual-chart-panel,
+  .visual-line-panel,
+  .visual-map-panel,
+  .visual-radar-panel {
+    min-height: 132px;
+    padding: 12px;
+  }
+
+  .visual-score-ring {
+    width: 112px;
+    height: 112px;
+  }
+
+  .visual-bars,
+  .visual-line-chart {
+    min-height: 104px;
+  }
+
+  .visual-mesh,
+  .visual-radar-grid {
+    min-height: 132px;
+  }
+}
 .proof-brief-layer,
 .concept-cockpit-app,
 .auth-projects-showcase,
