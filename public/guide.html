@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A visual, step-by-step guide to analyzing a repository, understanding its architecture, exploring source, and sharing findings with LumenStack AI." />
+  <title>How to Use LumenStack AI</title>
+  <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/critical-ui.css" />
+  <link rel="stylesheet" href="/experience.css" />
+</head>
+<body class="concept-match experience-page guide-page">
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand-lockup" href="/" aria-label="LumenStack AI home">
+        <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
+        <span class="subpage-brand-note">Quick guide</span>
+      </a>
+      <nav class="topbar-nav" aria-label="Primary">
+        <a href="/#analyze-panel">Analyze</a>
+        <a href="/explorer.html">Repository</a>
+        <a href="/guide.html" aria-current="page">How to use</a>
+        <a href="/product.html">Product</a>
+      </nav>
+      <div class="topbar-actions">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"></span></span>
+          <span id="theme-toggle-label">Dark Mode</span>
+        </button>
+        <a class="primary-button compact-button" href="/#analyze-panel">Start analysis</a>
+      </div>
+    </header>
+
+    <main class="guide-wrap">
+      <section class="guide-intro">
+        <p class="eyebrow">A clear path through any codebase</p>
+        <h1>From repository link to a confident walkthrough.</h1>
+        <p>Move through four practical steps. Each one ends with something you can inspect, explain, or share.</p>
+      </section>
+
+      <section class="guide-flow" aria-label="Repository review steps">
+        <div class="guide-step-track" role="tablist" aria-label="Guide steps">
+          <button class="guide-step active" type="button" role="tab" aria-selected="true" aria-controls="guide-detail" data-guide-step="0">
+            <span class="step-number">01</span><strong>Connect</strong><small>Choose a source</small>
+          </button>
+          <button class="guide-step" type="button" role="tab" aria-selected="false" aria-controls="guide-detail" data-guide-step="1">
+            <span class="step-number">02</span><strong>Understand</strong><small>Read the brief</small>
+          </button>
+          <button class="guide-step" type="button" role="tab" aria-selected="false" aria-controls="guide-detail" data-guide-step="2">
+            <span class="step-number">03</span><strong>Explore</strong><small>Follow the source</small>
+          </button>
+          <button class="guide-step" type="button" role="tab" aria-selected="false" aria-controls="guide-detail" data-guide-step="3">
+            <span class="step-number">04</span><strong>Present</strong><small>Share the findings</small>
+          </button>
+        </div>
+
+        <article class="guide-detail" id="guide-detail" role="tabpanel" aria-live="polite">
+          <div class="guide-detail-copy">
+            <p id="guide-kicker" class="eyebrow">Step 01 · Connect</p>
+            <h2 id="guide-title">Start with a public Git URL or a ZIP archive.</h2>
+            <p id="guide-copy">Paste a supported HTTPS repository link, choose an optional branch, or upload a ZIP when the code should stay offline.</p>
+            <a id="guide-action" class="primary-button compact-button" href="/#analyze-panel">Choose a repository</a>
+          </div>
+          <div class="guide-result" aria-label="What you get from this step">
+            <span class="guide-result-icon" aria-hidden="true">01</span>
+            <p class="eyebrow">What you get</p>
+            <strong id="guide-result-title">A source snapshot ready to inspect</strong>
+            <p id="guide-result-copy">The analyzer reads project files and maps the code it can identify.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="guide-outcome" aria-label="Review workflow outcome">
+        <div><span>Source</span><strong>Repository or ZIP</strong></div>
+        <span class="flow-connector" aria-hidden="true"></span>
+        <div><span>Map</span><strong>Summary and diagrams</strong></div>
+        <span class="flow-connector" aria-hidden="true"></span>
+        <div><span>Inspect</span><strong>Files and modules</strong></div>
+        <span class="flow-connector" aria-hidden="true"></span>
+        <div><span>Share</span><strong>Brief and exports</strong></div>
+      </section>
+    </main>
+  </div>
+  <script src="/theme.js"></script>
+  <script src="/guide.js"></script>
+</body>
+</html>

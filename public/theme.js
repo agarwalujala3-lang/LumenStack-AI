@@ -49,11 +49,25 @@
 
   function updateThemeToggle(theme) {
     const toggleButton = document.getElementById("theme-toggle");
-    const label = document.getElementById("theme-toggle-label");
     const darkModeEnabled = theme === "dark";
     const lockedTheme = getLockedTheme();
 
     if (toggleButton) {
+      let track = toggleButton.querySelector(".theme-toggle-track");
+      let label = toggleButton.querySelector("#theme-toggle-label");
+
+      if (!track || !label) {
+        track = document.createElement("span");
+        track.className = "theme-toggle-track";
+        track.setAttribute("aria-hidden", "true");
+        const thumb = document.createElement("span");
+        thumb.className = "theme-toggle-thumb";
+        track.appendChild(thumb);
+        label = document.createElement("span");
+        label.id = "theme-toggle-label";
+        toggleButton.replaceChildren(track, label);
+      }
+
       toggleButton.hidden = Boolean(lockedTheme);
       toggleButton.disabled = Boolean(lockedTheme);
       toggleButton.setAttribute("aria-pressed", String(darkModeEnabled));
@@ -63,6 +77,7 @@
       );
     }
 
+    const label = document.getElementById("theme-toggle-label");
     if (label) {
       label.textContent = darkModeEnabled ? "Light Mode" : "Dark Mode";
     }
@@ -76,6 +91,7 @@
     root.setAttribute("data-theme", nextTheme);
     document.body?.setAttribute("data-theme", nextTheme);
     updateThemeToggle(nextTheme);
+    document.dispatchEvent(new CustomEvent("lumenstack:themechange", { detail: { theme: nextTheme } }));
 
     if (persist && !lockedTheme) {
       try {

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env server.js",
     "dev": "node --env-file-if-exists=.env --watch server.js",
+    "test": "node --test test/product-learning.test.js",
     "smoke": "node --env-file-if-exists=.env scripts/smoke-test.js",
     "openai:check": "node --env-file-if-exists=.env scripts/openai-check.js",
     "site:audit": "node --env-file-if-exists=.env scripts/site-audit.js",

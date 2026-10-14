@@ -272,28 +272,41 @@ function configureMermaid(theme) {
   window.mermaid.initialize({
     startOnLoad: false,
     theme: "base",
+    securityLevel: "strict",
+    flowchart: {
+      htmlLabels: false,
+      curve: "linear",
+      nodeSpacing: 38,
+      rankSpacing: 46,
+      useMaxWidth: false
+    },
+    sequence: {
+      mirrorActors: false,
+      actorMargin: 34,
+      messageMargin: 24
+    },
     themeVariables: isDark
       ? {
-          primaryColor: "#0f2537",
-          primaryTextColor: "#ecf7ff",
-          primaryBorderColor: "#58d6ff",
-          lineColor: "#58d6ff",
-          secondaryColor: "#0a1721",
-          tertiaryColor: "#06111a",
-          background: "#06111a",
-          mainBkg: "#0c1f2d",
-          fontFamily: "Bahnschrift, Aptos Display, Arial Narrow, sans-serif"
+          primaryColor: "#10313b",
+          primaryTextColor: "#e9f4f5",
+          primaryBorderColor: "#52d6e5",
+          lineColor: "#71c9d4",
+          secondaryColor: "#102633",
+          tertiaryColor: "#172a34",
+          background: "#081720",
+          mainBkg: "#10313b",
+          fontFamily: "Inter, Segoe UI, sans-serif"
         }
       : {
-          primaryColor: "#d9eefc",
-          primaryTextColor: "#0d1b25",
-          primaryBorderColor: "#1677b7",
-          lineColor: "#1677b7",
-          secondaryColor: "#fcfeff",
-          tertiaryColor: "#e8f0f8",
-          background: "#e8f0f8",
-          mainBkg: "#fcfeff",
-          fontFamily: "Bahnschrift, Aptos Display, Arial Narrow, sans-serif"
+          primaryColor: "#e3f4f5",
+          primaryTextColor: "#172a34",
+          primaryBorderColor: "#087f9b",
+          lineColor: "#27889a",
+          secondaryColor: "#f6fafb",
+          tertiaryColor: "#e9eff2",
+          background: "#f7fafc",
+          mainBkg: "#e3f4f5",
+          fontFamily: "Inter, Segoe UI, sans-serif"
         }
   });
 }
@@ -481,6 +494,14 @@ function createPathTitle(pathValue, className = "file-path-title") {
   element.title = sanitize(pathValue);
   element.setAttribute("aria-label", sanitize(pathValue));
   return element;
+}
+
+function buildExplorerUrl(filePath, line = null) {
+  const params = new URLSearchParams();
+  if (analysisId) params.set("analysisId", analysisId);
+  params.set("path", filePath);
+  if (Number.isInteger(line) && line > 0) params.set("line", String(line));
+  return `/explorer.html?${params.toString()}`;
 }
 
 function summarizeSignalDetail(signal) {
@@ -1018,21 +1039,6 @@ function refreshMotionTargets(root) {
   });
 }
 
-function bindSpotlight(element) {
-  if (element.dataset.spotlightBound) {
-    return;
-  }
-
-  element.dataset.spotlightBound = "true";
-  element.addEventListener("pointermove", (event) => {
-    const rect = element.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-    element.style.setProperty("--mx", `${x}%`);
-    element.style.setProperty("--my", `${y}%`);
-  });
-}
-
 function setupScrollProgress() {
   if (!scrollProgressBar) {
     return;
@@ -1112,27 +1118,6 @@ function setupPromptRotator() {
     promptRotator.textContent = rotatingPrompts[index];
     promptCycler.classList.add("is-swapping");
   }, 2600);
-}
-
-function setupMagneticButtons() {
-  if (prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
-    return;
-  }
-
-  const buttons = document.querySelectorAll(".primary-button, .secondary-button, .ghost-button, .diagram-tab");
-
-  buttons.forEach((button) => {
-    button.addEventListener("pointermove", (event) => {
-      const rect = button.getBoundingClientRect();
-      const x = event.clientX - (rect.left + rect.width / 2);
-      const y = event.clientY - (rect.top + rect.height / 2);
-      button.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
-    });
-
-    button.addEventListener("pointerleave", () => {
-      button.style.transform = "";
-    });
-  });
 }
 
 function triggerDeviceAction(action) {
@@ -1360,17 +1345,6 @@ function setupTouchEffects() {
       lastPoint = null;
       clearPressedElement();
     }, { passive: true });
-  });
-}
-
-function refreshSpotlights(root) {
-  const elements = root.querySelectorAll(
-    ".spotlight-card, .preview-card, .metric-card, .finding-card, .module-card, .dependency-item, .file-card, .relationship-item, .chat-bubble"
-  );
-
-  elements.forEach((element) => {
-    element.classList.add("spotlight-card");
-    bindSpotlight(element);
   });
 }
 
@@ -1826,8 +1800,12 @@ function renderFiles(files) {
 }
 
 function renderComparison(comparison, comparisonContext = null) {
+  const fileList = document.getElementById("comparison-files");
+  const changeCount = document.getElementById("comparison-change-count");
   if (!comparison) {
     comparisonPanel.classList.add("hidden");
+    fileList?.replaceChildren();
+    if (changeCount) changeCount.textContent = "";
     return;
   }
 
@@ -1862,21 +1840,139 @@ function renderComparison(comparison, comparisonContext = null) {
     card.appendChild(createElement("p", "", finding.detail));
     comparisonFindingsElement.appendChild(card);
   }
+
+  if (fileList) {
+    const changes = [
+      ...(comparison.fileDiff?.changedDetails || comparison.fileDiff?.changed?.map((path) => ({ path })) || [])
+        .map((file) => ({ ...file, kind: "Changed", navigable: true })),
+      ...(comparison.fileDiff?.addedDetails || comparison.fileDiff?.added?.map((path) => ({ path })) || [])
+        .map((file) => ({ ...file, kind: "Added", navigable: true })),
+      ...(comparison.fileDiff?.removedDetails || comparison.fileDiff?.removed?.map((path) => ({ path })) || [])
+        .map((file) => ({ ...file, kind: "Removed", navigable: false }))
+    ];
+    fileList.replaceChildren();
+    if (changeCount) changeCount.textContent = `${changes.length} detected`;
+
+    if (!changes.length) {
+      fileList.appendChild(createElement("p", "empty-state", "No indexed code files changed."));
+    }
+
+    for (const change of changes.slice(0, 16)) {
+      const row = createElement("div", "comparison-file-item");
+      row.appendChild(createElement("span", "comparison-file-kind", change.kind));
+      if (change.navigable && analysisId) {
+        const link = createElement("a", "comparison-file-link", change.path);
+        link.href = buildExplorerUrl(change.path);
+        link.title = `Open ${change.path} in the current repository snapshot`;
+        row.appendChild(link);
+      } else {
+        row.appendChild(createElement("span", "comparison-file-path", change.path));
+      }
+      fileList.appendChild(row);
+    }
+
+    if (changes.length > 16) {
+      fileList.appendChild(createElement("p", "comparison-scope-note", `Showing 16 of ${changes.length} changed files.`));
+    }
+  }
+}
+
+function renderLearning(guide, source) {
+  const stepsRoot = document.getElementById("learning-steps");
+  const script = document.getElementById("presentation-script");
+  const progress = document.getElementById("learning-progress");
+  const progressLabel = document.getElementById("learning-progress-label");
+  const keyParts = [source?.platformId, source?.workspaceKey || source?.repoUrl || source?.name, source?.ref]
+    .map((part) => String(part || "").trim().toLowerCase());
+  const storageKey = `lumenstack-study:v1:${keyParts.join(":")}`;
+  const steps = guide?.steps || [];
+  let completed = new Set();
+
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(storageKey) || "[]");
+    if (Array.isArray(saved)) completed = new Set(saved.filter((id) => steps.some((step) => step.id === id)));
+  } catch {
+    completed = new Set();
+  }
+
+  document.getElementById("learning-title").textContent = source?.name
+    ? `Understand ${source.name}, step by step`
+    : "Understand the project, step by step";
+  document.getElementById("learning-certainty").textContent = guide?.certaintyNote || "Open the linked files to verify each explanation.";
+  document.getElementById("learning-scope").textContent = guide?.scopeNote || "Static analysis is a guide, not proof of runtime behavior.";
+  script.textContent = guide?.presentationScript || "A presentation outline will appear after analysis.";
+  stepsRoot.replaceChildren();
+
+  function updateProgress() {
+    const total = steps.length;
+    const count = completed.size;
+    progress.max = Math.max(1, total);
+    progress.value = count;
+    progressLabel.textContent = `${count} of ${total} steps understood`;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify([...completed]));
+    } catch {
+      progressLabel.textContent = `${count} of ${total} steps understood · browser storage unavailable`;
+    }
+  }
+
+  for (const [index, step] of steps.entries()) {
+    const article = createElement("article", "learning-step");
+    const heading = createElement("div", "learning-step-head");
+    const title = createElement("h3", "", `${String(index + 1).padStart(2, "0")} · ${step.title}`);
+    const label = createElement("label", "learning-step-check");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = completed.has(step.id);
+    checkbox.setAttribute("aria-label", `Mark ${step.title} as understood`);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) completed.add(step.id);
+      else completed.delete(step.id);
+      updateProgress();
+    });
+    label.append(checkbox, createElement("span", "", "I understand this"));
+    heading.append(title, label);
+    article.append(heading, createElement("p", "", step.body));
+    article.appendChild(createElement("span", "learning-basis", step.basis || "Analyzer note"));
+
+    const evidenceItems = [...new Map((step.evidence || []).map((item) => [`${item.path}:${item.line}`, item])).values()];
+    if (evidenceItems.length) {
+      const evidence = createElement("div", "learning-evidence");
+      for (const item of evidenceItems.slice(0, 8)) {
+        const link = createElement("a", "learning-evidence-link", `${item.path}:${item.line}`);
+        link.href = buildExplorerUrl(item.path, item.line);
+        link.title = item.excerpt || `Open ${item.path} at line ${item.line}`;
+        evidence.appendChild(link);
+      }
+      article.appendChild(evidence);
+    }
+    stepsRoot.appendChild(article);
+  }
+
+  updateProgress();
+  document.getElementById("learning-reset").onclick = () => {
+    completed.clear();
+    updateProgress();
+  };
+  document.getElementById("learning-copy-status").textContent = "";
 }
 
 function appendChatBubble(kind, text, citations = []) {
   const bubble = createElement("article", `chat-bubble ${kind} spotlight-card`, text);
 
   if (citations.length) {
-    const citationText = citations
-      .slice(0, 4)
-      .map((citation) => citation.path)
-      .join(", ");
-    bubble.appendChild(createElement("div", "chat-citations", `References: ${citationText}`));
+    const citationLinks = createElement("div", "chat-citations");
+    citationLinks.setAttribute("aria-label", "Source files supporting this answer");
+    for (const citation of citations.slice(0, 4)) {
+      const label = citation.line ? `${citation.path}:${citation.line}` : citation.path;
+      const link = createElement("a", "chat-citation-link", label);
+      link.href = buildExplorerUrl(citation.path, citation.line);
+      citationLinks.appendChild(link);
+    }
+    bubble.appendChild(citationLinks);
   }
 
   chatMessagesElement.appendChild(bubble);
-  refreshSpotlights(chatMessagesElement);
   window.requestAnimationFrame(() => {
     chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
   });
@@ -1927,10 +2023,23 @@ async function renderCurrentDiagram() {
 
 async function setActiveDiagram(key) {
   currentDiagramKey = key;
+  const captions = {
+    architecture: "Arrows show import relationships inferred between the highest-signal modules.",
+    sequence: "An illustrative path from an entrypoint through static module links, not runtime tracing.",
+    classes: "Class declarations found in analyzed source previews; inheritance is shown where detected.",
+    dependencies: "Packages found in manifests are grouped separately from code modules; links do not prove direct imports."
+  };
+  const caption = document.getElementById("diagram-caption");
+  if (caption) caption.textContent = captions[key] || "Generated from the analyzed repository structure.";
 
   for (const tab of diagramTabs) {
-    tab.classList.toggle("active", tab.dataset.diagram === key);
+    const selected = tab.dataset.diagram === key;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
   }
+
+  diagramElement?.setAttribute("aria-label", `${key} diagram`);
 
   await renderCurrentDiagram();
 }
@@ -1942,10 +2051,21 @@ function resetFormState() {
   applyWorkspacePreset(activeWorkspaceKey);
 }
 
-function resetAnalysisState() {
+function resetAnalysisState({ preserveStoredAnalysis = false } = {}) {
   stopMetricsTicker();
+  resultsElement.classList.add("hidden");
   analysisId = "";
+  const repoExplorerLink = document.getElementById("open-repo-explorer");
+  repoExplorerLink?.classList.add("hidden");
+  if (!preserveStoredAnalysis) {
+    try {
+      window.localStorage.removeItem("lumenstack-last-analysis-id");
+    } catch {
+      // Keep the analyzer usable when browser storage is restricted.
+    }
+  }
   exportUrls = null;
+  lastDocumentation = "";
   currentDiagrams = {};
   currentDiagramKey = "architecture";
   comparisonPanel.classList.add("hidden");
@@ -1997,6 +2117,89 @@ function markStreamsLive() {
   }
 }
 
+async function renderAnalysisPayload(payload) {
+  analysisId = payload.analysisId;
+  try {
+    window.localStorage.setItem("lumenstack-last-analysis-id", analysisId);
+  } catch {
+    // The analysis remains available in this page when storage is restricted.
+  }
+
+  const repoExplorerLink = document.getElementById("open-repo-explorer");
+  if (repoExplorerLink) {
+    repoExplorerLink.href = `/explorer.html?analysisId=${encodeURIComponent(analysisId)}`;
+    repoExplorerLink.classList.remove("hidden");
+  }
+  exportUrls = payload.exportUrls;
+  currentDiagrams = payload.analysis.diagrams || {};
+  currentDiagramKey = "architecture";
+  lastDocumentation = payload.analysis.documentation || "";
+
+  renderMetrics(payload);
+  renderSourceProfile(payload.source, payload.comparisonContext);
+  renderPlatformSignals(payload.analysis.platformSignals || []);
+  explanationElement.textContent = sanitize(payload.analysis.explanation);
+  documentationElement.textContent = sanitize(payload.analysis.documentation);
+  renderFrameworks(payload.analysis.summary);
+  renderEntrypoints(payload.analysis.summary);
+  renderLanguages(payload.analysis.summary);
+  renderFindings(payload.analysis.quality);
+  renderHotspots(payload.analysis.quality);
+  renderModules(payload.analysis.modules);
+  renderDependencies(payload.analysis.dependencies);
+  renderRelationships(payload.analysis.relationships);
+  renderFiles(payload.analysis.fileHighlights);
+  renderComparison(payload.comparison, payload.comparisonContext);
+  renderLearning(payload.analysis.learningGuide, payload.source);
+
+  resultsElement.classList.remove("hidden");
+  refreshMotionTargets(resultsElement);
+  markStreamsLive();
+  await setActiveDiagram("architecture");
+  resetChat();
+  appendChatBubble(
+    "system",
+    "LumenStack indexed the repository. Ask about a feature, file, module, or how the project works."
+  );
+  stopMetricsTicker();
+  updateMetricsRibbon({
+    engine: "Review ready",
+    source: payload.source?.workspaceLabel || payload.source?.name || "Workspace indexed",
+    throughput: (payload.analysis?.summary?.codeFiles || 0) * 2 + 20,
+    latency: 110 + Math.random() * 75,
+    modules: payload.analysis?.modules?.length || 0,
+    confidence: Math.max(78, Math.min(98, Math.round((payload.analysis?.quality?.score || 70) * 0.9)))
+  });
+}
+
+async function restoreLastAnalysis() {
+  let savedAnalysisId = "";
+  try {
+    savedAnalysisId = window.localStorage.getItem("lumenstack-last-analysis-id") || "";
+  } catch {
+    return;
+  }
+  if (!/^[a-f\d-]{36}$/i.test(savedAnalysisId)) return;
+
+  try {
+    const payload = await requestJsonWithRetry(
+      `/api/analysis/${encodeURIComponent(savedAnalysisId)}`,
+      { headers: { Accept: "application/json" } },
+      { retries: 0, fallbackMessage: "The previous analysis session is unavailable." }
+    );
+    await renderAnalysisPayload(payload);
+    setStatus("Previous repository analysis restored. Your study progress remains on this browser.", "success");
+    resultsElement.scrollIntoView({ behavior: "auto", block: "start" });
+  } catch {
+    try {
+      window.localStorage.removeItem("lumenstack-last-analysis-id");
+    } catch {
+      // Expired sessions do not prevent a fresh analysis.
+    }
+    setStatus("The previous analysis session expired. Run the repository again to continue.", "error");
+  }
+}
+
 function syncDiagramThemeFromDocument() {
   currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
   configureMermaid(currentTheme);
@@ -2026,12 +2229,9 @@ setupParallax();
 setupScrollProgress();
 setupAmbientParticles();
 setupPromptRotator();
-setupMagneticButtons();
 setupHeroDeviceSlider();
 bindDeviceActions();
 setupTouchEffects();
-setupCursorSystem();
-refreshSpotlights(document);
 resetChat();
 applyWorkspacePresetFromLocation();
 
@@ -2072,6 +2272,16 @@ copyDocsButton.addEventListener("click", () => {
   navigator.clipboard.writeText(lastDocumentation)
     .then(() => setStatus("Documentation copied.", "success"))
     .catch(() => setStatus("Clipboard access failed.", "error"));
+});
+
+document.getElementById("copy-presentation").addEventListener("click", async () => {
+  const status = document.getElementById("learning-copy-status");
+  try {
+    await navigator.clipboard.writeText(document.getElementById("presentation-script").textContent);
+    status.textContent = "Talk track copied.";
+  } catch {
+    status.textContent = "Clipboard access is unavailable in this browser.";
+  }
 });
 
 downloadReportButton.addEventListener("click", async () => {
@@ -2252,7 +2462,7 @@ form.addEventListener("submit", async (event) => {
 
   const formData = new FormData(form);
   formData.set("compareMode", compareToggle.checked ? "1" : "0");
-  resetAnalysisState();
+  resetAnalysisState({ preserveStoredAnalysis: true });
   resultsElement.classList.add("hidden");
   showOverlay(loadingMessages[Math.floor(Math.random() * loadingMessages.length)]);
   updateMetricsRibbon({
@@ -2290,47 +2500,7 @@ form.addEventListener("submit", async (event) => {
       }
     );
 
-    analysisId = payload.analysisId;
-    exportUrls = payload.exportUrls;
-    currentDiagrams = payload.analysis.diagrams || {};
-    lastDocumentation = payload.analysis.documentation || "";
-
-    renderMetrics(payload);
-    renderSourceProfile(payload.source, payload.comparisonContext);
-    renderPlatformSignals(payload.analysis.platformSignals || []);
-    explanationElement.textContent = sanitize(payload.analysis.explanation);
-    documentationElement.textContent = sanitize(payload.analysis.documentation);
-    renderFrameworks(payload.analysis.summary);
-    renderEntrypoints(payload.analysis.summary);
-    renderLanguages(payload.analysis.summary);
-    renderFindings(payload.analysis.quality);
-    renderHotspots(payload.analysis.quality);
-    renderModules(payload.analysis.modules);
-    renderDependencies(payload.analysis.dependencies);
-    renderRelationships(payload.analysis.relationships);
-    renderFiles(payload.analysis.fileHighlights);
-    renderComparison(payload.comparison, payload.comparisonContext);
-
-    resultsElement.classList.remove("hidden");
-    refreshMotionTargets(resultsElement);
-    refreshSpotlights(resultsElement);
-    markStreamsLive();
-    await setActiveDiagram("architecture");
-
-    appendChatBubble(
-      "system",
-      "LumenStack indexed the repository. Ask follow-up questions like 'Where is routing handled?' or 'Which files look risky?'"
-    );
-
-    stopMetricsTicker();
-    updateMetricsRibbon({
-      engine: "Review ready",
-      source: payload.source?.workspaceLabel || payload.source?.name || "Workspace indexed",
-      throughput: (payload.analysis?.summary?.codeFiles || 0) * 2 + 20,
-      latency: 110 + Math.random() * 75,
-      modules: payload.analysis?.modules?.length || 0,
-      confidence: Math.max(78, Math.min(98, Math.round((payload.analysis?.quality?.score || 70) * 0.9)))
-    });
+    await renderAnalysisPayload(payload);
 
     setStatus(
       payload.analysis.aiStatus === "live"
@@ -2359,5 +2529,12 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
+document.addEventListener("lumenstack:themechange", () => {
+  if (!resultsElement?.classList.contains("hidden") && currentDiagrams[currentDiagramKey]) {
+    renderCurrentDiagram();
+  }
+});
+
 resetFormState();
 updateMetricsRibbon(metricsState);
+restoreLastAnalysis();

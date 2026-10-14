@@ -1,41 +1,18 @@
 (function () {
   const commands = [
     { label: "Run live analyzer", hint: "Open the repository intake form", url: "/#analyze-panel" },
-    { label: "Open product page", hint: "See product workflow and metrics", url: "/product.html" },
-    { label: "Open architecture page", hint: "See the system design map", url: "/architecture.html" },
-    { label: "Open evaluation page", hint: "Review quality and release confidence", url: "/evaluate.html" },
-    { label: "Open issues page", hint: "Inspect risk queue and remediation flow", url: "/issues.html" },
-    { label: "Open dependencies page", hint: "Review package and manifest pressure", url: "/dependencies.html" },
-    { label: "Open reports page", hint: "Export and share decision-ready briefs", url: "/reports.html" },
+    { label: "Open repository explorer", hint: "Browse analyzed files and architecture context", url: "/explorer.html" },
+    { label: "Open quick guide", hint: "Follow the four-step repository review", url: "/guide.html" },
+    { label: "Open product overview", hint: "See the product and its workflow", url: "/product.html" },
+    { label: "Open provider workspaces", hint: "Use Git host and ZIP intake presets", url: "/workspaces.html" },
+    { label: "Open integrations", hint: "Configure repository webhook paths", url: "/integrations.html" },
     { label: "Read case study", hint: "Recruiter-focused project narrative", url: "/case-study.html" },
-    { label: "Try saved projects", hint: "Demo auth and saved reviews", url: "/saved-projects.html" },
+    { label: "Try saved projects", hint: "Open saved review snapshots", url: "/saved-projects.html" },
     { label: "Contact Ujala", hint: "Email, LinkedIn, GitHub, portfolio", url: "/contact.html" },
     { label: "Download recruiter brief", hint: "Export a markdown summary", action: "export" },
     { label: "Share live site", hint: "Copy or share the deployment URL", action: "share" }
   ];
 
-  const tourSteps = [
-    {
-      selector: ".concept-hero",
-      title: "Product story",
-      copy: "The first viewport explains the product and points visitors toward the real analyzer."
-    },
-    {
-      selector: ".visual-intelligence-deck",
-      title: "Visual intelligence layer",
-      copy: "One focused preview shows the premium interface direction without duplicating dashboard sections."
-    },
-    {
-      selector: "#analyze-panel",
-      title: "Live analyzer",
-      copy: "The core workflow starts here: repository URL, ZIP upload, compare mode, and generated results."
-    },
-    {
-      selector: ".preview-panel",
-      title: "Capability stack",
-      copy: "This panel keeps the product promise clear while the analyzer remains the main surface."
-    }
-  ];
   function createPalette() {
     const palette = document.createElement("div");
     palette.className = "command-palette";
@@ -112,71 +89,6 @@
     }
   }
 
-  function createTour() {
-    const tour = document.createElement("div");
-    tour.className = "guided-tour";
-    tour.setAttribute("aria-hidden", "true");
-    tour.innerHTML = `
-      <div class="tour-card">
-        <span id="tour-count"></span>
-        <h2 id="tour-title"></h2>
-        <p id="tour-copy"></p>
-        <div class="tour-actions">
-          <button class="secondary-button compact-button" type="button" data-tour-action="skip">Skip</button>
-          <button class="primary-button compact-button" type="button" data-tour-action="next">Next</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(tour);
-    return tour;
-  }
-
-  const tour = createTour();
-  let tourIndex = 0;
-
-  function renderTourStep() {
-    const step = tourSteps[tourIndex];
-    const target = document.querySelector(step.selector);
-
-    tour.querySelector("#tour-count").textContent = `${tourIndex + 1} / ${tourSteps.length}`;
-    tour.querySelector("#tour-title").textContent = step.title;
-    tour.querySelector("#tour-copy").textContent = step.copy;
-    tour.querySelector("[data-tour-action='next']").textContent =
-      tourIndex === tourSteps.length - 1 ? "Finish" : "Next";
-
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
-      target.classList.add("tour-highlight");
-      window.setTimeout(() => target.classList.remove("tour-highlight"), 1600);
-    }
-  }
-
-  function startTour() {
-    tourIndex = 0;
-    document.documentElement.classList.add("tour-open");
-    document.body?.classList.add("tour-open");
-    tour.classList.add("is-open");
-    tour.setAttribute("aria-hidden", "false");
-    renderTourStep();
-  }
-
-  function closeTour() {
-    document.documentElement.classList.remove("tour-open");
-    document.body?.classList.remove("tour-open");
-    tour.classList.remove("is-open");
-    tour.setAttribute("aria-hidden", "true");
-  }
-
-  function nextTourStep() {
-    if (tourIndex >= tourSteps.length - 1) {
-      closeTour();
-      return;
-    }
-
-    tourIndex += 1;
-    renderTourStep();
-  }
-
   document.addEventListener("keydown", (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
       event.preventDefault();
@@ -185,13 +97,12 @@
 
     if (event.key === "Escape") {
       closePalette();
-      closeTour();
     }
   });
 
   document.addEventListener("click", (event) => {
     const commandButton = event.target instanceof Element
-      ? event.target.closest("[data-open-command], .command-result, [data-start-tour], [data-tour-action]")
+      ? event.target.closest("[data-open-command], .command-result")
       : null;
 
     if (!commandButton) {
@@ -206,23 +117,8 @@
       return;
     }
 
-    if (commandButton.matches("[data-start-tour]")) {
-      startTour();
-      return;
-    }
-
     if (commandButton.matches(".command-result")) {
       executeCommand(commands[Number(commandButton.dataset.commandIndex)]);
-      return;
-    }
-
-    if (commandButton.dataset.tourAction === "skip") {
-      closeTour();
-      return;
-    }
-
-    if (commandButton.dataset.tourAction === "next") {
-      nextTourStep();
     }
   });
 

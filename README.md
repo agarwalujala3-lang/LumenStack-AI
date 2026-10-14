@@ -5,7 +5,7 @@
 <h1 align="center">LumenStack AI</h1>
 
 <p align="center">
-  <strong>An AI architecture intelligence workspace that turns repositories into system maps, quality signals, codebase chat, compare reviews, and export-ready engineering briefs.</strong>
+  <strong>A repository learning workspace that turns unfamiliar code into source-linked understanding and recruiter-ready walkthroughs.</strong>
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@
 
 ## What It Is
 
-**LumenStack AI is a polished architecture review workspace for understanding software systems fast.** It accepts repositories or ZIP archives, analyzes code structure, detects architecture signals, generates Mermaid diagrams, enables codebase chat, compares baselines, and exports briefs that are ready for engineering or stakeholder review.
+**LumenStack AI helps anyone get oriented in an unfamiliar repository.** Analyze a Git repository or ZIP, follow a plain-language, source-linked learning path, inspect the actual files behind an explanation, compare versions, ask grounded questions, and prepare a recruiter-ready walkthrough. The guide distinguishes observed facts from analyzer inferences and does not claim that a static scan proves runtime behavior.
 
 The project is built to demonstrate both product taste and engineering depth: a premium frontend, a real Express analysis backend, meaningful security checks, CI governance, and documentation that helps a reviewer see the complete system quickly.
 
@@ -52,7 +52,15 @@ The project is built to demonstrate both product taste and engineering depth: a 
   </tr>
   <tr>
     <td><strong>Visualize</strong></td>
-    <td>Create Mermaid architecture, sequence, class, and dependency diagrams from detected structure.</td>
+    <td>Create focused Mermaid architecture, import-flow, class, and manifest-package diagrams with a plain-language note about each map.</td>
+  </tr>
+  <tr>
+    <td><strong>Explore</strong></td>
+    <td>Open a VS Code-inspired, read-only workspace with a searchable directory tree, source previews, entrypoints, and module context.</td>
+  </tr>
+  <tr>
+    <td><strong>Learn</strong></td>
+    <td>Follow a five-step, beginner-friendly repo walkthrough with clickable file-and-line evidence, browser-saved study progress, a plain-English glossary, and a recruiter-ready talk track.</td>
   </tr>
   <tr>
     <td><strong>Review</strong></td>
@@ -64,21 +72,18 @@ The project is built to demonstrate both product taste and engineering depth: a 
   </tr>
 </table>
 
-## Visual System
+## Product Surfaces
 
-The interface is intentionally built like a modern AI product, not a plain analyzer form.
+The interface centers the repository workflow and keeps one saved theme preference across its pages.
 
 | Surface | Role |
 | --- | --- |
-| **Visual Intelligence Lab** | Glass dashboard with score ring, chart panels, module mesh, trust radar, and Quality/Security/Release modes. |
-| **Architecture Cockpit** | Product-style system workspace for maps, evaluation, dependencies, issues, and reports. |
-| **Proof Brief Layer** | Reviewer-ready evidence for UI polish, security posture, useful core, and deployment readiness. |
-| **Live Analyzer** | Actual repository URL, ZIP upload, compare mode, chat, diagrams, and exports. |
-| **Responsive Shell** | Desktop and mobile layouts tuned for readable hierarchy and stable controls. |
-
-<p align="center">
-  <img src="public/visual-lab-control-room.png" alt="Abstract LumenStack AI control room visual" width="100%" />
-</p>
+| **Analysis overview** | Summary, stack signals, quality review, and compare findings grouped into readable views. |
+| **Learn &amp; present** | Source-linked learning steps, observed-versus-inferred labels, private study progress, and a copyable presentation script. |
+| **Repository explorer** | Searchable directory tree, source previews, entrypoints, generated summary, and module context. |
+| **Architecture maps** | Mermaid diagrams with bounded node counts, safer labels, and captions that describe inferred links. |
+| **Quick guide** | Four visual steps connect repository intake to understanding, source exploration, and presentation. |
+| **Theme system** | Translucent midnight-blue surfaces, cyan and multicolor signal accents, and a persistent light/dark toggle. |
 
 ## System Flow
 
@@ -94,6 +99,7 @@ flowchart LR
   Source --> Input[Git URL or ZIP archive]
   API --> Analyzer[Analyzer service]
   Analyzer --> Signals[Modules, dependencies, relationships, findings]
+  Signals --> Explorer[Directory and source previews]
   Signals --> Diagrams[Mermaid diagrams]
   Signals --> Reports[Markdown and JSON exports]
   Signals --> AI[AI service or fallback]
@@ -104,11 +110,13 @@ flowchart LR
 
 | Area | Implementation |
 | --- | --- |
-| **Backend** | Express app with analysis, chat, export, platform catalog, demo auth, saved project, and webhook routes. |
+| **Backend** | Express app with analysis, session-bound source previews, chat, export, platform catalog, demo auth, saved project, and webhook routes. |
 | **Analysis engine** | Language detection, module grouping, dependency parsing, relationship extraction, hotspot ranking, and quality scoring. |
-| **Source handling** | Public Git URLs, generic HTTPS remotes, provider-aware workspace flows, and ZIP archive uploads. |
+| **Learning guide** | Beginner-first explanations derived from indexed files and manifests, with verified source-line links and explicit static-analysis limitations. |
+| **Change impact** | Baseline comparison with changed, added, and removed code paths plus the modules touched; it does not claim runtime verification. |
+| **Source handling** | Public Git URLs, generic HTTPS remotes, provider-aware workspace flows, and ZIP archive uploads. The explorer only serves indexed text from the selected analysis session. |
 | **AI layer** | OpenAI integration with safe fallback summaries so the app still works without secrets. |
-| **Frontend** | HTML, CSS, vanilla JavaScript, responsive product shell, command palette, motion, charts, and interactive mode states. |
+| **Frontend** | HTML, CSS, vanilla JavaScript, persistent theme preference, focused analysis tabs, source explorer, and a step-by-step guide. |
 | **Governance** | GitHub Actions, Dependabot, issue templates, PR template, security policy, contribution guide, and audit scripts. |
 
 ## Repository Structure
@@ -117,10 +125,14 @@ flowchart LR
 | --- | --- |
 | [`src/app.js`](src/app.js) | Express app, security headers, routes, exports, demo APIs, and static serving. |
 | [`src/services/analyzerService.js`](src/services/analyzerService.js) | Core repository intelligence engine. |
+| [`src/services/learningGuideService.js`](src/services/learningGuideService.js) | Builds the evidence-linked learning path and recruiter talk track. |
 | [`src/services/sourceService.js`](src/services/sourceService.js) | Git and ZIP source preparation. |
 | [`src/services/aiService.js`](src/services/aiService.js) | OpenAI and fallback explanation flow. |
 | [`src/services/chatService.js`](src/services/chatService.js) | Grounded chat over analysis sessions. |
 | [`public/index.html`](public/index.html) | Primary product experience and live analyzer surface. |
+| [`public/explorer.html`](public/explorer.html) | Searchable repository tree and read-only source preview workspace. |
+| [`public/guide.html`](public/guide.html) | Visual walkthrough from source intake to shareable findings. |
+| [`public/experience.css`](public/experience.css) | Shared theme tokens, focused layouts, explorer, and guide styling. |
 | [`public/styles.css`](public/styles.css) | Main visual system, layout, responsive rules, and glass UI layer. |
 | [`public/site-actions.js`](public/site-actions.js) | UI actions, sharing, exports, use cases, and visual mode switching. |
 | [`scripts/site-audit.js`](scripts/site-audit.js) | Static page, asset, and handled-button audit. |
@@ -131,6 +143,7 @@ flowchart LR
 | Check | Command | What it protects |
 | --- | --- | --- |
 | JavaScript syntax | `node --check public/site-actions.js` | Frontend interaction code parses cleanly. |
+| Product behavior | `npm test` | Learning evidence, source-line import links, and change-impact details remain correct. |
 | Smoke test | `npm run smoke` | Analyzer works against this repository. |
 | Site audit | `npm run site:audit` | Static pages, assets, and button handlers are valid. |
 | Security audit | `npm run security:audit` | Security hardening expectations remain intact. |
@@ -201,6 +214,8 @@ PORT=3000
 | `GET` | `/api/projects` | List saved demo projects. |
 | `POST` | `/api/projects` | Save a demo architecture project. |
 | `POST` | `/api/analyze` | Analyze a repository or uploaded ZIP. |
+| `GET` | `/api/analysis/:analysisId` | Read the session summary and indexed repository tree. |
+| `GET` | `/api/analysis/:analysisId/file?path=...` | Read one previewable file from that analysis session. |
 | `POST` | `/api/chat` | Ask questions against an analysis session. |
 | `POST` | `/api/system-chat` | Ask product or system-level questions. |
 | `GET` | `/api/export/:analysisId` | Export Markdown or JSON. |
@@ -229,10 +244,13 @@ https://lumenstack-ai.onrender.com/health
 ## Fast Review Path
 
 1. Open the live product.
-2. Scan the Visual Intelligence Lab and switch Quality, Security, and Release modes.
-3. Run a public repository URL or upload a ZIP.
-4. Review modules, dependencies, diagrams, findings, chat, and exports.
-5. Inspect `src/services/analyzerService.js`, `src/app.js`, `public/site-actions.js`, and `.github/workflows/smoke.yml`.
+2. Run a public repository URL or upload a ZIP.
+3. Read the generated summary and inspect the overview signals.
+4. Open the architecture view, then follow a module into the repository explorer.
+5. Use the [four-step guide](https://lumenstack-ai.onrender.com/guide.html) to prepare a walkthrough.
+6. Ask a codebase question or export the Markdown and JSON brief.
+
+Analysis sessions expire after two hours. Source previews are served by an exact path lookup in the selected session; JSON exports contain analysis metadata rather than indexed source contents.
 
 ## Roadmap
 

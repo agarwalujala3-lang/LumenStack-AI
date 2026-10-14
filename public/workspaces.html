@@ -3,18 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      (() => {
-        try {
-          if (
-            window.matchMedia("(pointer: fine)").matches &&
-            !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ) {
-            document.documentElement.classList.add("cursor-bootstrap");
-          }
-        } catch {}
-      })();
-    </script>
     <title>LumenStack AI Workspaces</title>
     <meta
       name="description"
@@ -42,30 +30,13 @@
     <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/critical-ui.css" />
+    <link rel="stylesheet" href="/experience.css" />
   </head>
-  <body
-    class="concept-match"
-    data-intro-badge="Workspace Profiles"
-    data-intro-title="Loading mission presets"
-    data-intro-copy="Preparing guided routes for review, delivery, migration, and offline repo work."
-    data-intro-tags="Guided lanes|Preset workspaces|Cross-platform routing"
-  >
-    <div class="ambient-layer" aria-hidden="true">
-      <div class="ambient-orb orb-a"></div>
-      <div class="ambient-orb orb-b"></div>
-      <div class="ambient-grid"></div>
-      <div class="ambient-beam beam-a"></div>
-      <div class="ambient-beam beam-b"></div>
-    </div>
-
-    <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
-    <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
-    <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
-
+  <body class="concept-match subpage workspaces-page">
     <div class="page-shell">
       <header class="topbar">
         <div class="brand-lockup">
-          <img class="brand-lockup-image" src="/brand-lockup.svg" alt="LumenStack AI" />
+          <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
           <div class="brand-lockup-copy">
             <p class="eyebrow">LumenStack AI</p>
             <strong>Mission Profiles</strong>
@@ -73,10 +44,10 @@
         </div>
 
         <nav class="topbar-nav" aria-label="Primary">
-          <a href="/">Analyzer</a>
-          <a href="/#platform-pillars">Roadmap</a>
-          <a href="/workspaces.html" aria-current="page">Workspaces</a>
-          <a href="/integrations.html">Integrations</a>
+          <a href="/#analyze-panel">Analyze</a>
+          <a href="/explorer.html">Repository</a>
+          <a href="/guide.html">How to use</a>
+          <a href="/product.html">Product</a>
         </nav>
 
         <div class="topbar-actions">
@@ -91,8 +62,15 @@
             </span>
             <span id="theme-toggle-label">Dark Mode</span>
           </button>
+          <a class="primary-button compact-button" href="/#analyze-panel">Analyze repo</a>
         </div>
       </header>
+
+      <section class="subpage-hero subpage-brief">
+        <span class="concept-pill">Repository workflows</span>
+        <h1>Choose a review lane.</h1>
+        <p>Start with the goal that fits your repository. Each preset opens the analyzer with focused defaults.</p>
+      </section>
 
       <section class="hero-stage alt-hero-stage hero-stage-reference">
         <article class="hero-panel spotlight-card">
@@ -248,7 +226,6 @@
               <p class="eyebrow">Presets</p>
               <h2>Workspace launchers</h2>
             </div>
-            <span class="panel-badge">5 lanes</span>
           </div>
 
           <div class="workspace-preset-grid wide-grid">
@@ -286,6 +263,5 @@
       </main>
     </div>
     <script src="/theme.js"></script>
-    <script src="/pagefx.js"></script>
   </body>
 </html>

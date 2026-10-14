@@ -517,8 +517,6 @@ function initPageFx() {
     return;
   }
 
-  initSharedCursorSystem();
-
   const shouldRunRouteTransition = consumeRouteTransition();
 
   if (shouldRunRouteTransition) {
@@ -526,7 +524,7 @@ function initPageFx() {
     return;
   }
 
-  if (!shouldSkipIntro()) {
+  if (document.body.classList.contains("app-home") && !shouldSkipIntro()) {
     runPageIntro();
   }
 }

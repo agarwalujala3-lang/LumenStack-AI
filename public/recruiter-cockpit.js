@@ -5,10 +5,6 @@
   const scoreCopy = document.getElementById("cockpit-score-copy");
   const proofList = document.getElementById("cockpit-proof-list");
 
-  if (!tabs.length || !modeLabel || !score || !scoreCopy || !proofList) {
-    return;
-  }
-
   const modes = {
     recruiter: {
       label: "Recruiter View",
@@ -57,9 +53,11 @@
     proofList.innerHTML = mode.bullets.map((bullet) => `<li>${bullet}</li>`).join("");
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => renderMode(tab.dataset.cockpitTab));
-  });
+  if (tabs.length && modeLabel && score && scoreCopy && proofList) {
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => renderMode(tab.dataset.cockpitTab));
+    });
+  }
 
   const authButton = document.getElementById("demo-auth-button");
   const authStateLabel = document.getElementById("auth-state-label");
@@ -95,24 +93,27 @@
       return;
     }
 
-    projectList.innerHTML = projects
-      .map((project) => {
-        const updatedAt = new Date(project.updatedAt).toLocaleDateString(undefined, {
-          month: "short",
-          day: "numeric"
-        });
-        return `
-          <article class="saved-project-card">
-            <div>
-              <strong>${project.name}</strong>
-              <span>${project.repository}</span>
-            </div>
-            <p>${project.score}% architecture confidence</p>
-            <small>${project.status} · ${updatedAt}</small>
-          </article>
-        `;
-      })
-      .join("");
+    const cards = projects.map((project) => {
+      const updatedAt = new Date(project.updatedAt).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric"
+      });
+      const card = document.createElement("article");
+      card.className = "saved-project-card";
+      const details = document.createElement("div");
+      const name = document.createElement("strong");
+      name.textContent = project.name;
+      const repository = document.createElement("span");
+      repository.textContent = project.repository;
+      details.append(name, repository);
+      const confidence = document.createElement("p");
+      confidence.textContent = `${project.score}% architecture confidence`;
+      const status = document.createElement("small");
+      status.textContent = `${project.status} · ${updatedAt}`;
+      card.append(details, confidence, status);
+      return card;
+    });
+    projectList.replaceChildren(...cards);
   }
 
   async function loadProjects() {
@@ -140,7 +141,7 @@
     const payload = await response.json();
     setDemoUser(payload.user);
     authStateLabel.textContent = `Signed in: ${payload.user.name}`;
-    authButton.textContent = "Recruiter signed in";
+    authButton.textContent = "Signed in";
     await loadProjects();
   });
 
@@ -158,7 +159,7 @@
       user = payload.user;
       setDemoUser(user);
       authStateLabel.textContent = `Signed in: ${user.name}`;
-      authButton.textContent = "Recruiter signed in";
+      authButton.textContent = "Signed in";
     }
 
     const response = await fetch("/api/projects", {
@@ -179,7 +180,7 @@
   const existingUser = getDemoUser();
   if (existingUser) {
     authStateLabel.textContent = `Signed in: ${existingUser.name}`;
-    authButton.textContent = "Recruiter signed in";
+    authButton.textContent = "Signed in";
   }
   loadProjects();
 })();

@@ -4,21 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    (() => {
-      try {
-        if (
-          window.matchMedia("(pointer: fine)").matches &&
-          !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ) {
-          document.documentElement.classList.add("cursor-bootstrap");
-        }
-      } catch { }
-    })();
-  </script>
   <title>LumenStack AI</title>
   <meta name="description"
-    content="LumenStack AI turns repositories into an architecture intelligence workspace with compare mode, diagrams, platform signals, and codebase chat." />
+    content="Turn an unfamiliar repository into a plain-language, source-linked guide with architecture maps, change reviews, grounded Q&amp;A, and recruiter-ready exports." />
   <meta name="keywords"
     content="LumenStack AI, repository analyzer, architecture intelligence, AI code review, Mermaid diagrams, codebase chat, engineering portfolio, recruiter project" />
   <meta name="author" content="LumenStack AI" />
@@ -27,7 +15,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="LumenStack AI | Architecture Intelligence Workspace" />
   <meta property="og:description"
-    content="Review repositories with compare mode, diagrams, platform signals, and codebase chat across GitHub, GitLab, Bitbucket, Azure DevOps, and ZIP uploads." />
+    content="Learn an unfamiliar codebase step by step, verify explanations in source, compare changes, and prepare a clear project walkthrough." />
   <meta property="og:url" content="https://lumenstack-ai.onrender.com/" />
   <meta property="og:image" content="https://lumenstack-ai.onrender.com/social-preview.png" />
   <meta property="og:image:type" content="image/png" />
@@ -35,11 +23,12 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="LumenStack AI | Architecture Intelligence Workspace" />
   <meta name="twitter:description"
-    content="Review repositories with compare mode, diagrams, platform signals, and codebase chat across GitHub, GitLab, Bitbucket, Azure DevOps, and ZIP uploads." />
+    content="Learn an unfamiliar codebase step by step, verify explanations in source, compare changes, and prepare a clear project walkthrough." />
   <meta name="twitter:image" content="https://lumenstack-ai.onrender.com/social-preview.png" />
   <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/styles.css" />
   <link rel="stylesheet" href="/critical-ui.css" />
+  <link rel="stylesheet" href="/experience.css" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -47,14 +36,15 @@
       "name": "LumenStack AI",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web",
-      "description": "An AI-powered architecture intelligence workspace for analyzing repositories, comparing baselines, generating Mermaid diagrams, chatting with codebases, and exporting architecture briefs.",
+      "description": "A repository learning workspace that turns unfamiliar codebases into source-linked explanations, architecture views, change reviews, grounded questions, and recruiter-ready walkthroughs.",
       "url": "https://lumenstack-ai.onrender.com/",
       "featureList": [
         "Cross-platform repository and ZIP analysis",
         "Architecture, sequence, class, and dependency diagrams",
         "AI-generated architecture explanations",
         "Codebase chat and markdown export",
-        "Baseline comparison and platform signal detection"
+        "Baseline comparison and platform signal detection",
+        "Evidence-linked learning guide and recruiter talk track"
       ],
       "offers": {
         "@type": "Offer",
@@ -76,9 +66,10 @@
   </script>
 </head>
 
-<body class="concept-match" data-theme-lock="dark" data-intro-badge="LumenStack AI" data-intro-title="Spinning up the repo command deck"
+<body class="concept-match app-home" data-intro-badge="LumenStack AI" data-intro-title="Spinning up the repo command deck"
   data-intro-copy="Locking onto architecture signals, compare lanes, and live system views."
   data-intro-tags="Cross-platform repo intake|Mission review mode|Live codebase chat">
+  <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
   <div id="tsparticles"></div>
   <div class="scroll-progress" aria-hidden="true">
     <span id="scroll-progress-bar"></span>
@@ -110,14 +101,11 @@
     </div>
   </div>
 
-  <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
-  <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
-  <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
 
   <div class="page-shell">
     <header class="topbar motion-target" data-parallax="0.025">
       <div class="brand-lockup">
-        <img class="brand-lockup-image" src="/brand-lockup.svg" alt="LumenStack AI" />
+        <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
         <div class="brand-lockup-copy">
           <p class="eyebrow">LumenStack AI</p>
           <strong>AI Codebase Intelligence Workspace</strong>
@@ -125,17 +113,18 @@
       </div>
 
       <nav class="topbar-nav" aria-label="Primary">
-        <a href="/">Home</a>
+        <a href="/">Analyze</a>
+        <a href="/explorer.html">Repository</a>
+        <a href="/guide.html">How to use</a>
         <a href="/product.html">Product</a>
-        <a href="/case-study.html">Case Study</a>
-        <a href="/saved-projects.html">Saved Projects</a>
-        <a href="/contact.html">Hire Ujala</a>
       </nav>
 
       <div class="topbar-actions">
-        <button class="secondary-button compact-button" type="button" data-open-command>Command</button>
-        <button class="secondary-button compact-button" type="button" data-start-tour>Tour</button>
-        <a class="primary-button compact-button demo-button" href="mailto:agarwalujala3@gmail.com">Hire Ujala</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"></span></span>
+          <span id="theme-toggle-label">Dark Mode</span>
+        </button>
+        <a class="primary-button compact-button" href="#analyze-panel">Analyze</a>
       </div>
     </header>
 
@@ -144,8 +133,8 @@
         <span class="concept-pill">LumenStack AI</span>
         <h1>Codebase intelligence, <span>made visible.</span></h1>
         <p>
-          Map repositories into architecture graphs, quality signals, compare reviews, and grounded AI chat
-          without letting the interface get in your way.
+          Start with a repository you have never seen. Learn what it does, trace the real files, compare changes,
+          and prepare a recruiter-ready walkthrough. Each explanation marks what was observed and what is inferred.
         </p>
         <div class="concept-hero-actions">
           <a class="primary-button" href="#analyze-panel">Analyze a repository</a>
@@ -154,44 +143,32 @@
         </div>
         <div class="concept-feature-row">
           <article>
-            <span></span>
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="14" r="1.5"/><circle cx="10" cy="6" r="1.5"/><circle cx="15" cy="11" r="1.5"/><path d="m6.2 12.7 2.6-5.3m2.6-.3 2.4 2.8"/></svg></span>
             <strong>Architecture graph</strong>
             <p>Layered module and dependency view</p>
           </article>
           <article>
-            <span></span>
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3.2"/><path d="M10 3v7l5 5"/></svg></span>
             <strong>Quality radar</strong>
             <p>Security, risk, and review signals</p>
           </article>
           <article>
-            <span></span>
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5v4m0 7v4m7.5-7.5h-4m-7 0h-4M15.3 4.7l-2.8 2.8m-5 5-2.8 2.8m10.6 0-2.8-2.8m-5-5L4.7 4.7"/></svg></span>
             <strong>AI copilot</strong>
             <p>Ask grounded questions and export briefs</p>
           </article>
-        </div>
-        <div class="concept-trust">
-          <small>A polished full-stack AI product case study by Ujala Agarwal</small>
-          <div>
-            <a href="https://www.linkedin.com/in/ujala-agarwal-30aa28283/" target="_blank"
-              rel="noreferrer">LinkedIn</a>
-            <a href="https://github.com/agarwalujala3-lang" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="https://lumenstack-ai.onrender.com/case-study.html" target="_blank"
-              rel="noreferrer">Case study</a>
-            <a href="mailto:agarwalujala3@gmail.com">Email</a>
-          </div>
         </div>
       </div>
 
       <div class="concept-overview-card">
         <div class="overview-window-bar">
-          <strong>acme/checkout-service</strong>
-          <span data-updated-label>Updated 2m ago</span>
-          <button type="button" data-live-action="refresh">Refresh</button>
+          <strong>Architecture preview</strong>
+          <span>Example system map</span>
         </div>
         <div class="overview-card-body">
           <div class="overview-title">
-            <h2>Repository command view</h2>
-            <p>Architecture, quality, security, and export signals in one calm control surface.</p>
+            <h2>See the shape of a system</h2>
+            <p>A compact example of how repository modules connect across an application.</p>
           </div>
           <div class="lumen-graph-stack" aria-hidden="true">
             <span class="graph-line line-one"></span>
@@ -203,209 +180,10 @@
             <span class="graph-node node-ai">AI</span>
             <span class="graph-node node-sec">Sec</span>
           </div>
-          <div class="overview-grid">
-            <article class="health-ring-card">
-              <span>Architecture Health</span>
-              <div class="health-ring"><strong>76</strong><small>Good</small></div>
-              <small>+12 vs last scan</small>
-            </article>
-            <article class="mini-health"><span>Maintainability</span><strong>78</strong><small>Good</small></article>
-            <article class="mini-health"><span>Security</span><strong>72</strong><small>Fair</small></article>
-            <article class="mini-health"><span>Test Coverage</span><strong>64%</strong><small>Fair</small></article>
-            <article class="mini-health"><span>Complexity</span><strong>56</strong><small>High</small></article>
-            <article class="key-findings-card">
-              <span>Key Findings</span>
-              <p><strong>3</strong> Critical issues</p>
-              <p><strong>7</strong> High risk issues</p>
-              <p><strong>12</strong> Medium risk issues</p>
-              <p><strong>24</strong> Low risk issues</p>
-            </article>
-            <article class="architecture-map-card">
-              <span>Architecture Map</span>
-              <div class="mini-network">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-            </article>
-          </div>
         </div>
       </div>
     </section>
 
-    <section class="concept-benefits" aria-label="Product benefits">
-      <div>
-        <h2>Built for serious codebase decisions</h2>
-        <p>Designed to make architecture reviews readable, repeatable, and useful for developers, recruiters, and product teams.</p>
-      </div>
-      <article><span>01</span><strong>Onboard faster</strong><p>Instant architecture maps and clear documentation.</p></article>
-      <article><span>02</span><strong>Reduce risk</strong><p>Surface hidden dependencies and security weaknesses.</p></article>
-      <article><span>03</span><strong>Improve quality</strong><p>Identify architectural debt and code smells.</p></article>
-      <article><span>04</span><strong>Make better decisions</strong><p>AI-powered guidance tailored to your codebase.</p></article>
-    </section>
-
-    <section class="visual-intelligence-deck motion-target" aria-label="Visual intelligence dashboard preview"
-      data-visual-mode="quality" data-parallax="0.018">
-      <div class="visual-deck-copy">
-        <span class="concept-pill">Visual intelligence layer</span>
-        <h2>A cleaner command deck for architecture, risk, and release signals.</h2>
-        <p>
-          Transparent panels, layered graphs, multicolor signal states, and code-native charts now work together as one
-          product surface instead of fighting for attention.
-        </p>
-        <div class="visual-mode-controls" role="tablist" aria-label="Visual intelligence views">
-          <button class="visual-mode-button active" type="button" data-visual-mode-trigger="quality"
-            aria-pressed="true">Quality</button>
-          <button class="visual-mode-button" type="button" data-visual-mode-trigger="security"
-            aria-pressed="false">Security</button>
-          <button class="visual-mode-button" type="button" data-visual-mode-trigger="release"
-            aria-pressed="false">Release</button>
-        </div>
-        <div class="visual-signal-row">
-          <span>Security Hardened</span>
-          <span>Audit Scripts</span>
-          <span>Live Analyzer</span>
-          <span>Polished UX</span>
-        </div>
-        <div class="visual-action-row">
-          <button class="secondary-button compact-button" type="button" data-live-action="share">Share live site</button>
-          <button class="secondary-button compact-button" type="button" data-live-action="copy-pitch">Copy pitch</button>
-        </div>
-      </div>
-
-      <div class="visual-dashboard-shell">
-        <div class="visual-dashboard-aurora" aria-hidden="true"></div>
-        <div class="visual-dashboard-header">
-          <div>
-            <span class="visual-status-dot"></span>
-            <strong>LumenStack Control Graph</strong>
-          </div>
-          <div class="visual-live-meta">
-            <span data-visual-primary-label>91 score</span>
-            <span>12 modules</span>
-            <span>4 audits</span>
-          </div>
-        </div>
-
-        <div class="visual-dashboard-grid">
-          <article class="visual-asset-panel">
-            <img src="/visual-lab-control-room.png"
-              alt="Abstract LumenStack AI architecture control room with glowing dashboard panels" width="1672"
-              height="941" loading="lazy" decoding="async" />
-            <div class="visual-asset-glass">
-              <span>Visual Lab</span>
-              <strong>Architecture intelligence surface</strong>
-              <small>Image asset + code-native telemetry</small>
-            </div>
-          </article>
-
-          <article class="visual-score-panel">
-            <span>Architecture Health</span>
-            <div class="visual-score-ring" aria-hidden="true">
-              <strong data-visual-score>91</strong>
-              <small data-visual-score-label>Ready</small>
-            </div>
-            <p data-visual-score-copy>Security, UX, audit, and deploy posture are trending upward.</p>
-            <div class="visual-mini-ledger">
-              <span><strong data-visual-ledger-a>+37%</strong> signal lift</span>
-              <span><strong data-visual-ledger-b>08</strong> graph nodes</span>
-            </div>
-          </article>
-
-          <article class="visual-chart-panel">
-            <div class="visual-card-heading">
-              <strong>Signal Growth</strong>
-              <span data-visual-trend>+37%</span>
-            </div>
-            <div class="visual-bars" aria-hidden="true">
-              <i style="--bar: 48%"></i>
-              <i style="--bar: 64%"></i>
-              <i style="--bar: 58%"></i>
-              <i style="--bar: 78%"></i>
-              <i style="--bar: 88%"></i>
-              <i style="--bar: 96%"></i>
-            </div>
-            <div class="visual-chart-labels">
-              <span>UX</span>
-              <span>SEC</span>
-              <span>AI</span>
-            </div>
-          </article>
-
-          <article class="visual-line-panel">
-            <div class="visual-card-heading">
-              <strong>Release Confidence</strong>
-              <span data-visual-release>94%</span>
-            </div>
-            <div class="visual-line-chart" aria-hidden="true">
-              <span style="--x: 5%; --y: 68%"></span>
-              <span style="--x: 22%; --y: 56%"></span>
-              <span style="--x: 40%; --y: 46%"></span>
-              <span style="--x: 58%; --y: 34%"></span>
-              <span style="--x: 76%; --y: 28%"></span>
-              <span style="--x: 92%; --y: 18%"></span>
-            </div>
-            <p>Smoke, audit, security, and deployment signals shown as one decision curve.</p>
-          </article>
-
-          <article class="visual-map-panel">
-            <div class="visual-card-heading">
-              <strong>Module Mesh</strong>
-              <span data-visual-node-count>8 nodes</span>
-            </div>
-            <div class="visual-mesh" aria-hidden="true">
-              <span class="mesh-node mesh-core">Core</span>
-              <span class="mesh-node mesh-ui">UI</span>
-              <span class="mesh-node mesh-api">API</span>
-              <span class="mesh-node mesh-ai">AI</span>
-              <span class="mesh-node mesh-sec">Sec</span>
-              <span class="mesh-line mesh-line-a"></span>
-              <span class="mesh-line mesh-line-b"></span>
-              <span class="mesh-line mesh-line-c"></span>
-              <span class="mesh-line mesh-line-d"></span>
-            </div>
-          </article>
-
-          <article class="visual-radar-panel">
-            <div class="visual-card-heading">
-              <strong>Trust Radar</strong>
-              <span data-visual-radar>Stable</span>
-            </div>
-            <div class="visual-radar-grid" aria-hidden="true">
-              <span class="radar-ring ring-one"></span>
-              <span class="radar-ring ring-two"></span>
-              <span class="radar-ring ring-three"></span>
-              <span class="radar-sweep"></span>
-              <i style="--x: 63%; --y: 28%"></i>
-              <i style="--x: 38%; --y: 44%"></i>
-              <i style="--x: 72%; --y: 62%"></i>
-              <i style="--x: 48%; --y: 72%"></i>
-            </div>
-          </article>
-
-          <article class="visual-icon-grid">
-            <div class="visual-icon-tile">
-              <span class="visual-icon visual-icon-shield"></span>
-              <strong>Headers</strong>
-              <small>HSTS + CSP</small>
-            </div>
-            <div class="visual-icon-tile">
-              <span class="visual-icon visual-icon-chart"></span>
-              <strong>Audits</strong>
-              <small>Site + security</small>
-            </div>
-            <div class="visual-icon-tile">
-              <span class="visual-icon visual-icon-graph"></span>
-              <strong>Maps</strong>
-              <small>Architecture flow</small>
-            </div>
-            <div class="visual-icon-tile">
-              <span class="visual-icon visual-icon-spark"></span>
-              <strong>Motion</strong>
-              <small>3-4 sec intro</small>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
     <main class="main-grid">
       <section id="analyze-panel" class="panel intake-panel motion-target spotlight-card" data-parallax="0.03">
         <div class="panel-header">
@@ -490,38 +268,6 @@
         </div>
       </section>
 
-      <aside class="panel preview-panel motion-target spotlight-card" data-parallax="0.02">
-        <div class="panel-header compact">
-          <div>
-            <p class="eyebrow">Capability Stack</p>
-            <h2>What this version adds</h2>
-          </div>
-        </div>
-
-        <div class="preview-grid">
-          <article class="preview-card">
-            <span>Route</span>
-            <strong>Provider workspaces</strong>
-            <p>Jump between GitHub review, GitLab delivery, Bitbucket audit, Azure migration, or ZIP-first flows.</p>
-          </article>
-          <article class="preview-card">
-            <span>Ask</span>
-            <strong>Codebase chat</strong>
-            <p>Query modules, files, entrypoints, and relationships after an analysis run.</p>
-          </article>
-          <article class="preview-card">
-            <span>Compare</span>
-            <strong>Review mode</strong>
-            <p>Analyze a baseline and current version together to surface structural change risks.</p>
-          </article>
-          <article class="preview-card">
-            <span>Radar</span>
-            <strong>Platform signals</strong>
-            <p>Surface CI/CD, ownership, containerization, dependency automation, and deployment clues.</p>
-          </article>
-        </div>
-      </aside>
-
       <section id="results" class="results hidden">
         <article class="panel result-banner motion-target" data-parallax="0.03">
           <div>
@@ -533,7 +279,16 @@
             <span id="ai-badge" class="result-pill">Fallback</span>
             <span id="analysis-time" class="result-time">Just now</span>
           </div>
+          <a id="open-repo-explorer" class="primary-button compact-button hidden" href="/explorer.html">Open source explorer</a>
         </article>
+
+        <nav class="result-view-tabs" role="tablist" aria-label="Repository analysis views">
+          <button class="result-view-tab active" id="overview-tab" type="button" role="tab" aria-selected="true" aria-controls="overview-view" data-result-view="overview">Overview</button>
+          <button class="result-view-tab" id="architecture-tab" type="button" role="tab" aria-selected="false" aria-controls="architecture-view" data-result-view="architecture">Architecture</button>
+          <button class="result-view-tab" id="learn-tab" type="button" role="tab" aria-selected="false" aria-controls="learn-view" data-result-view="learn">Learn &amp; present</button>
+        </nav>
+
+        <section class="result-view-panel" id="overview-view" role="tabpanel" aria-labelledby="overview-tab" data-result-panel="overview">
 
         <section class="platform-grid reveal-grid">
           <article class="panel spotlight-card">
@@ -651,6 +406,12 @@
             <p id="comparison-summary" class="body-copy"></p>
             <div id="comparison-stats" class="chip-row"></div>
             <div id="comparison-findings" class="finding-list"></div>
+            <div class="comparison-changes-heading">
+              <h3>Files to review</h3>
+              <span id="comparison-change-count" class="file-meta-label"></span>
+            </div>
+            <div id="comparison-files" class="comparison-file-list"></div>
+            <p class="comparison-scope-note">Static source comparison only; run the project tests to confirm behavior.</p>
           </article>
 
           <article class="panel chat-panel motion-target spotlight-card" data-parallax="0.012">
@@ -672,6 +433,49 @@
           </article>
         </section>
 
+        </section>
+
+        <section class="result-view-panel" id="learn-view" role="tabpanel" aria-labelledby="learn-tab" data-result-panel="learn" hidden>
+          <div class="learning-heading">
+            <div>
+              <p class="eyebrow">Your guided repo walkthrough</p>
+              <h2 id="learning-title">Understand the project, step by step</h2>
+              <p id="learning-certainty" class="body-copy"></p>
+            </div>
+            <div class="learning-progress-wrap">
+              <label for="learning-progress">Study progress</label>
+              <progress id="learning-progress" max="5" value="0"></progress>
+              <span id="learning-progress-label" role="status" aria-live="polite">0 of 5 steps understood</span>
+              <button id="learning-reset" class="secondary-button compact-button" type="button">Reset progress</button>
+            </div>
+          </div>
+          <div class="learning-layout">
+            <div id="learning-steps" class="learning-steps"></div>
+            <aside class="learning-aside" aria-label="Presentation and glossary">
+              <section class="learning-talk-track">
+                <p class="eyebrow">Recruiter talk track</p>
+                <h3>A clear, evidence-aware walkthrough</h3>
+                <p id="learning-scope" class="learning-scope-note"></p>
+                <p id="presentation-script" class="presentation-script"></p>
+                <button id="copy-presentation" class="secondary-button compact-button" type="button">Copy talk track</button>
+                <p id="learning-copy-status" class="copy-status" role="status" aria-live="polite"></p>
+              </section>
+              <details class="learning-glossary">
+                <summary>Plain-English glossary</summary>
+                <dl>
+                  <dt>Entrypoint</dt><dd>A likely place where the program begins.</dd>
+                  <dt>Module</dt><dd>A group of files that work on a related area.</dd>
+                  <dt>Dependency</dt><dd>An external tool or library this project relies on.</dd>
+                  <dt>Import</dt><dd>A connection where one file uses code from another.</dd>
+                </dl>
+              </details>
+              <p class="learning-storage-note">Study checkmarks stay in this browser; no account or server save is used.</p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="result-view-panel" id="architecture-view" role="tabpanel" aria-labelledby="architecture-tab" data-result-panel="architecture" hidden>
+
         <section class="diagram-grid wide-first">
           <article class="panel diagram-panel motion-target spotlight-card" data-parallax="0.014">
             <div class="section-title-row">
@@ -688,13 +492,14 @@
                 <button id="download-json" class="secondary-button" type="button">Download JSON</button>
               </div>
             </div>
-            <div id="diagram-tabs" class="diagram-tabs">
-              <button type="button" class="diagram-tab active" data-diagram="architecture">Architecture</button>
-              <button type="button" class="diagram-tab" data-diagram="sequence">Sequence</button>
-              <button type="button" class="diagram-tab" data-diagram="classes">Classes</button>
-              <button type="button" class="diagram-tab" data-diagram="dependencies">Dependencies</button>
+            <p id="diagram-caption" class="diagram-caption">Follow the main modules and the connections between them.</p>
+            <div id="diagram-tabs" class="diagram-tabs" role="tablist" aria-label="Generated diagrams">
+              <button type="button" class="diagram-tab active" role="tab" aria-selected="true" data-diagram="architecture">Architecture</button>
+              <button type="button" class="diagram-tab" role="tab" aria-selected="false" tabindex="-1" data-diagram="sequence">Sequence</button>
+              <button type="button" class="diagram-tab" role="tab" aria-selected="false" tabindex="-1" data-diagram="classes">Classes</button>
+              <button type="button" class="diagram-tab" role="tab" aria-selected="false" tabindex="-1" data-diagram="dependencies">Packages</button>
             </div>
-            <div id="diagram" class="diagram-surface content-stream"></div>
+            <div id="diagram" class="diagram-surface content-stream" role="tabpanel" aria-label="Architecture diagram"></div>
           </article>
 
           <article class="panel docs-panel motion-target spotlight-card" data-parallax="0.012">
@@ -750,6 +555,8 @@
           </div>
           <div id="files" class="file-grid"></div>
         </section>
+
+        </section>
       </section>
     </main>
   </div>
@@ -757,8 +564,8 @@
   <script src="/theme.js"></script>
   <script src="/vendor/mermaid/mermaid.min.js"></script>
   <script type="module" src="/app.js"></script>
+  <script src="/results-ui.js"></script>
   <script src="/site-actions.js"></script>
-  <script src="/advanced-ui.js"></script>
   <script src="/pagefx.js"></script>
 </body>
 

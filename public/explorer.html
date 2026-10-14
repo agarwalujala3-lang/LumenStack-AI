@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Explore an analyzed repository through its directory structure, source previews, and generated architecture summary." />
+  <title>Repository Explorer | LumenStack AI</title>
+  <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/critical-ui.css" />
+  <link rel="stylesheet" href="/experience.css" />
+</head>
+<body class="concept-match experience-page explorer-page">
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand-lockup" href="/" aria-label="LumenStack AI home">
+        <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
+        <span class="subpage-brand-note">Repository explorer</span>
+      </a>
+      <nav class="topbar-nav" aria-label="Primary">
+        <a href="/#analyze-panel">Analyze</a>
+        <a href="/explorer.html" aria-current="page">Repository</a>
+        <a href="/guide.html">How to use</a>
+        <a href="/product.html">Product</a>
+      </nav>
+      <div class="topbar-actions">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"></span></span>
+          <span id="theme-toggle-label">Dark Mode</span>
+        </button>
+        <a class="secondary-button compact-button" href="/#analyze-panel">New analysis</a>
+      </div>
+    </header>
+
+    <main class="workspace-wrap">
+      <div class="workspace-page-head">
+        <div>
+          <p class="eyebrow">Source workspace</p>
+          <h1 id="repository-name">Repository explorer</h1>
+          <p id="repository-meta" class="workspace-subtitle">Open an analyzed repository to browse its structure and source previews.</p>
+        </div>
+        <div class="workspace-head-stats" id="workspace-stats" hidden>
+          <span><strong id="stat-files">0</strong> code files</span>
+          <span><strong id="stat-modules">0</strong> modules</span>
+          <span><strong id="stat-language">-</strong> primary language</span>
+        </div>
+      </div>
+
+      <div id="explorer-state" class="explorer-state" role="status" aria-live="polite">
+        <div class="state-mark" aria-hidden="true">LS</div>
+        <div>
+          <h2>Analyze a repository to open its source map</h2>
+          <p>The explorer uses the same repository snapshot as your analysis, including a generated overview, entrypoints, modules, and readable code previews.</p>
+          <a class="primary-button compact-button" href="/#analyze-panel">Analyze a repository</a>
+        </div>
+      </div>
+
+      <div id="editor-workspace" class="editor-workspace" hidden>
+        <aside class="file-pane" aria-label="Repository files">
+          <div class="pane-heading">
+            <div>
+              <p class="eyebrow">Explorer</p>
+              <h2>Files</h2>
+            </div>
+            <span id="tree-count" class="count-label">0</span>
+          </div>
+          <label class="file-search-wrap">
+            <span class="sr-only">Search repository files</span>
+            <span class="file-search-icon" aria-hidden="true"></span>
+            <input id="file-search" type="search" placeholder="Find a file  Ctrl/Cmd+P" autocomplete="off" />
+          </label>
+          <nav id="file-tree" class="file-tree" aria-label="Analyzed source files"></nav>
+          <p id="file-limit-note" class="pane-footnote" hidden>Showing the first 8,000 repository entries in this tree.</p>
+        </aside>
+
+        <section class="code-pane" aria-label="Source preview">
+          <div class="editor-topline">
+            <div class="editor-tab" aria-live="polite">
+              <span id="file-type-mark" class="file-type-mark" aria-hidden="true">SRC</span>
+              <span id="active-file-name">Choose a file</span>
+            </div>
+            <div class="editor-actions">
+              <span class="read-only-label">Read only</span>
+              <button id="copy-file" class="icon-action" type="button" aria-label="Copy source preview" title="Copy source preview">Copy</button>
+            </div>
+          </div>
+          <div class="breadcrumb-row" id="file-breadcrumb">No file selected</div>
+          <div id="file-description" class="file-description">Select a file in the explorer to inspect its analyzed preview.</div>
+          <div id="code-scroll" class="code-scroll" tabindex="0" aria-label="Code preview">
+            <div id="code-lines" class="code-lines"><p class="code-empty">Choose a file from the tree.</p></div>
+          </div>
+          <div id="file-notice" class="file-notice" role="status" hidden></div>
+        </section>
+
+        <aside class="context-pane" aria-label="Repository overview">
+          <section class="context-section">
+            <p class="eyebrow">Repository brief</p>
+            <h2>Understand the system</h2>
+            <p id="repository-summary" class="repository-summary">The generated overview will appear here after analysis.</p>
+            <div id="repository-tags" class="repository-tags"></div>
+          </section>
+          <section class="context-section">
+            <div class="context-heading-row"><h3>Entrypoints</h3><span id="entrypoint-count" class="count-label">0</span></div>
+            <div id="entrypoint-list" class="context-list"></div>
+          </section>
+          <section class="context-section">
+            <div class="context-heading-row"><h3>Modules</h3><span id="module-count" class="count-label">0</span></div>
+            <div id="module-list" class="context-list"></div>
+          </section>
+          <a id="repository-source-link" class="external-source-link" href="#" target="_blank" rel="noreferrer" hidden>Open repository source</a>
+        </aside>
+      </div>
+      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+    </main>
+  </div>
+  <script src="/theme.js"></script>
+  <script src="/explorer.js"></script>
+</body>
+</html>

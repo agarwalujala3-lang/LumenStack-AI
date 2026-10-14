@@ -54,7 +54,23 @@ function compareSearchIndex(baseItems = [], nextItems = []) {
   return {
     added,
     removed,
-    changed
+    changed,
+    addedDetails: added.map((path) => ({
+      path,
+      module: nextMap.get(path)?.module || "",
+      language: nextMap.get(path)?.language || ""
+    })),
+    removedDetails: removed.map((path) => ({
+      path,
+      module: baseMap.get(path)?.module || "",
+      language: baseMap.get(path)?.language || ""
+    })),
+    changedDetails: changed.map((path) => ({
+      path,
+      beforeModule: baseMap.get(path)?.module || "",
+      afterModule: nextMap.get(path)?.module || "",
+      language: nextMap.get(path)?.language || baseMap.get(path)?.language || ""
+    }))
   };
 }
 
@@ -81,6 +97,11 @@ function compareAnalyses(baseAnalysis, candidateAnalysis) {
   const codeFilesDelta = candidateAnalysis.summary.codeFiles - baseAnalysis.summary.codeFiles;
   const relationshipDelta = candidateAnalysis.relationships.length - baseAnalysis.relationships.length;
   const changedCodeFiles = fileDiff.added.length + fileDiff.removed.length + fileDiff.changed.length;
+  const impactedModules = [...new Set([
+    ...fileDiff.changedDetails.flatMap((file) => [file.beforeModule, file.afterModule]),
+    ...fileDiff.addedDetails.map((file) => file.module),
+    ...fileDiff.removedDetails.map((file) => file.module)
+  ].filter(Boolean))].sort();
   const riskFindings = [];
 
   if (dependencyDiff.added.length) {
@@ -157,6 +178,7 @@ function compareAnalyses(baseAnalysis, candidateAnalysis) {
     `Total files changed by ${totalFilesDelta >= 0 ? "+" : ""}${totalFilesDelta}.`,
     `Code files changed by ${codeFilesDelta >= 0 ? "+" : ""}${codeFilesDelta}.`,
     `Module count changed by ${candidateAnalysis.modules.length - baseAnalysis.modules.length >= 0 ? "+" : ""}${candidateAnalysis.modules.length - baseAnalysis.modules.length}.`,
+    `Modules touched: ${impactedModules.length ? impactedModules.join(", ") : "none identified"}.`,
     `Quality score changed by ${scoreDelta >= 0 ? "+" : ""}${scoreDelta}.`
   ].join(" ");
 
@@ -186,7 +208,10 @@ function compareAnalyses(baseAnalysis, candidateAnalysis) {
     fileDiff.added.length ? fileDiff.added.join(", ") : "None",
     "",
     "## Removed Code Files",
-    fileDiff.removed.length ? fileDiff.removed.join(", ") : "None"
+    fileDiff.removed.length ? fileDiff.removed.join(", ") : "None",
+    "",
+    "## Scope",
+    "This is a static comparison of indexed source samples and detected structure. It does not establish runtime behavior or replace tests."
   ].join("\n");
 
   return {
@@ -198,7 +223,8 @@ function compareAnalyses(baseAnalysis, candidateAnalysis) {
       changedCodeFiles,
       moduleDelta: candidateAnalysis.modules.length - baseAnalysis.modules.length,
       dependencyDelta: dependencyDiff.added.length - dependencyDiff.removed.length,
-      relationshipDelta
+      relationshipDelta,
+      impactedModules: impactedModules.length
     },
     frameworkDiff,
     dependencyDiff,

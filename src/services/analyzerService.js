@@ -64,6 +64,21 @@ const CODE_FILE_TYPES = {
   ".svelte": "Svelte"
 };
 
+const PREVIEW_FILE_TYPES = {
+  ".md": "Markdown",
+  ".mdx": "Markdown",
+  ".json": "JSON",
+  ".yaml": "YAML",
+  ".yml": "YAML",
+  ".toml": "TOML",
+  ".xml": "XML",
+  ".txt": "Text",
+  ".sql": "SQL",
+  ".sh": "Shell",
+  ".bash": "Shell",
+  ".dockerfile": "Dockerfile"
+};
+
 const MANIFEST_FILES = new Set([
   "package.json",
   "requirements.txt",
@@ -118,6 +133,7 @@ const PRIORITY_MODULE_NAMES = new Set([
 const IMPORTANT_HIDDEN_ENTRIES = new Set([
   ".env.example",
   ".github",
+  ".gitignore",
   ".gitlab-ci.yml",
   ".circleci",
   ".devcontainer",
@@ -287,6 +303,29 @@ function shouldSkipHiddenEntry(entryName) {
 function isTextBuffer(buffer) {
   const sample = buffer.subarray(0, Math.min(buffer.length, 512));
   return !sample.includes(0);
+}
+
+function describePreviewFile(fileName, extension) {
+  const normalizedName = fileName.toLowerCase();
+
+  if (normalizedName === ".env.example") {
+    return { language: "Environment example", role: "Documents the expected environment variables." };
+  }
+
+  if (/^(readme|contributing|changelog|license)(\.|$)/.test(normalizedName)) {
+    return { language: "Markdown", role: "Explains project setup, contribution, changes, or license details." };
+  }
+
+  if (MANIFEST_FILES.has(fileName)) {
+    return { language: PREVIEW_FILE_TYPES[extension] || "Configuration", role: "Defines runtime, package, or build configuration." };
+  }
+
+  return {
+    language: PREVIEW_FILE_TYPES[extension] || "Text",
+    role: extension === ".md" || extension === ".mdx"
+      ? "Provides project documentation and implementation context."
+      : "Provides project tooling or environment configuration."
+  };
 }
 
 async function isNestedRepositoryRoot(rootPath, candidatePath) {
@@ -474,53 +513,57 @@ function summarizeRole(relativePath, sample) {
 
 function detectImports(extension, sample) {
   const imports = [];
-  const addImport = (value, type) => {
+  const addImport = (value, type, offset = 0) => {
     if (!value) {
       return;
     }
 
-    imports.push({ value, type });
+    imports.push({
+      value,
+      type,
+      line: sample.slice(0, offset).split(/\r?\n/).length
+    });
   };
 
   if ([".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte"].includes(extension)) {
     for (const match of sample.matchAll(/import\s+[\s\S]*?\sfrom\s+["']([^"']+)["']/g)) {
-      addImport(match[1], "esm");
+      addImport(match[1], "esm", match.index);
     }
 
     for (const match of sample.matchAll(/require\(\s*["']([^"']+)["']\s*\)/g)) {
-      addImport(match[1], "cjs");
+      addImport(match[1], "cjs", match.index);
     }
 
     for (const match of sample.matchAll(/import\(\s*["']([^"']+)["']\s*\)/g)) {
-      addImport(match[1], "dynamic");
+      addImport(match[1], "dynamic", match.index);
     }
   }
 
   if (extension === ".py") {
     for (const match of sample.matchAll(/from\s+([a-zA-Z0-9_\.]+)\s+import/g)) {
-      addImport(match[1], "python");
+      addImport(match[1], "python", match.index);
     }
 
     for (const match of sample.matchAll(/import\s+([a-zA-Z0-9_\.]+)/g)) {
-      addImport(match[1], "python");
+      addImport(match[1], "python", match.index);
     }
   }
 
   if (extension === ".java") {
     for (const match of sample.matchAll(/import\s+([a-zA-Z0-9_.*]+);/g)) {
-      addImport(match[1], "java");
+      addImport(match[1], "java", match.index);
     }
   }
 
   if (extension === ".go") {
     for (const match of sample.matchAll(/import\s+(?:\([\s\S]*?\)|"([^"]+)")/g)) {
       if (match[1]) {
-        addImport(match[1], "go");
+        addImport(match[1], "go", match.index);
       }
     }
 
     for (const match of sample.matchAll(/"([^"]+)"/g)) {
-      addImport(match[1], "go");
+      addImport(match[1], "go", match.index);
     }
   }
 
@@ -838,32 +881,48 @@ function detectFrameworks(dependencies, languages, entrypoints) {
   return [...frameworks];
 }
 
+function mermaidId(prefix, value) {
+  const normalized = String(value || "item").toLowerCase().replace(/[^a-z0-9_]+/g, "_");
+  return `${prefix}_${normalized.replace(/^_+|_+$/g, "") || "item"}`;
+}
+
+function mermaidLabel(value) {
+  return String(value || "")
+    .replace(/[\\\r\n\u2028\u2029]/g, " ")
+    .replace(/"/g, "#quot;")
+    .replace(/[<>]/g, "")
+    .trim();
+}
+
 function buildArchitectureDiagram(sourceName, modules, relationships, frameworks) {
+  const visibleModules = modules.slice(0, 8);
+  const visibleNames = new Set(visibleModules.map((module) => module.name));
+  const moduleIds = new Map(visibleModules.map((module, index) => [module.name, `module_${index + 1}`]));
   const lines = [
     "flowchart TD",
-    `  app["${sourceName}"]`
+    `  app["${mermaidLabel(sourceName)}"]`
   ];
 
-  for (const framework of frameworks.slice(0, 3)) {
-    const frameworkId = framework.toLowerCase().replace(/[^a-z0-9]+/g, "");
-    lines.push(`  ${frameworkId}["${framework}"]`);
+  frameworks.slice(0, 3).forEach((framework, index) => {
+    const frameworkId = `runtime_${index + 1}`;
+    lines.push(`  ${frameworkId}["${mermaidLabel(framework)}"]`);
     lines.push(`  app --> ${frameworkId}`);
-  }
+  });
 
-  for (const module of modules.slice(0, 8)) {
-    const moduleId = `module_${module.name.replace(/[^a-z0-9]+/gi, "_")}`;
-    lines.push(`  ${moduleId}["${module.name} (${module.fileCount})"]`);
+  visibleModules.forEach((module, index) => {
+    const moduleId = `module_${index + 1}`;
+    lines.push(`  ${moduleId}["${mermaidLabel(module.name)} (${module.fileCount})"]`);
     lines.push(`  app --> ${moduleId}`);
-  }
+  });
 
-  for (const relationship of relationships.slice(0, 12)) {
-    const fromId = `module_${relationship.from.replace(/[^a-z0-9]+/gi, "_")}`;
-    const toId = `module_${relationship.to.replace(/[^a-z0-9]+/gi, "_")}`;
-    lines.push(`  ${fromId} --> ${toId}`);
+  const visibleRelationships = relationships
+    .filter((relationship) => visibleNames.has(relationship.from) && visibleNames.has(relationship.to))
+    .slice(0, 10);
+  for (const relationship of visibleRelationships) {
+    const fromId = moduleIds.get(relationship.from);
+    const toId = moduleIds.get(relationship.to);
+    lines.push(`  ${fromId} -->|${Number(relationship.count) || 1} imports| ${toId}`);
   }
-
-  lines.push("  classDef focus fill:#17494d,stroke:#0d2f32,color:#f7f3e8;");
-  lines.push("  class app focus;");
 
   return lines.join("\n");
 }
@@ -871,7 +930,6 @@ function buildArchitectureDiagram(sourceName, modules, relationships, frameworks
 function buildSequenceDiagram(entrypoints, relationships) {
   const lines = ["sequenceDiagram"];
   const chain = relationships.slice(0, 6);
-  const participants = new Set();
 
   if (!chain.length) {
     lines.push("  participant User");
@@ -881,28 +939,26 @@ function buildSequenceDiagram(entrypoints, relationships) {
     return lines.join("\n");
   }
 
-  for (const entrypoint of entrypoints.slice(0, 2)) {
-    const alias = entrypoint.split("/").pop().replace(/[^a-z0-9]/gi, "_");
-    participants.add(`${alias}:${entrypoint}`);
+  const visibleParticipants = new Map();
+  for (const relationship of chain) {
+    if (!visibleParticipants.has(relationship.from)) {
+      visibleParticipants.set(relationship.from, `module_${visibleParticipants.size + 1}`);
+    }
+    if (!visibleParticipants.has(relationship.to)) {
+      visibleParticipants.set(relationship.to, `module_${visibleParticipants.size + 1}`);
+    }
   }
+  lines.push("  participant caller as Entry point");
+  for (const [name, id] of visibleParticipants) {
+    lines.push(`  participant ${id} as ${mermaidLabel(name)}`);
+  }
+  const entryLabel = entrypoints[0] ? mermaidLabel(entrypoints[0]) : "Repository entry";
+  lines.push(`  caller->>${visibleParticipants.get(chain[0].from)}: ${entryLabel}`);
 
   for (const relationship of chain) {
-    participants.add(`${relationship.from}:${relationship.from}`);
-    participants.add(`${relationship.to}:${relationship.to}`);
-  }
-
-  for (const participant of participants) {
-    const [alias, label] = participant.split(":");
-    lines.push(`  participant ${alias} as ${label}`);
-  }
-
-  if (entrypoints.length) {
-    const alias = entrypoints[0].split("/").pop().replace(/[^a-z0-9]/gi, "_");
-    lines.push(`  ${alias}->>${chain[0].from}: entrypoint dispatch`);
-  }
-
-  for (const relationship of chain) {
-    lines.push(`  ${relationship.from}->>${relationship.to}: ${relationship.count} linked imports`);
+    const fromId = visibleParticipants.get(relationship.from);
+    const toId = visibleParticipants.get(relationship.to);
+    lines.push(`  ${fromId}->>${toId}: ${Number(relationship.count) || 1} linked imports`);
   }
 
   return lines.join("\n");
@@ -919,12 +975,12 @@ function buildClassDiagram(classRecords) {
   }
 
   for (const record of flattened) {
-    const classId = `${record.module}_${record.name}`.replace(/[^a-z0-9_]/gi, "_");
-    lines.push(`  class ${classId}["${record.name}"]`);
+    const classId = mermaidId("class", `${record.module}_${record.name}`);
+    lines.push(`  class ${classId}["${mermaidLabel(record.name)}"]`);
 
     if (record.base) {
-      const baseId = `${record.module}_${record.base}`.replace(/[^a-z0-9_]/gi, "_");
-      lines.push(`  class ${baseId}["${record.base}"]`);
+      const baseId = mermaidId("class", `${record.module}_${record.base}`);
+      lines.push(`  class ${baseId}["${mermaidLabel(record.base)}"]`);
       lines.push(`  ${baseId} <|-- ${classId}`);
     }
   }
@@ -933,22 +989,28 @@ function buildClassDiagram(classRecords) {
 }
 
 function buildDependencyDiagram(modules, dependencies) {
-  const lines = [
-    "flowchart LR",
-    '  app["Application"]'
-  ];
+  const lines = ["flowchart LR", '  repo["Repository"]', '  subgraph modules["Code modules"]'];
 
-  for (const module of modules.slice(0, 6)) {
-    const moduleId = `module_${module.name.replace(/[^a-z0-9]+/gi, "_")}`;
-    lines.push(`  ${moduleId}["${module.name}"]`);
-    lines.push(`  app --> ${moduleId}`);
-  }
+  modules.slice(0, 6).forEach((module, index) => {
+    const moduleId = `module_${index + 1}`;
+    lines.push(`    ${moduleId}["${mermaidLabel(module.name)}"]`);
+    lines.push(`  repo --> ${moduleId}`);
+  });
 
-  for (const dependency of dependencies.slice(0, 8)) {
-    const dependencyId = `dep_${dependency.name.replace(/[^a-z0-9]+/gi, "_")}`;
-    lines.push(`  ${dependencyId}["${dependency.name}"]`);
-    lines.push(`  app --> ${dependencyId}`);
+  lines.push("  end", '  subgraph manifest["Manifest packages"]');
+  dependencies.slice(0, 8).forEach((dependency, index) => {
+    const dependencyId = `package_${index + 1}`;
+    const packageLabel = `${dependency.name}${dependency.version ? ` ${dependency.version}` : ""}`;
+    lines.push(`    ${dependencyId}["${mermaidLabel(packageLabel)}"]`);
+    lines.push(`  repo -. declares .-> ${dependencyId}`);
+  });
+  if (!dependencies.length) {
+    lines.push('    no_packages["No manifest packages detected"]');
   }
+  if (!modules.length) {
+    lines.push('    no_modules["No modules detected"]');
+  }
+  lines.push("  end");
 
   return lines.join("\n");
 }
@@ -1102,8 +1164,9 @@ async function walkDirectory(rootPath, currentPath, state) {
 
     const isCodeFile = Boolean(CODE_FILE_TYPES[extension]);
     const isManifest = MANIFEST_FILES.has(entry.name);
+    const isDocumentation = PREVIEW_FILE_TYPES[extension] || /^(readme|contributing|changelog|license)(\.|$)/i.test(entry.name) || entry.name === ".env.example";
 
-    if (!isCodeFile && !isManifest) {
+    if (!isCodeFile && !isManifest && !isDocumentation) {
       continue;
     }
 
@@ -1161,7 +1224,24 @@ async function walkDirectory(rootPath, currentPath, state) {
       }
 
       state.files.push(fileRecord);
+      state.sourceFiles.push({
+        path: relativePath,
+        module: moduleName,
+        language,
+        role: fileRecord.role,
+        content: sample
+      });
       state.classRecords.push(...classRecords);
+    } else {
+      const moduleName = getModuleName(relativePath);
+      const fileDescription = describePreviewFile(entry.name, extension);
+      state.sourceFiles.push({
+        path: relativePath,
+        module: moduleName,
+        language: fileDescription.language,
+        role: fileDescription.role,
+        content: sample
+      });
     }
   }
 }
@@ -1173,6 +1253,7 @@ async function analyzeCodebase(rootPath, options = {}) {
     allFiles: [],
     manifests: [],
     files: [],
+    sourceFiles: [],
     entrypoints: [],
     languageCounts: new Map(),
     moduleCounts: new Map(),
@@ -1184,6 +1265,7 @@ async function analyzeCodebase(rootPath, options = {}) {
 
   const knownModules = new Set([...state.moduleCounts.keys()]);
   const relationshipCounts = new Map();
+  const relationshipEvidence = new Map();
 
   for (const file of state.files) {
     const imports = detectImports(file.extension, file.sample);
@@ -1199,6 +1281,17 @@ async function analyzeCodebase(rootPath, options = {}) {
 
       const key = `${file.moduleName}->${targetModule}`;
       incrementCounter(relationshipCounts, key);
+      if (!relationshipEvidence.has(key)) {
+        relationshipEvidence.set(key, []);
+      }
+      const evidence = relationshipEvidence.get(key);
+      if (evidence.length < 3) {
+        evidence.push({
+          path: file.relativePath,
+          line: entry.line,
+          import: entry.value
+        });
+      }
     }
   }
 
@@ -1217,7 +1310,7 @@ async function analyzeCodebase(rootPath, options = {}) {
   const relationships = [...relationshipCounts.entries()]
     .map(([key, count]) => {
       const [from, to] = key.split("->");
-      return { from, to, count };
+      return { from, to, count, evidence: relationshipEvidence.get(key) || [] };
     })
     .sort((a, b) => b.count - a.count || a.from.localeCompare(b.from));
 
@@ -1279,6 +1372,8 @@ async function analyzeCodebase(rootPath, options = {}) {
     content: file.sample
   }));
 
+  const sourceIndex = state.sourceFiles;
+
   const analysis = {
     summary,
     modules,
@@ -1290,7 +1385,9 @@ async function analyzeCodebase(rootPath, options = {}) {
     diagrams,
     mermaidDiagram: diagrams.architecture,
     reportMarkdown: "",
-    searchIndex
+    searchIndex,
+    sourceIndex,
+    directoryIndex: state.allFiles
   };
 
   analysis.reportMarkdown = buildReportMarkdown(analysis);

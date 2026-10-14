@@ -8,6 +8,7 @@ const { prepareSource, getSupportedSourcePlatforms } = require("./services/sourc
 const { analyzeCodebase } = require("./services/analyzerService");
 const { generateInsights, generateStreamingInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
+const { buildLearningGuide } = require("./services/learningGuideService");
 const { answerQuestion } = require("./services/chatService");
 const { answerSystemQuestion } = require("./services/systemChatService");
 const { normalizeUserQuestion } = require("./services/questionNormalizer");
@@ -126,6 +127,22 @@ function getUploadedFile(files, fieldName) {
   return files?.[fieldName]?.[0] || null;
 }
 
+function sanitizeRepositoryUrl(value) {
+  try {
+    const url = new URL(String(value || ""));
+    if (!["http:", "https:"].includes(url.protocol)) {
+      return "";
+    }
+    url.username = "";
+    url.password = "";
+    url.search = "";
+    url.hash = "";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function serializeAnalysis(analysis, insights) {
   return {
     summary: analysis.summary,
@@ -138,6 +155,7 @@ function serializeAnalysis(analysis, insights) {
     diagrams: analysis.diagrams,
     mermaidDiagram: analysis.mermaidDiagram,
     reportMarkdown: analysis.reportMarkdown,
+    learningGuide: buildLearningGuide(analysis),
     explanation: insights.explanation,
     documentation: insights.documentation,
     aiStatus: insights.aiStatus
@@ -152,17 +170,34 @@ function buildSourceMetadata(preparedSource) {
     platformId: preparedSource.sourcePlatformId || "generic",
     workspaceLabel: preparedSource.sourceWorkspaceLabel || preparedSource.sourceName,
     workspaceKey: preparedSource.sourceWorkspaceKey || "",
-    repoUrl: preparedSource.sourceRepoUrl || "",
+    repoUrl: sanitizeRepositoryUrl(preparedSource.sourceRepoUrl),
     ref: preparedSource.sourceRef || ""
   };
 }
 
 function buildExportMarkdown(session) {
+  const guide = buildLearningGuide(session.analysis);
+  const guideMarkdown = [
+    "## First-day learning guide",
+    "",
+    ...guide.steps.flatMap((step) => [
+      `### ${step.title}`,
+      step.body,
+      `Basis: ${step.basis}`,
+      ...(step.evidence || []).map((item) => `- Evidence: ${item.path}:${item.line}`),
+      ""
+    ]),
+    "### Recruiter walkthrough",
+    guide.presentationScript,
+    "",
+    `> ${guide.scopeNote}`
+  ].join("\n");
+
   if (session.comparison) {
-    return `${session.analysis.reportMarkdown}\n\n${session.comparison.reviewMarkdown}`;
+    return `${session.analysis.reportMarkdown}\n\n${guideMarkdown}\n\n${session.comparison.reviewMarkdown}`;
   }
 
-  return session.analysis.reportMarkdown;
+  return `${session.analysis.reportMarkdown}\n\n${guideMarkdown}`;
 }
 
 function verifyGitHubSignature(rawBody, signatureHeader, secret) {
@@ -313,6 +348,9 @@ function createApp() {
       capabilities: [
         "repository intake",
         "ZIP analysis",
+        "beginner learning guide",
+        "source-line citations",
+        "change impact review",
         "architecture diagrams",
         "compare reviews",
         "codebase chat",
@@ -395,6 +433,92 @@ function createApp() {
     return res.json(report);
   });
 
+  app.get("/api/analysis/:analysisId", (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const session = getAnalysisSession(req.params.analysisId);
+
+    if (!session) {
+      return res.status(404).json({ error: "Analysis session not found. Run the repository analysis again." });
+    }
+
+    const files = session.analysis.sourceIndex || session.analysis.searchIndex || [];
+    const directory = session.analysis.directoryIndex || files.map((file) => file.path);
+    const previewByPath = new Map(files.map((file) => [file.path, file]));
+    return res.json({
+      source: session.source,
+      analysisId: req.params.analysisId,
+      summary: session.analysis.summary,
+      explanation: session.insights?.explanation || "",
+      learningGuide: buildLearningGuide(session.analysis),
+      aiStatus: session.insights?.aiStatus || "fallback",
+      analysis: serializeAnalysis(session.analysis, session.insights || {}),
+      comparison: session.comparison || null,
+      comparisonContext: session.baselineSource
+        ? {
+            baselineSource: session.baselineSource,
+            baselineSummary: session.baselineAnalysis?.summary || null
+          }
+        : null,
+      exportUrls: {
+        markdown: `/api/export/${encodeURIComponent(req.params.analysisId)}?format=markdown`,
+        json: `/api/export/${encodeURIComponent(req.params.analysisId)}?format=json`
+      },
+      modules: session.analysis.modules || [],
+      files: directory.slice(0, 8000).map((filePath) => {
+        const preview = previewByPath.get(filePath);
+        return {
+          path: filePath,
+          module: preview?.module || "",
+          language: preview?.language || "",
+          role: preview?.role || "",
+          previewable: Boolean(preview)
+        };
+      }),
+      totalFiles: directory.length,
+      indexedTextFiles: files.length,
+      filesLimited: directory.length > 8000
+    });
+  });
+
+  app.get("/api/analysis/:analysisId/file", (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const session = getAnalysisSession(req.params.analysisId);
+
+    if (!session) {
+      return res.status(404).json({ error: "Analysis session not found. Run the repository analysis again." });
+    }
+
+    const requestedPath = String(req.query.path || "").replace(/\\/g, "/");
+    const pathSegments = requestedPath.split("/");
+
+    if (
+      !requestedPath ||
+      requestedPath.length > 1024 ||
+      requestedPath.startsWith("/") ||
+      requestedPath.includes("\0") ||
+      pathSegments.includes("..")
+    ) {
+      return res.status(400).json({ error: "Choose a file from the analyzed repository." });
+    }
+
+    const file = (session.analysis.sourceIndex || session.analysis.searchIndex || []).find((entry) => entry.path === requestedPath);
+
+    if (!file) {
+      return res.status(404).json({ error: "That file is not part of this analyzed repository." });
+    }
+
+    return res.json({
+      file: {
+        path: file.path,
+        module: file.module,
+        language: file.language,
+        role: file.role,
+        content: file.content,
+        truncated: file.content.length >= 12000
+      }
+    });
+  });
+
   app.post(
     "/api/analyze",
     upload.fields([
@@ -454,7 +578,9 @@ function createApp() {
 
         const analysisId = createAnalysisSession({
           analysis,
+          insights,
           baselineAnalysis,
+          baselineSource: baselineMetadata,
           comparison,
           source: buildSourceMetadata(preparedSource)
         });
@@ -582,7 +708,7 @@ function createApp() {
     if (format === "json") {
       return res.json({
         source: session.source,
-        analysis: session.analysis,
+        analysis: serializeAnalysis(session.analysis, session.insights || {}),
         comparison: session.comparison || null
       });
     }

@@ -45,12 +45,13 @@ function buildFallbackDocumentation(analysis, options = {}) {
 
   return {
     explanation:
-      `${analysis.summary.sourceName} looks like a ${frameworkLine} codebase with ` +
-      `${analysis.summary.codeFiles} code files organized into ${analysis.modules.length} logical modules. ` +
+      `${analysis.summary.sourceName} is a repository built with ${frameworkLine}, containing ` +
+      `${analysis.summary.codeFiles} code files organized into ${analysis.modules.length} logical ` +
+      `module${analysis.modules.length === 1 ? "" : "s"}. ` +
       `The heaviest areas are ${modules || "the root module"}, and the most likely entrypoints are ${entrypoints}.`,
     documentation: [
       "## Overview",
-      `${analysis.summary.sourceName} is a ${frameworkLine} project analyzed from a ${analysis.summary.sourceType} source.`,
+      `${analysis.summary.sourceName} was analyzed. Source type: ${analysis.summary.sourceType}. Primary technology profile: ${frameworkLine}.`,
       "",
       "## Architecture",
       modules || "The repository is small enough that most logic lives near the root.",

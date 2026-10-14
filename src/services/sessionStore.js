@@ -3,6 +3,20 @@ const { randomUUID } = require("crypto");
 const analysisSessions = new Map();
 const webhookReports = new Map();
 const savedProjects = new Map();
+const ANALYSIS_SESSION_TTL_MS = 2 * 60 * 60 * 1000;
+const MAX_ANALYSIS_SESSIONS = 16;
+
+function pruneAnalysisSessions(now = Date.now()) {
+  for (const [id, session] of analysisSessions) {
+    if (now - Date.parse(session.createdAt) > ANALYSIS_SESSION_TTL_MS) {
+      analysisSessions.delete(id);
+    }
+  }
+
+  while (analysisSessions.size >= MAX_ANALYSIS_SESSIONS) {
+    analysisSessions.delete(analysisSessions.keys().next().value);
+  }
+}
 
 function buildWorkspaceReportKey(provider, repository) {
   return `${String(provider || "generic").trim().toLowerCase()}:${String(repository || "")
@@ -11,6 +25,7 @@ function buildWorkspaceReportKey(provider, repository) {
 }
 
 function createAnalysisSession(payload) {
+  pruneAnalysisSessions();
   const id = randomUUID();
   analysisSessions.set(id, {
     ...payload,
@@ -20,7 +35,18 @@ function createAnalysisSession(payload) {
 }
 
 function getAnalysisSession(id) {
-  return analysisSessions.get(id) || null;
+  const session = analysisSessions.get(id);
+
+  if (!session) {
+    return null;
+  }
+
+  if (Date.now() - Date.parse(session.createdAt) > ANALYSIS_SESSION_TTL_MS) {
+    analysisSessions.delete(id);
+    return null;
+  }
+
+  return session;
 }
 
 function saveWebhookReport(key, payload) {

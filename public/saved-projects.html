@@ -8,45 +8,45 @@
     <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/critical-ui.css" />
+    <link rel="stylesheet" href="/experience.css" />
   </head>
-  <body class="concept-match subpage">
+  <body class="concept-match subpage saved-projects-page">
     <div class="page-shell">
       <header class="topbar">
         <a class="brand-lockup" href="/">
-          <img class="brand-lockup-image" src="/brand-lockup.svg" alt="LumenStack AI" />
+          <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
           <span class="subpage-brand-note">Saved Projects</span>
         </a>
         <nav class="topbar-nav" aria-label="Primary">
-          <a href="/">Home</a>
+          <a href="/#analyze-panel">Analyze</a>
+          <a href="/explorer.html">Repository</a>
+          <a href="/guide.html">How to use</a>
           <a href="/product.html">Product</a>
-          <a href="/case-study.html">Case Study</a>
-          <a href="/saved-projects.html" aria-current="page">Saved Projects</a>
-          <a href="/contact.html">Hire Ujala</a>
         </nav>
         <div class="topbar-actions">
           <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">Dark Mode</button>
           <button class="secondary-button compact-button" type="button" data-open-command>Command</button>
-          <a class="primary-button compact-button" href="/#auth-projects">Open Demo</a>
+          <a class="primary-button compact-button" href="#auth-projects">Open workspace</a>
         </div>
       </header>
 
       <main class="subpage-main">
         <section class="subpage-hero">
-          <span class="concept-pill">Auth-ready workflow</span>
-          <h1>Saved projects make the demo feel like a real workspace recruiters can return to.</h1>
-          <p>This page demonstrates the product direction for authentication and persistence. The current demo uses an in-memory backend store and browser session state.</p>
+          <span class="concept-pill">Saved reviews</span>
+          <h1>A clear home for repository reviews.</h1>
+          <p>Save a review, then scan its repository, confidence score, and status in one place. Demo records reset when the app restarts.</p>
         </section>
 
         <section id="auth-projects" class="auth-projects-showcase">
           <div class="auth-copy">
-            <span class="concept-pill">Demo account</span>
-            <h2>Sign in, save a project, and see it appear instantly.</h2>
-            <p>Production persistence can later move to Render Postgres, Supabase, Neon, or another free PostgreSQL tier.</p>
+            <span class="concept-pill">Demo workspace</span>
+            <h2>Save a review. Keep its key details in view.</h2>
+            <p>Create a project review and see its repository, confidence score, and status together.</p>
           </div>
           <div class="auth-console spotlight-card">
             <div class="auth-panel-header">
               <div>
-                <strong>Ujala Workspace</strong>
+                <strong>Review workspace</strong>
                 <span id="auth-state-label">Demo account ready</span>
               </div>
               <button id="demo-auth-button" class="primary-button compact-button" type="button">Sign in as recruiter</button>

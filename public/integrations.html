@@ -3,18 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      (() => {
-        try {
-          if (
-            window.matchMedia("(pointer: fine)").matches &&
-            !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ) {
-            document.documentElement.classList.add("cursor-bootstrap");
-          }
-        } catch {}
-      })();
-    </script>
     <title>LumenStack AI Integrations</title>
     <meta
       name="description"
@@ -42,30 +30,13 @@
     <link rel="icon" href="/brand-favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/critical-ui.css" />
+    <link rel="stylesheet" href="/experience.css" />
   </head>
-  <body
-    class="concept-match"
-    data-intro-badge="Provider Grid"
-    data-intro-title="Booting the intake matrix"
-    data-intro-copy="Checking live platform coverage, webhook routes, and workspace report lanes."
-    data-intro-tags="Provider catalog|Webhook coverage|Workspace reports"
-  >
-    <div class="ambient-layer" aria-hidden="true">
-      <div class="ambient-orb orb-a"></div>
-      <div class="ambient-orb orb-b"></div>
-      <div class="ambient-grid"></div>
-      <div class="ambient-beam beam-a"></div>
-      <div class="ambient-beam beam-b"></div>
-    </div>
-
-    <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
-    <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
-    <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
-
+  <body class="concept-match subpage integration-page">
     <div class="page-shell">
       <header class="topbar">
         <div class="brand-lockup">
-          <img class="brand-lockup-image" src="/brand-lockup.svg" alt="LumenStack AI" />
+          <img class="brand-lockup-image" src="/brand-mark.svg" alt="LumenStack AI" />
           <div class="brand-lockup-copy">
             <p class="eyebrow">LumenStack AI</p>
             <strong>Intake Matrix</strong>
@@ -73,10 +44,10 @@
         </div>
 
         <nav class="topbar-nav" aria-label="Primary">
-          <a href="/">Analyzer</a>
-          <a href="/#platform-pillars">Roadmap</a>
-          <a href="/workspaces.html">Workspaces</a>
-          <a href="/integrations.html" aria-current="page">Integrations</a>
+          <a href="/#analyze-panel">Analyze</a>
+          <a href="/explorer.html">Repository</a>
+          <a href="/guide.html">How to use</a>
+          <a href="/product.html">Product</a>
         </nav>
 
         <div class="topbar-actions">
@@ -91,8 +62,15 @@
             </span>
             <span id="theme-toggle-label">Dark Mode</span>
           </button>
+          <a class="primary-button compact-button" href="/#analyze-panel">Analyze repo</a>
         </div>
       </header>
+
+      <section class="subpage-hero subpage-brief">
+        <span class="concept-pill">Source coverage</span>
+        <h1>Know what you can connect.</h1>
+        <p>Live provider coverage, example formats, and the API routes available to each repository workflow.</p>
+      </section>
 
       <section class="hero-stage alt-hero-stage hero-stage-reference">
         <article class="hero-panel spotlight-card">
@@ -247,7 +225,6 @@
               <p class="eyebrow">Provider API</p>
               <h2>Runtime-supported intake platforms</h2>
             </div>
-            <span class="panel-badge">Live catalog</span>
           </div>
 
           <div id="integration-grid" class="integration-grid">
@@ -280,6 +257,5 @@
 
     <script src="/theme.js"></script>
     <script src="/integrations.js"></script>
-    <script src="/pagefx.js"></script>
   </body>
 </html>

@@ -161,6 +161,27 @@ function toTokenSet(value) {
   return new Set(tokenize(value));
 }
 
+function findCitationLine(content, questionTokens) {
+  const lines = String(content || "").split(/\r?\n/);
+  let best = null;
+  let bestScore = 0;
+
+  lines.forEach((line, index) => {
+    const normalized = line.trim();
+    if (!normalized) return;
+    const lineTokens = toTokenSet(normalized);
+    const score = questionTokens.reduce((total, token) => total + Number(lineTokens.has(token)), 0);
+    if (score > bestScore) {
+      bestScore = score;
+      best = { line: index + 1 };
+    }
+  });
+
+  if (best) return best;
+  const firstReadableLine = lines.findIndex((line) => line.trim());
+  return firstReadableLine < 0 ? null : { line: firstReadableLine + 1 };
+}
+
 function normalizeRole(role) {
   if (!role) {
     return "";
@@ -259,7 +280,8 @@ function retrieveRelevantDocuments(analysis, question, limit = 4) {
         pathHit,
         moduleHit,
         roleHit,
-        contentHit
+        contentHit,
+        citationLine: findCitationLine(document.content, questionTokens)
       };
     })
     .filter((document) => document.score > 0)
@@ -523,7 +545,8 @@ function buildSimpleOverviewAnswer(analysis, matches, options = {}) {
 function buildCitations(matches) {
   return matches.map((match) => ({
     path: match.path,
-    module: match.module
+    module: match.module,
+    line: match.citationLine?.line || null
   }));
 }
 
@@ -978,15 +1001,14 @@ function buildFallbackAnswer(analysis, question, matches, options = {}) {
 async function answerQuestion(analysis, question) {
   const normalizedQuestion = normalizeQuestionText(question);
   const matches = retrieveRelevantDocuments(analysis, normalizedQuestion);
-  const includeCitations = shouldIncludeCitations(normalizedQuestion);
   const fallbackAnswer = buildFallbackAnswer(analysis, normalizedQuestion, matches, {
-    includeEvidenceInText: includeCitations
+    includeEvidenceInText: shouldIncludeCitations(normalizedQuestion)
   });
 
   if (!process.env.OPENAI_API_KEY) {
     return {
       answer: formatAnswerForHumans(fallbackAnswer.answer, question),
-      citations: includeCitations ? fallbackAnswer.citations : [],
+      citations: fallbackAnswer.citations,
       aiStatus: "fallback",
       aiReason: "missing_key",
       aiMessage: "OPENAI_API_KEY is missing. Answering from indexed repository context."
@@ -1051,7 +1073,7 @@ async function answerQuestion(analysis, question) {
 
     return {
       answer: formatAnswerForHumans(response.output_text || fallbackAnswer.answer, normalizedQuestion),
-      citations: includeCitations ? buildCitations(matches) : [],
+      citations: buildCitations(matches),
       aiStatus: "live",
       aiReason: "ok",
       aiMessage: "OpenAI live response."
@@ -1060,7 +1082,7 @@ async function answerQuestion(analysis, question) {
     const aiDetails = classifyOpenAIError(error);
     return {
       answer: formatAnswerForHumans(fallbackAnswer.answer, normalizedQuestion),
-      citations: includeCitations ? fallbackAnswer.citations : [],
+      citations: fallbackAnswer.citations,
       aiStatus: "fallback",
       aiReason: aiDetails.aiReason,
       aiMessage: aiDetails.aiMessage
