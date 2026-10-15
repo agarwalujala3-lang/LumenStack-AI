@@ -37,6 +37,7 @@ const metricsLatencyElement = document.getElementById("metrics-latency");
 const metricsModuleCountElement = document.getElementById("metrics-module-count");
 const metricsConfidenceElement = document.getElementById("metrics-confidence");
 const resultsElement = document.getElementById("results");
+let activePracticeTimer = null;
 const resultTitleElement = document.getElementById("result-title");
 const sourcePillElement = document.getElementById("source-pill");
 const analysisTimeElement = document.getElementById("analysis-time");
@@ -1877,6 +1878,347 @@ function renderComparison(comparison, comparisonContext = null) {
   }
 }
 
+function appendLearningEvidence(parent, evidenceItems) {
+  const uniqueItems = [...new Map((evidenceItems || [])
+    .filter((item) => item?.path && Number.isInteger(item.line))
+    .map((item) => [`${item.path}:${item.line}`, item])).values()];
+  if (!uniqueItems.length) return;
+
+  const links = createElement("div", "learning-evidence");
+  for (const item of uniqueItems.slice(0, 8)) {
+    const link = createElement("a", "learning-evidence-link", `${item.path}:${item.line}`);
+    link.href = buildExplorerUrl(item.path, item.line);
+    link.title = item.excerpt || `Open ${item.path} at line ${item.line}`;
+    links.appendChild(link);
+  }
+  parent.appendChild(links);
+}
+
+function renderLearningWorkflow(workflow) {
+  const workflowRoot = document.getElementById("learning-workflow");
+  const exampleRoot = document.getElementById("learning-flow-example");
+  workflowRoot.replaceChildren();
+  exampleRoot.replaceChildren();
+  document.getElementById("learning-workflow-note").textContent = workflow?.note || "Connections are static source evidence, not a guaranteed runtime sequence.";
+
+  if (!workflow?.stages?.length) {
+    workflowRoot.appendChild(createElement("p", "empty-state", "No workflow stages could be confirmed from this repository."));
+  } else {
+    for (const [index, stage] of workflow.stages.entries()) {
+      const article = createElement("article", "learning-flow-stage");
+      article.appendChild(createElement("span", "learning-flow-index", String(index + 1).padStart(2, "0")));
+      article.appendChild(createElement("span", "learning-flow-state", stage.state || "Observed"));
+      article.appendChild(createElement("h3", "", stage.title));
+      article.appendChild(createElement("p", "", stage.detail));
+      appendLearningEvidence(article, stage.evidence);
+      workflowRoot.appendChild(article);
+    }
+  }
+
+  if (workflow?.example) {
+    exampleRoot.hidden = false;
+    exampleRoot.appendChild(createElement("div", "learning-flow-example-copy"));
+    const copy = exampleRoot.querySelector(".learning-flow-example-copy");
+    copy.appendChild(createElement("p", "eyebrow", workflow.example.title));
+    copy.appendChild(createElement("p", "", workflow.example.body));
+    const code = createElement("pre", "learning-source-example");
+    code.appendChild(createElement("code", "", workflow.example.snippet || "Source line not available."));
+    exampleRoot.appendChild(code);
+    appendLearningEvidence(exampleRoot, [workflow.example.evidence]);
+  } else {
+    exampleRoot.hidden = true;
+  }
+}
+
+function renderLearningInfrastructure(cards) {
+  const root = document.getElementById("learning-infrastructure");
+  root.replaceChildren();
+  for (const card of cards || []) {
+    const article = createElement("article", "learning-info-card learning-infra-card");
+    article.appendChild(createElement("span", "learning-info-kicker", card.category || "Infrastructure"));
+    article.appendChild(createElement("h3", "", card.title));
+    article.appendChild(createElement("p", "", card.description));
+    if (card.details?.length) {
+      const detailList = createElement("dl", "learning-config-details");
+      for (const detail of card.details) {
+        const label = createElement("dt", "", detail.label);
+        const value = createElement("dd", "", detail.value);
+        if (detail.evidence) {
+          const link = createElement("a", "learning-inline-source", `${detail.evidence.path}:${detail.evidence.line}`);
+          link.href = buildExplorerUrl(detail.evidence.path, detail.evidence.line);
+          link.title = detail.evidence.excerpt || "Open the source configuration";
+          value.appendChild(link);
+        }
+        detailList.append(label, value);
+      }
+      article.appendChild(detailList);
+    }
+    appendLearningEvidence(article, card.evidence);
+    root.appendChild(article);
+  }
+  if (!root.children.length) root.appendChild(createElement("p", "empty-state", "No infrastructure signals were indexed."));
+}
+
+function renderLearningTechnologies(choices) {
+  const root = document.getElementById("learning-technologies");
+  root.replaceChildren();
+  for (const choice of choices || []) {
+    const article = createElement("article", "learning-info-card learning-tech-card");
+    article.appendChild(createElement("span", "learning-info-kicker", "Detected stack"));
+    article.appendChild(createElement("h3", "", choice.name));
+    article.appendChild(createElement("p", "learning-observed", choice.observed));
+    const role = createElement("div", "learning-rationale-block");
+    role.appendChild(createElement("strong", "", "What it does here"));
+    role.appendChild(createElement("p", "", choice.role));
+    const fit = createElement("div", "learning-rationale-block");
+    fit.appendChild(createElement("strong", "", "Why it can fit"));
+    fit.appendChild(createElement("p", "", choice.typicalFit));
+    article.append(role, fit);
+    if (choice.apiEvidence?.excerpt) {
+      const example = createElement("div", "learning-tech-example");
+      example.appendChild(createElement("strong", "", "One implementation example"));
+      const code = createElement("pre", "learning-source-example");
+      code.appendChild(createElement("code", "", choice.apiEvidence.excerpt));
+      example.appendChild(code);
+      const source = createElement("a", "learning-inline-source", `${choice.apiEvidence.path}:${choice.apiEvidence.line}`);
+      source.href = buildExplorerUrl(choice.apiEvidence.path, choice.apiEvidence.line);
+      example.appendChild(source);
+      article.appendChild(example);
+    }
+    article.appendChild(createElement("p", "learning-rationale-caveat", choice.projectRationale));
+    appendLearningEvidence(article, choice.evidence);
+    root.appendChild(article);
+  }
+  if (!root.children.length) {
+    root.appendChild(createElement("p", "empty-state", "No framework or primary language signal was available for a technology explanation."));
+  }
+}
+
+function renderLearningInterview(questions, note) {
+  const root = document.getElementById("learning-interview-questions");
+  root.replaceChildren();
+  for (const item of questions || []) {
+    const details = createElement("details", "learning-interview-question");
+    details.open = false;
+    const summary = createElement("summary", "", item.question);
+    const answer = createElement("p", "learning-interview-answer", item.answer);
+    details.append(summary, answer);
+    if (item.followUp) {
+      const followUp = createElement("p", "learning-interview-followup");
+      followUp.appendChild(createElement("strong", "", "Practice follow-up: "));
+      followUp.appendChild(document.createTextNode(sanitize(item.followUp)));
+      details.appendChild(followUp);
+    }
+    appendLearningEvidence(details, item.evidence);
+    root.appendChild(details);
+  }
+  document.getElementById("learning-interview-note").textContent = note || "Verify each answer against the files before using it in an interview.";
+  if (!root.children.length) root.appendChild(createElement("p", "empty-state", "Interview practice will appear after analysis."));
+}
+
+function appendLearningKnowledgeCheck(article, step) {
+  const check = step.knowledgeCheck;
+  if (!check?.options?.length) return;
+
+  const details = createElement("details", "learning-quick-check");
+  details.appendChild(createElement("summary", "", "Quick recall · choose the best-supported answer"));
+  const body = createElement("div", "learning-check-body");
+  const prompt = createElement("p", "", check.question);
+  const options = document.createElement("fieldset");
+  options.className = "learning-check-options";
+  options.setAttribute("aria-label", `${step.title} answer choices`);
+  const feedback = createElement("div", "learning-check-feedback");
+  feedback.setAttribute("role", "status");
+  feedback.setAttribute("aria-live", "polite");
+  feedback.hidden = true;
+
+  check.options.forEach((option, index) => {
+    const label = createElement("label", "learning-check-option");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `knowledge-check-${step.id}`;
+    input.value = String(index);
+    label.append(input, createElement("span", "", option));
+    options.appendChild(label);
+  });
+
+  const submit = createElement("button", "secondary-button compact-button learning-check-submit", "Check answer");
+  submit.type = "button";
+  submit.onclick = () => {
+    const selected = options.querySelector("input:checked");
+    feedback.replaceChildren();
+    feedback.hidden = false;
+    if (!selected) {
+      feedback.textContent = "Choose an answer, then check it against the linked repository evidence.";
+      feedback.dataset.correct = "false";
+      return;
+    }
+
+    const correct = Number(selected.value) === check.correctIndex;
+    feedback.dataset.correct = String(correct);
+    feedback.appendChild(createElement("strong", "", correct ? "Supported by the scan." : "Revisit the evidence."));
+    feedback.appendChild(createElement("p", "", check.explanation));
+    appendLearningEvidence(feedback, check.evidence);
+  };
+
+  body.append(prompt, options, submit, feedback);
+  details.appendChild(body);
+  article.appendChild(details);
+}
+
+function renderInterviewPractice(questions) {
+  if (activePracticeTimer) window.clearInterval(activePracticeTimer);
+  activePracticeTimer = null;
+
+  const select = document.getElementById("practice-question-select");
+  const prompt = document.getElementById("practice-question-prompt");
+  const answer = document.getElementById("practice-answer");
+  const timerOutput = document.getElementById("practice-timer");
+  const timerButton = document.getElementById("practice-timer-toggle");
+  const reviewButton = document.getElementById("review-practice-answer");
+  const nextButton = document.getElementById("next-practice-question");
+  const feedback = document.getElementById("practice-feedback");
+  const drafts = new Map();
+  let activeIndex = 0;
+  let remainingSeconds = 90;
+
+  function showTime() {
+    const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
+    const seconds = String(remainingSeconds % 60).padStart(2, "0");
+    timerOutput.textContent = `${minutes}:${seconds}`;
+  }
+
+  function stopTimer(reset = false) {
+    if (activePracticeTimer) window.clearInterval(activePracticeTimer);
+    activePracticeTimer = null;
+    if (reset) remainingSeconds = 90;
+    timerButton.setAttribute("aria-pressed", "false");
+    timerButton.textContent = remainingSeconds === 90 ? "Start 90 sec" : "Resume timer";
+    showTime();
+  }
+
+  function setQuestion(index, saveDraft = true) {
+    if (!questions?.length) return;
+    if (saveDraft) drafts.set(activeIndex, answer.value);
+    activeIndex = (index + questions.length) % questions.length;
+    select.value = String(activeIndex);
+    prompt.textContent = questions[activeIndex].question;
+    answer.value = drafts.get(activeIndex) || "";
+    feedback.replaceChildren();
+    feedback.hidden = true;
+    stopTimer(true);
+  }
+
+  select.replaceChildren();
+  (questions || []).forEach((item, index) => {
+    const option = document.createElement("option");
+    option.value = String(index);
+    option.textContent = `${String(index + 1).padStart(2, "0")} · ${item.question}`;
+    select.appendChild(option);
+  });
+
+  select.onchange = () => setQuestion(Number(select.value));
+  nextButton.onclick = () => setQuestion(activeIndex + 1);
+  timerButton.onclick = () => {
+    if (activePracticeTimer) {
+      stopTimer();
+      return;
+    }
+    if (remainingSeconds <= 0) remainingSeconds = 90;
+    timerButton.textContent = "Pause timer";
+    timerButton.setAttribute("aria-pressed", "true");
+    showTime();
+    activePracticeTimer = window.setInterval(() => {
+      remainingSeconds = Math.max(0, remainingSeconds - 1);
+      showTime();
+      if (remainingSeconds === 0) stopTimer();
+    }, 1000);
+  };
+  reviewButton.onclick = () => {
+    drafts.set(activeIndex, answer.value);
+    const text = answer.value.trim();
+    const wordCount = text ? text.split(/\s+/).length : 0;
+    const cues = [
+      { label: "Give enough context to explain the problem and your approach.", found: wordCount >= 35 },
+      { label: "Anchor at least one point to a real file or configuration path.", found: /(?:^|\s)[\w.@-]+(?:\/[\w.@-]+)*\.[a-z0-9]+(?::\d+)?\b/i.test(text) },
+      { label: "Separate your own contribution from what you learned by inspecting the repository.", found: /\b(?:I (?:built|implemented|designed|tested|contributed|maintained|learned)|my contribution)\b/i.test(text) },
+      { label: "Mention how you would verify the result or measure its impact.", found: /\b(?:test(?:ed|s)?|verif(?:y|ied|ication)|validat(?:e|ed|ion)|measur(?:e|ed|ement)|metric|result|impact)\b/i.test(text) }
+    ];
+
+    feedback.replaceChildren();
+    feedback.hidden = false;
+    feedback.appendChild(createElement("h4", "", "Answer self-review"));
+    feedback.appendChild(createElement("p", "", "These are writing cues, not a correctness score. Check your claims against the cited files and be accurate about your own work."));
+    for (const cue of cues) {
+      const item = createElement("div", "learning-practice-cue", cue.label);
+      item.dataset.found = String(cue.found);
+      feedback.appendChild(item);
+    }
+  };
+
+  select.disabled = !questions?.length;
+  reviewButton.disabled = !questions?.length;
+  nextButton.disabled = !questions?.length;
+  timerButton.disabled = !questions?.length;
+  if (questions?.length) setQuestion(0, false);
+  else prompt.textContent = "Interview prompts will appear after analysis.";
+}
+
+function renderLearningImpact(changeImpact) {
+  const select = document.getElementById("learning-impact-module");
+  const map = document.getElementById("learning-impact-map");
+  const note = document.getElementById("learning-impact-note");
+  const modules = changeImpact?.modules || [];
+  select.replaceChildren();
+
+  for (const module of modules) {
+    const option = document.createElement("option");
+    option.value = module.name;
+    option.textContent = `${module.name} · ${module.fileCount} files`;
+    select.appendChild(option);
+  }
+  select.disabled = !modules.length;
+  note.textContent = changeImpact?.note || "Change impact is estimated from indexed source imports only.";
+
+  function showImpact() {
+    map.replaceChildren();
+    const selected = modules.find((module) => module.name === select.value);
+    if (!selected) {
+      map.appendChild(createElement("p", "learning-impact-empty", "No modules were available for impact exploration."));
+      return;
+    }
+    if (!selected.affected.length) {
+      map.appendChild(createElement("p", "learning-impact-empty", `No reverse import path to ${selected.name} was confirmed in indexed source. That does not rule out runtime, configuration, or external dependencies.`));
+      return;
+    }
+
+    for (const affected of selected.affected) {
+      const row = createElement("article", "learning-impact-result");
+      row.appendChild(createElement("strong", "", affected.name));
+      row.appendChild(createElement("p", "", `Import path: ${affected.path.join(" → ")}. Review this area and its tests if ${selected.name} changes.`));
+      row.appendChild(createElement("span", "learning-impact-distance", affected.distance === 1 ? "Direct importer" : `${affected.distance} steps away`));
+      appendLearningEvidence(row, affected.evidence);
+      map.appendChild(row);
+    }
+  }
+
+  select.onchange = showImpact;
+  showImpact();
+}
+
+function activateLearningDetailTab(key, focus = false) {
+  const tabs = [...document.querySelectorAll("[data-learning-tab]")];
+  for (const tab of tabs) {
+    const selected = tab.dataset.learningTab === key;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected && focus) tab.focus();
+  }
+  for (const panel of document.querySelectorAll("[data-learning-panel]")) {
+    panel.hidden = panel.dataset.learningPanel !== key;
+  }
+}
+
 function renderLearning(guide, source) {
   const stepsRoot = document.getElementById("learning-steps");
   const script = document.getElementById("presentation-script");
@@ -1920,6 +2262,8 @@ function renderLearning(guide, source) {
     const article = createElement("article", "learning-step");
     const heading = createElement("div", "learning-step-head");
     const title = createElement("h3", "", `${String(index + 1).padStart(2, "0")} · ${step.title}`);
+    const titleGroup = createElement("div", "learning-step-title");
+    titleGroup.append(title, createElement("span", "learning-step-phase", step.phase || "Learn"));
     const label = createElement("label", "learning-step-check");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -1931,23 +2275,49 @@ function renderLearning(guide, source) {
       updateProgress();
     });
     label.append(checkbox, createElement("span", "", "I understand this"));
-    heading.append(title, label);
+    heading.append(titleGroup, label);
     article.append(heading, createElement("p", "", step.body));
     article.appendChild(createElement("span", "learning-basis", step.basis || "Analyzer note"));
 
-    const evidenceItems = [...new Map((step.evidence || []).map((item) => [`${item.path}:${item.line}`, item])).values()];
-    if (evidenceItems.length) {
-      const evidence = createElement("div", "learning-evidence");
-      for (const item of evidenceItems.slice(0, 8)) {
-        const link = createElement("a", "learning-evidence-link", `${item.path}:${item.line}`);
-        link.href = buildExplorerUrl(item.path, item.line);
-        link.title = item.excerpt || `Open ${item.path} at line ${item.line}`;
-        evidence.appendChild(link);
-      }
-      article.appendChild(evidence);
-    }
+    appendLearningEvidence(article, step.evidence);
+    appendLearningKnowledgeCheck(article, step);
     stepsRoot.appendChild(article);
   }
+
+  renderLearningWorkflow(guide?.workflow);
+  renderLearningInfrastructure(guide?.infrastructure);
+  renderLearningTechnologies(guide?.technologyChoices);
+  renderLearningInterview(guide?.interviewQuestions, guide?.interviewNote);
+  renderInterviewPractice(guide?.interviewQuestions);
+  renderLearningImpact(guide?.changeImpact);
+  const detailTabs = [...document.querySelectorAll("[data-learning-tab]")];
+  for (const [index, tab] of detailTabs.entries()) {
+    tab.onclick = () => activateLearningDetailTab(tab.dataset.learningTab);
+    tab.onkeydown = (event) => {
+      let nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % detailTabs.length;
+      else if (event.key === "ArrowLeft") nextIndex = (index - 1 + detailTabs.length) % detailTabs.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = detailTabs.length - 1;
+      else return;
+      event.preventDefault();
+      activateLearningDetailTab(detailTabs[nextIndex].dataset.learningTab, true);
+    };
+  }
+  activateLearningDetailTab("flow");
+
+  document.getElementById("copy-interview-prep").onclick = async () => {
+    const status = document.getElementById("learning-interview-copy-status");
+    const text = (guide?.interviewQuestions || [])
+      .map((item) => `${item.question}\n${item.answer}${item.followUp ? `\nFollow-up: ${item.followUp}` : ""}`)
+      .join("\n\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = "Interview Q&A copied.";
+    } catch {
+      status.textContent = "Clipboard access is unavailable in this browser.";
+    }
+  };
 
   updateProgress();
   document.getElementById("learning-reset").onclick = () => {

@@ -102,6 +102,117 @@ test("guide avoids inventing a project purpose when documentation and manifest d
   assert.match(guide.presentationScript, /confirm the exact problem/i);
 });
 
+test("deep dive explains stack fit, delivery configuration, and interview answers with valid evidence", () => {
+  const base = createAnalysis();
+  const sourceIndex = [
+    ...base.sourceIndex.map((file) => file.path === "package.json"
+      ? {
+          ...file,
+          content: JSON.stringify({
+            description: "A small shopping basket API",
+            scripts: { start: "node src/index.js", test: "node --test" },
+            dependencies: { express: "^5.0.0" }
+          }, null, 2)
+        }
+      : file),
+    {
+      path: "render.yaml",
+      content: "services:\n  - type: web\n    runtime: node\n    buildCommand: npm install\n    startCommand: npm start\n    healthCheckPath: /health\n",
+      module: "root",
+      language: "YAML",
+      role: "Deployment configuration"
+    },
+    {
+      path: ".github/workflows/ci.yml",
+      content: "name: CI\njobs:\n  test:\n    steps:\n      - run: npm test\n",
+      module: "root",
+      language: "YAML",
+      role: "Continuous integration workflow"
+    }
+  ];
+  const analysis = createAnalysis({
+    sourceIndex,
+    dependencies: [{ name: "express", version: "^5.0.0", section: "dependencies", source: "package.json" }],
+    platformSignals: [{
+      id: "github-actions",
+      name: "GitHub Actions",
+      category: "Delivery",
+      detail: "An automated workflow is configured.",
+      evidence: [".github/workflows/ci.yml"]
+    }]
+  });
+  const guide = buildLearningGuide(analysis);
+  const renderCard = guide.infrastructure.find((card) => card.title === "Render service");
+  const technologyNames = guide.technologyChoices.map((choice) => choice.name);
+
+  assert.ok(technologyNames.includes("Express"));
+  assert.ok(technologyNames.includes("JavaScript"));
+  assert.match(guide.technologyChoices.find((choice) => choice.name === "Express").projectRationale, /no direct selection rationale was found/i);
+  assert.equal(renderCard.details.find((detail) => detail.label === "Start Command").value, "npm start");
+  assert.ok(guide.workflow.stages.some((stage) => stage.id === "operate" && stage.evidence.some((item) => item.path === "render.yaml")));
+  assert.equal(guide.interviewQuestions.length, 5);
+  assert.deepEqual(guide.steps.map((step) => step.phase), ["Orient", "Orient", "Trace", "Trace", "Present"]);
+  assert.ok(guide.steps.every((step) => step.knowledgeCheck.options.length === 3));
+  assert.ok(guide.steps.every((step) => step.knowledgeCheck.correctIndex >= 0 && step.knowledgeCheck.correctIndex < step.knowledgeCheck.options.length));
+  assert.match(guide.interviewQuestions[2].answer, /reasoned fit rather than a historical fact/i);
+  assert.match(guide.interviewQuestions[3].answer, /healthCheckPath|health check path/i);
+
+  const documentedSource = sourceIndex.map((file) => file.path === "README.md"
+    ? { ...file, content: "# Sample store\n\nWe chose Express because flexible routing fit this small API.\n" }
+    : file);
+  const documentedGuide = buildLearningGuide(createAnalysis({ sourceIndex: documentedSource, dependencies: analysis.dependencies }));
+  const documentedChoice = documentedGuide.technologyChoices.find((choice) => choice.name === "Express");
+  assert.match(documentedChoice.projectRationale, /repository document mentions/i);
+  assert.deepEqual(documentedChoice.rationaleEvidence, { path: "README.md", line: 3, excerpt: "We chose Express because flexible routing fit this small API." });
+
+  function collectEvidence(value, evidence = []) {
+    if (Array.isArray(value)) {
+      for (const item of value) collectEvidence(item, evidence);
+    } else if (value && typeof value === "object") {
+      if (typeof value.path === "string" && Number.isInteger(value.line)) evidence.push(value);
+      for (const item of Object.values(value)) collectEvidence(item, evidence);
+    }
+    return evidence;
+  }
+
+  for (const item of collectEvidence({
+    workflow: guide.workflow,
+    infrastructure: guide.infrastructure,
+    technologyChoices: guide.technologyChoices,
+    interviewQuestions: guide.interviewQuestions,
+    knowledgeChecks: guide.steps.map((step) => step.knowledgeCheck),
+    changeImpact: guide.changeImpact
+  })) {
+    const file = sourceIndex.find((candidate) => candidate.path === item.path);
+    assert.ok(file, `expected ${item.path} to exist in the indexed files`);
+    assert.ok(file.content.split(/\r?\n/)[item.line - 1], `expected ${item.path}:${item.line} to exist`);
+  }
+});
+
+test("change impact follows reverse imports transitively and keeps source evidence", () => {
+  const base = createAnalysis();
+  const guide = buildLearningGuide(createAnalysis({
+    modules: [
+      { name: "application", fileCount: 4, examples: ["src/index.js"] },
+      { name: "services", fileCount: 3, examples: ["src/services/cart.js"] },
+      { name: "storage", fileCount: 2, examples: ["src/services/cart.js"] }
+    ],
+    relationships: [
+      { from: "application", to: "services", count: 1, evidence: [{ path: "src/index.js", line: 2 }] },
+      { from: "services", to: "storage", count: 1, evidence: [{ path: "src/services/cart.js", line: 1 }] }
+    ],
+    sourceIndex: base.sourceIndex
+  }));
+  const storage = guide.changeImpact.modules.find((module) => module.name === "storage");
+
+  assert.deepEqual(storage.affected.map((item) => [item.name, item.distance]), [["services", 1], ["application", 2]]);
+  assert.deepEqual(storage.affected[1].path, ["application", "services", "storage"]);
+  assert.ok(storage.affected.every((item) => item.evidence.length));
+
+  const noImports = buildLearningGuide(createAnalysis({ relationships: [] }));
+  assert.ok(noImports.changeImpact.modules.every((module) => module.affected.length === 0));
+});
+
 test("comparison exposes changed file details and the modules touched", () => {
   const baseline = {
     dependencies: [],
@@ -201,12 +312,18 @@ test("local API returns a learnable comparison, cited chat answer, and evidence-
   assert.equal(analyzeResponse.status, 200);
   assert.equal(result.analysis.aiStatus, "fallback");
   assert.equal(result.analysis.learningGuide.steps.length, 5);
+  assert.equal(result.analysis.learningGuide.interviewQuestions.length, 5);
+  assert.ok(result.analysis.learningGuide.steps.every((step) => step.knowledgeCheck?.options?.length === 3));
+  assert.ok(result.analysis.learningGuide.changeImpact.modules.some((module) => module.name === "src"));
+  assert.ok(result.analysis.learningGuide.workflow.stages.some((stage) => stage.id === "trace"));
+  assert.ok(result.analysis.learningGuide.infrastructure.some((card) => card.id === "runtime"));
   assert.ok(result.comparison.fileDiff.changedDetails.some((file) => file.path === "src/services/catalog.js"));
 
   const restoreResponse = await fetch(`${baseUrl}/api/analysis/${result.analysisId}`);
   const restored = await restoreResponse.json();
   assert.equal(restored.analysisId, result.analysisId);
   assert.equal(restored.analysis.learningGuide.steps.length, 5);
+  assert.equal(restored.analysis.learningGuide.interviewQuestions.length, 5);
   assert.ok(restored.comparison.fileDiff.changedDetails.some((file) => file.path === "src/services/catalog.js"));
   assert.equal(restored.comparisonContext.baselineSource.name, "sample-base");
 
@@ -225,4 +342,9 @@ test("local API returns a learnable comparison, cited chat answer, and evidence-
   assert.match(report, /First-day learning guide/);
   assert.match(report, /Evidence: src\/services\/catalog\.js:1/);
   assert.match(report, /Recruiter walkthrough/);
+  assert.match(report, /Infrastructure map/);
+  assert.match(report, /Recruiter interview practice/);
+  assert.match(report, /Change impact exploration/);
+  assert.match(report, /Quick check:/);
+  assert.match(report, /Why did you use this technology stack\?/);
 });

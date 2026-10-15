@@ -54,9 +54,10 @@ function extractButtons(html) {
       /data-cockpit-tab=/i.test(button) ||
       /data-diagram=/i.test(button) ||
       /data-result-view=/i.test(button) ||
+      /data-learning-tab=/i.test(button) ||
       /data-guide-step=/i.test(button) ||
       /class=["'][^"']*diagram-tab/i.test(button) ||
-      /id=["'](theme-toggle|demo-auth-button|clear-form|copy-file|copy-mermaid|download-report|download-json|copy-docs|copy-presentation|learning-reset|zoom-out-diagram|zoom-reset-diagram|zoom-in-diagram)["']/i.test(button)
+      /id=["'](theme-toggle|demo-auth-button|clear-form|copy-file|copy-mermaid|download-report|download-json|copy-docs|copy-presentation|copy-interview-prep|practice-timer-toggle|review-practice-answer|next-practice-question|learning-reset|zoom-out-diagram|zoom-reset-diagram|zoom-in-diagram)["']/i.test(button)
   }));
 }
 

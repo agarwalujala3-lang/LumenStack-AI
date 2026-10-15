@@ -177,20 +177,84 @@ function buildSourceMetadata(preparedSource) {
 
 function buildExportMarkdown(session) {
   const guide = buildLearningGuide(session.analysis);
+  const evidenceLines = (items = []) => items.map((item) => `- Evidence: ${item.path}:${item.line}`);
   const guideMarkdown = [
     "## First-day learning guide",
     "",
     ...guide.steps.flatMap((step) => [
       `### ${step.title}`,
+      `Learning stage: ${step.phase || "Learn"}`,
       step.body,
       `Basis: ${step.basis}`,
       ...(step.evidence || []).map((item) => `- Evidence: ${item.path}:${item.line}`),
+      ...(step.knowledgeCheck ? [
+        `Quick check: ${step.knowledgeCheck.question}`,
+        ...step.knowledgeCheck.options.map((option, index) => `${index + 1}. ${option}`),
+        `Answer: ${step.knowledgeCheck.options[step.knowledgeCheck.correctIndex]}`,
+        step.knowledgeCheck.explanation,
+        ...evidenceLines(step.knowledgeCheck.evidence)
+      ] : []),
       ""
     ]),
     "### Recruiter walkthrough",
     guide.presentationScript,
     "",
-    `> ${guide.scopeNote}`
+    `> ${guide.scopeNote}`,
+    "",
+    "## Code flow",
+    guide.workflow.note,
+    ...guide.workflow.stages.flatMap((stage) => [
+      `### ${stage.title} (${stage.state})`,
+      stage.detail,
+      ...evidenceLines(stage.evidence),
+      ""
+    ]),
+    ...(guide.workflow.example ? [
+      `### ${guide.workflow.example.title}`,
+      guide.workflow.example.body,
+      `\`${guide.workflow.example.snippet}\``,
+      ...evidenceLines([guide.workflow.example.evidence]),
+      ""
+    ] : []),
+    "## Change impact exploration",
+    guide.changeImpact.note,
+    ...guide.changeImpact.modules.flatMap((module) => [
+      `### If ${module.name} changes`,
+      ...(module.affected.length
+        ? module.affected.flatMap((item) => [
+            `- ${item.path.join(" -> ")} (${item.distance === 1 ? "direct importer" : `${item.distance} steps away`})`,
+            ...evidenceLines(item.evidence)
+          ])
+        : ["- No reverse import path was confirmed in indexed source."]),
+      ""
+    ]),
+    "## Infrastructure map",
+    ...guide.infrastructure.flatMap((card) => [
+      `### ${card.title} (${card.category})`,
+      card.description,
+      ...card.details.map((detail) => `- ${detail.label}: ${detail.value}${detail.evidence ? ` (${detail.evidence.path}:${detail.evidence.line})` : ""}`),
+      ...evidenceLines(card.evidence),
+      ""
+    ]),
+    "## Technology choices",
+    ...guide.technologyChoices.flatMap((choice) => [
+      `### ${choice.name}`,
+      `Observed: ${choice.observed}`,
+      `Role: ${choice.role}`,
+      `Typical fit: ${choice.typicalFit}`,
+      choice.projectRationale,
+      ...evidenceLines(choice.evidence),
+      ""
+    ]),
+    "## Recruiter interview practice",
+    ...guide.interviewQuestions.flatMap((item) => [
+      `### ${item.question}`,
+      item.answer,
+      ...evidenceLines(item.evidence),
+      ...(item.followUp ? [`Follow-up: ${item.followUp}`] : []),
+      ""
+    ]),
+    `> ${guide.interviewNote}`
   ].join("\n");
 
   if (session.comparison) {

@@ -44,7 +44,10 @@
         "AI-generated architecture explanations",
         "Codebase chat and markdown export",
         "Baseline comparison and platform signal detection",
-        "Evidence-linked learning guide and recruiter talk track"
+        "Evidence-linked code and infrastructure workflow guide",
+        "Progressive knowledge checks with source evidence",
+        "Reverse-import change impact exploration",
+        "Technology fit explanations and private recruiter interview practice"
       ],
       "offers": {
         "@type": "Offer",
@@ -472,6 +475,86 @@
               <p class="learning-storage-note">Study checkmarks stay in this browser; no account or server save is used.</p>
             </aside>
           </div>
+
+          <section class="learning-deep-dive" aria-labelledby="learning-deep-title">
+            <div class="learning-deep-heading">
+              <div>
+                <p class="eyebrow">Go beyond the file tree</p>
+                <h2 id="learning-deep-title">Understand how the project fits together</h2>
+                <p class="body-copy">Follow the source-backed flow, see what the infrastructure files configure, then practice explaining the decisions.</p>
+              </div>
+              <div class="learning-detail-tabs" role="tablist" aria-label="Project deep dive">
+                <button class="learning-detail-tab" id="learning-flow-tab" type="button" role="tab" aria-selected="true" aria-controls="learning-flow-panel" data-learning-tab="flow">Code flow</button>
+                <button class="learning-detail-tab" id="learning-infra-tab" type="button" role="tab" aria-selected="false" aria-controls="learning-infra-panel" data-learning-tab="infrastructure" tabindex="-1">Infrastructure</button>
+                <button class="learning-detail-tab" id="learning-stack-tab" type="button" role="tab" aria-selected="false" aria-controls="learning-stack-panel" data-learning-tab="stack" tabindex="-1">Tech choices</button>
+                <button class="learning-detail-tab" id="learning-interview-tab" type="button" role="tab" aria-selected="false" aria-controls="learning-interview-panel" data-learning-tab="interview" tabindex="-1">Interview lab</button>
+                <button class="learning-detail-tab" id="learning-impact-tab" type="button" role="tab" aria-selected="false" aria-controls="learning-impact-panel" data-learning-tab="impact" tabindex="-1">Change impact</button>
+              </div>
+            </div>
+
+            <section class="learning-detail-panel" id="learning-flow-panel" role="tabpanel" aria-labelledby="learning-flow-tab" data-learning-panel="flow">
+              <div id="learning-workflow" class="learning-workflow"></div>
+              <p id="learning-workflow-note" class="learning-evidence-note"></p>
+              <div id="learning-flow-example" class="learning-flow-example" hidden></div>
+            </section>
+
+            <section class="learning-detail-panel" id="learning-infra-panel" role="tabpanel" aria-labelledby="learning-infra-tab" data-learning-panel="infrastructure" hidden>
+              <div id="learning-infrastructure" class="learning-infrastructure"></div>
+              <p class="learning-evidence-note">Configuration files show what the repository declares, not necessarily which services are active in production. Confirm that with the project owner or hosting dashboard.</p>
+            </section>
+
+            <section class="learning-detail-panel" id="learning-stack-panel" role="tabpanel" aria-labelledby="learning-stack-tab" data-learning-panel="stack" hidden>
+              <div id="learning-technologies" class="learning-technologies"></div>
+              <p class="learning-evidence-note">“Typical fit” is general engineering context. The exact reason this project selected a tool is only shown as fact when the repository documents it.</p>
+            </section>
+
+            <section class="learning-detail-panel" id="learning-interview-panel" role="tabpanel" aria-labelledby="learning-interview-tab" data-learning-panel="interview" hidden>
+              <div class="learning-interview-heading">
+                <div>
+                  <h3>Practice a recruiter round</h3>
+                  <p class="learning-evidence-note">Answer from your own experience. The local review checks for useful detail, not whether your claims are true.</p>
+                </div>
+                <button id="copy-interview-prep" class="secondary-button compact-button" type="button">Copy Q&amp;A</button>
+              </div>
+              <section class="learning-interview-lab" aria-label="Private interview practice">
+                <div class="learning-practice-toolbar">
+                  <label for="practice-question-select">Question
+                    <select id="practice-question-select"></select>
+                  </label>
+                  <div class="learning-practice-timer">
+                    <output id="practice-timer" aria-label="Practice timer remaining" aria-live="off">01:30</output>
+                    <button id="practice-timer-toggle" class="secondary-button compact-button" type="button" aria-pressed="false">Start 90 sec</button>
+                  </div>
+                </div>
+                <p id="practice-question-prompt" class="learning-practice-prompt"></p>
+                <label class="learning-practice-answer-label" for="practice-answer">Your answer</label>
+                <textarea id="practice-answer" rows="5" placeholder="Explain it in your own words. Separate what you built from what you learned by studying the repository." aria-describedby="interview-practice-note"></textarea>
+                <div class="learning-practice-actions">
+                  <button id="review-practice-answer" class="primary-button compact-button" type="button">Review answer</button>
+                  <button id="next-practice-question" class="secondary-button compact-button" type="button">Next question</button>
+                </div>
+                <p id="interview-practice-note" class="learning-practice-privacy">Your draft stays in this page: it is reviewed in your browser, not sent to the server or saved.</p>
+                <div id="practice-feedback" class="learning-practice-feedback" role="status" aria-live="polite" hidden></div>
+              </section>
+              <div id="learning-interview-questions" class="learning-interview-questions"></div>
+              <p id="learning-interview-copy-status" class="copy-status" role="status" aria-live="polite"></p>
+              <p id="learning-interview-note" class="learning-coach-note"></p>
+            </section>
+
+            <section class="learning-detail-panel" id="learning-impact-panel" role="tabpanel" aria-labelledby="learning-impact-tab" data-learning-panel="impact" hidden>
+              <div class="learning-impact-intro">
+                <div>
+                  <h3>Explore a likely change ripple</h3>
+                  <p class="learning-evidence-note">Choose a module to see which indexed modules import it, then open the evidence and decide what you would test.</p>
+                </div>
+                <label for="learning-impact-module">Module to change
+                  <select id="learning-impact-module"></select>
+                </label>
+              </div>
+              <div id="learning-impact-map" class="learning-impact-map"></div>
+              <p id="learning-impact-note" class="learning-evidence-note"></p>
+            </section>
+          </section>
         </section>
 
         <section class="result-view-panel" id="architecture-view" role="tabpanel" aria-labelledby="architecture-tab" data-result-panel="architecture" hidden>

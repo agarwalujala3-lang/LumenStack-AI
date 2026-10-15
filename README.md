@@ -60,7 +60,7 @@ The project is built to demonstrate both product taste and engineering depth: a 
   </tr>
   <tr>
     <td><strong>Learn</strong></td>
-    <td>Follow a five-step, beginner-friendly repo walkthrough with clickable file-and-line evidence, browser-saved study progress, a plain-English glossary, and a recruiter-ready talk track.</td>
+    <td>Follow a progressive beginner walkthrough with evidence-linked recall checks, inspect detected build/test/deploy settings, explore reverse-import change impact, and rehearse recruiter answers with a private local rubric.</td>
   </tr>
   <tr>
     <td><strong>Review</strong></td>
@@ -79,7 +79,7 @@ The interface centers the repository workflow and keeps one saved theme preferen
 | Surface | Role |
 | --- | --- |
 | **Analysis overview** | Summary, stack signals, quality review, and compare findings grouped into readable views. |
-| **Learn &amp; present** | Source-linked learning steps, observed-versus-inferred labels, private study progress, and a copyable presentation script. |
+| **Learn &amp; present** | Progressive source-linked learning, quick knowledge checks, a code-to-deploy map, reverse-import impact exploration, technology-fit explanations, and a timed interview lab whose draft stays in the browser. |
 | **Repository explorer** | Searchable directory tree, source previews, entrypoints, generated summary, and module context. |
 | **Architecture maps** | Mermaid diagrams with bounded node counts, safer labels, and captions that describe inferred links. |
 | **Quick guide** | Four visual steps connect repository intake to understanding, source exploration, and presentation. |
@@ -112,7 +112,7 @@ flowchart LR
 | --- | --- |
 | **Backend** | Express app with analysis, session-bound source previews, chat, export, platform catalog, demo auth, saved project, and webhook routes. |
 | **Analysis engine** | Language detection, module grouping, dependency parsing, relationship extraction, hotspot ranking, and quality scoring. |
-| **Learning guide** | Beginner-first explanations derived from indexed files and manifests, with verified source-line links and explicit static-analysis limitations. |
+| **Learning guide** | Beginner-first explanations, staged recall checks, inferred code-reading path, detected runtime/CI/deployment configuration, reverse-import impact estimates, cautious technology rationale, and a private recruiter-practice rubric derived from indexed source evidence. |
 | **Change impact** | Baseline comparison with changed, added, and removed code paths plus the modules touched; it does not claim runtime verification. |
 | **Source handling** | Public Git URLs, generic HTTPS remotes, provider-aware workspace flows, and ZIP archive uploads. The explorer only serves indexed text from the selected analysis session. |
 | **AI layer** | OpenAI integration with safe fallback summaries so the app still works without secrets. |
