@@ -1,6 +1,18 @@
 (() => {
   const finePointer = window.matchMedia?.("(pointer: fine)");
   const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+  const textEntrySelector = [
+    "textarea",
+    "[contenteditable='true']",
+    "input:not([type])",
+    "input[type='text']",
+    "input[type='search']",
+    "input[type='url']",
+    "input[type='tel']",
+    "input[type='email']",
+    "input[type='password']",
+    "input[type='number']",
+  ].join(",");
 
   if (!finePointer?.matches || reducedMotion?.matches) {
     return;
@@ -8,59 +20,18 @@
 
   const root = document.documentElement;
   const body = document.body;
+  let core = document.getElementById("cursor-core");
 
-  function getCursorElement(id, className) {
-    let element = document.getElementById(id);
-
-    if (!element) {
-      element = document.createElement("div");
-      element.id = id;
-      element.className = className;
-      element.setAttribute("aria-hidden", "true");
-      body.appendChild(element);
-    }
-
-    return element;
+  if (!core) {
+    core = document.createElement("div");
+    core.id = "cursor-core";
+    core.className = "cursor-core";
+    core.setAttribute("aria-hidden", "true");
+    body.appendChild(core);
   }
 
-  const core = getCursorElement("cursor-core", "cursor-core");
-  const aura = getCursorElement("cursor-aura", "cursor-aura");
-  let targetX = 0;
-  let targetY = 0;
-  let auraX = 0;
-  let auraY = 0;
-  let animationFrame = 0;
-
-  function updateAura() {
-    auraX += (targetX - auraX) * 0.22;
-    auraY += (targetY - auraY) * 0.22;
-    aura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
-
-    if (Math.abs(targetX - auraX) > 0.15 || Math.abs(targetY - auraY) > 0.15) {
-      animationFrame = window.requestAnimationFrame(updateAura);
-    } else {
-      animationFrame = 0;
-    }
-  }
-
-  function getCursorKind(target) {
-    if (!(target instanceof Element)) {
-      return "";
-    }
-
-    if (target.closest(".upload-surface")) {
-      return "upload";
-    }
-
-    if (target.closest("textarea, [contenteditable='true'], input:not([type='button']):not([type='submit']):not([type='reset']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file'])")) {
-      return "field";
-    }
-
-    if (target.closest("a, button, select, input[type='checkbox'], input[type='radio'], .diagram-tab, .theme-toggle, .toggle-row")) {
-      return "action";
-    }
-
-    return "";
+  function isTextEntry(target) {
+    return target instanceof Element && Boolean(target.closest(textEntrySelector));
   }
 
   function clearCursor() {
@@ -73,28 +44,10 @@
       return;
     }
 
-    targetX = event.clientX;
-    targetY = event.clientY;
-    if (!animationFrame) {
-      auraX = targetX;
-      auraY = targetY;
-      aura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
-    }
-    core.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
-
-    const target = document.elementFromPoint(targetX, targetY);
-    const kind = getCursorKind(target);
-
-    ["action", "upload", "field"].forEach((state) => {
-      core.classList.toggle(`is-${state}`, state === kind);
-      aura.classList.toggle(`is-${state}`, state === kind);
-    });
+    core.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+    core.classList.toggle("is-field", isTextEntry(document.elementFromPoint(event.clientX, event.clientY)));
     root.classList.add("cursor-enhanced");
     body.classList.add("cursor-enhanced");
-
-    if (!animationFrame) {
-      animationFrame = window.requestAnimationFrame(updateAura);
-    }
   });
 
   root.addEventListener("pointerleave", clearCursor);

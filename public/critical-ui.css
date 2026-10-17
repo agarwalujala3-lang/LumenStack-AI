@@ -1630,10 +1630,8 @@ body {
 
 @media (pointer: fine) {
   html.cursor-enhanced .cursor-core,
-  html.cursor-enhanced .cursor-aura,
   html.cursor-enhanced .cursor-trail,
   body.cursor-enhanced .cursor-core,
-  body.cursor-enhanced .cursor-aura,
   body.cursor-enhanced .cursor-trail {
     z-index: 30050;
   }
