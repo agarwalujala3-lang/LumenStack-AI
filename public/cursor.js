@@ -1,6 +1,5 @@
 (() => {
   const finePointer = window.matchMedia?.("(pointer: fine)");
-  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)");
   const textEntrySelector = [
     "textarea",
     "[contenteditable='true']",
@@ -14,7 +13,7 @@
     "input[type='number']",
   ].join(",");
 
-  if (!finePointer?.matches || reducedMotion?.matches) {
+  if (!finePointer?.matches) {
     return;
   }
 

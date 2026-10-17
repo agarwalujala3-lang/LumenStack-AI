@@ -3272,7 +3272,6 @@ body.touch-enhanced .cursor-trail {
   }
 
   .scroll-progress,
-  .cursor-core,
   .cursor-trail,
   .ambient-particles {
     display: none !important;
