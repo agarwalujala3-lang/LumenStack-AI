@@ -3,8 +3,6 @@ const overlay = document.getElementById("analysis-overlay");
 const overlayStatus = document.getElementById("overlay-status");
 const scrollProgressBar = document.getElementById("scroll-progress-bar");
 const ambientParticles = document.getElementById("ambient-particles");
-const cursorCore = document.getElementById("cursor-core");
-const cursorAura = document.getElementById("cursor-aura");
 const cursorTrail = document.getElementById("cursor-trail");
 const promptRotator = document.getElementById("prompt-rotator");
 const promptCycler = promptRotator?.closest(".prompt-cycler");
@@ -132,34 +130,6 @@ function bindMediaQueryChange(query, listener) {
   }
 
   return () => {};
-}
-
-function applyCursorKind(cursorCoreElement, cursorAuraElement, kind) {
-  const kinds = ["action", "upload", "field"];
-  kinds.forEach((entry) => {
-    cursorCoreElement.classList.toggle(`is-${entry}`, entry === kind);
-    cursorAuraElement.classList.toggle(`is-${entry}`, entry === kind);
-  });
-}
-
-function resolveCursorKind(target) {
-  if (!(target instanceof Element)) {
-    return "";
-  }
-
-  if (target.closest(".upload-surface")) {
-    return "upload";
-  }
-
-  if (target.closest("textarea, [contenteditable='true'], input:not([type='button']):not([type='submit']):not([type='reset']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file'])")) {
-    return "field";
-  }
-
-  if (target.closest("a, button, select, input[type='checkbox'], input[type='radio'], .diagram-tab, .theme-toggle, .toggle-row")) {
-    return "action";
-  }
-
-  return "";
 }
 
 const contentStreams = [explanationElement, documentationElement, diagramElement];
@@ -1340,75 +1310,6 @@ function setupParallax() {
   update();
   window.addEventListener("scroll", update, { passive: true });
   window.addEventListener("resize", update);
-}
-
-function setupCursorSystem() {
-  if (!cursorCore || !cursorAura || prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
-    return;
-  }
-
-  if (window.__lumenCursorSystemActive) {
-    return;
-  }
-
-  window.__lumenCursorSystemActive = true;
-  const root = document.documentElement;
-  let targetX = 0;
-  let targetY = 0;
-  let auraX = 0;
-  let auraY = 0;
-  let animationFrame = 0;
-
-  function updateAura() {
-    auraX += (targetX - auraX) * 0.22;
-    auraY += (targetY - auraY) * 0.22;
-    cursorAura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
-
-    if (Math.abs(targetX - auraX) > 0.15 || Math.abs(targetY - auraY) > 0.15) {
-      animationFrame = window.requestAnimationFrame(updateAura);
-    } else {
-      animationFrame = 0;
-    }
-  }
-
-  window.addEventListener("pointermove", (event) => {
-    if (event.pointerType && event.pointerType !== "mouse") return;
-
-    targetX = event.clientX;
-    targetY = event.clientY;
-    if (!animationFrame) {
-      auraX = targetX;
-      auraY = targetY;
-      cursorAura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
-    }
-    cursorCore.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
-
-    const target = document.elementFromPoint(targetX, targetY);
-    const kind = resolveCursorKind(target);
-    applyCursorKind(cursorCore, cursorAura, kind);
-    root.classList.add("cursor-enhanced");
-    body.classList.add("cursor-enhanced");
-
-    if (!animationFrame) animationFrame = window.requestAnimationFrame(updateAura);
-  });
-
-  document.documentElement.addEventListener("pointerleave", (event) => {
-    if (event.pointerType && event.pointerType !== "mouse") return;
-    root.classList.remove("cursor-enhanced");
-    body.classList.remove("cursor-enhanced");
-  });
-
-  window.addEventListener("blur", () => {
-    root.classList.remove("cursor-enhanced");
-    body.classList.remove("cursor-enhanced");
-  });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      root.classList.remove("cursor-enhanced");
-      body.classList.remove("cursor-enhanced");
-    }
-  });
 }
 
 function renderMetrics(payload) {
@@ -3011,4 +2912,3 @@ document.addEventListener("lumenstack:themechange", () => {
 resetFormState();
 updateMetricsRibbon(metricsState);
 restoreLastAnalysis();
-setupCursorSystem();
