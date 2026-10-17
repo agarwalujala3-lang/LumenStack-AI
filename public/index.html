@@ -47,6 +47,9 @@
         "Evidence-linked code and infrastructure workflow guide",
         "Progressive knowledge checks with source evidence",
         "Reverse-import change impact exploration",
+        "AI-free guided sample repository and tour",
+        "Observed, inferred, missing, and unverified evidence coverage",
+        "Private browser-only contribution notes",
         "Technology fit explanations and private recruiter interview practice"
       ],
       "offers": {
@@ -73,6 +76,8 @@
   data-intro-copy="Locking onto architecture signals, compare lanes, and live system views."
   data-intro-tags="Cross-platform repo intake|Mission review mode|Live codebase chat">
   <div id="cursor-trail" class="cursor-trail" aria-hidden="true"></div>
+  <div id="cursor-aura" class="cursor-aura" aria-hidden="true"></div>
+  <div id="cursor-core" class="cursor-core" aria-hidden="true"></div>
   <div id="tsparticles"></div>
   <div class="scroll-progress" aria-hidden="true">
     <span id="scroll-progress-bar"></span>
@@ -258,6 +263,7 @@
 
           <div class="action-row">
             <button class="primary-button" type="submit">Run Analysis</button>
+            <button id="load-demo-analysis" class="secondary-button" type="button" disabled>Explore sample repo</button>
             <button id="clear-form" class="secondary-button" type="button">Clear</button>
           </div>
         </form>
@@ -290,6 +296,20 @@
           <button class="result-view-tab" id="architecture-tab" type="button" role="tab" aria-selected="false" aria-controls="architecture-view" data-result-view="architecture">Architecture</button>
           <button class="result-view-tab" id="learn-tab" type="button" role="tab" aria-selected="false" aria-controls="learn-view" data-result-view="learn">Learn &amp; present</button>
         </nav>
+
+        <section id="learning-demo-tour" class="learning-demo-tour" aria-label="Guided sample tour" hidden>
+          <div class="learning-demo-tour-copy">
+            <p class="eyebrow">Guided sample</p>
+            <p id="learning-demo-tour-text" aria-live="polite">Start a short tour of the repository analysis.</p>
+          </div>
+          <div class="learning-demo-tour-actions">
+            <span id="learning-demo-tour-step" class="learning-demo-tour-step"></span>
+            <button id="learning-demo-tour-start" class="secondary-button compact-button" type="button">Start tour</button>
+            <button id="learning-demo-tour-prev" class="secondary-button compact-button" type="button" disabled>Back</button>
+            <button id="learning-demo-tour-next" class="primary-button compact-button" type="button" disabled>Next</button>
+            <button id="learning-demo-tour-exit" class="secondary-button compact-button" type="button" hidden>Close</button>
+          </div>
+        </section>
 
         <section class="result-view-panel" id="overview-view" role="tabpanel" aria-labelledby="overview-tab" data-result-panel="overview">
 
@@ -452,6 +472,17 @@
               <button id="learning-reset" class="secondary-button compact-button" type="button">Reset progress</button>
             </div>
           </div>
+          <section class="learning-coverage" aria-labelledby="learning-coverage-title">
+            <div class="learning-coverage-heading">
+              <div>
+                <p class="eyebrow">Trust &amp; coverage</p>
+                <h3 id="learning-coverage-title">What the scan can support</h3>
+              </div>
+              <div id="learning-coverage-counts" class="learning-coverage-counts" aria-label="Evidence status counts"></div>
+            </div>
+            <p id="learning-coverage-note" class="learning-evidence-note"></p>
+            <div id="learning-coverage-rows" class="learning-coverage-rows"></div>
+          </section>
           <div class="learning-layout">
             <div id="learning-steps" class="learning-steps"></div>
             <aside class="learning-aside" aria-label="Presentation and glossary">
@@ -471,6 +502,21 @@
                   <dt>Dependency</dt><dd>An external tool or library this project relies on.</dd>
                   <dt>Import</dt><dd>A connection where one file uses code from another.</dd>
                 </dl>
+              </details>
+              <details class="learning-contribution-notes">
+                <summary>My project notes</summary>
+                <p class="learning-storage-note">Private to this browser. Use these prompts to distinguish what you built from what you studied.</p>
+                <label for="contribution-built">What I built</label>
+                <textarea id="contribution-built" rows="3" maxlength="1200" placeholder="Describe your own changes and decisions."></textarea>
+                <label for="contribution-studied">What I studied</label>
+                <textarea id="contribution-studied" rows="3" maxlength="1200" placeholder="Note areas you learned by reading the repository."></textarea>
+                <label for="contribution-next">What I would improve</label>
+                <textarea id="contribution-next" rows="3" maxlength="1200" placeholder="Capture a specific next step and why it matters."></textarea>
+                <div class="learning-contribution-actions">
+                  <button id="copy-contribution-notes" class="secondary-button compact-button" type="button">Copy notes</button>
+                  <button id="clear-contribution-notes" class="secondary-button compact-button" type="button">Clear notes</button>
+                </div>
+                <p id="contribution-notes-status" class="copy-status" role="status" aria-live="polite"></p>
               </details>
               <p class="learning-storage-note">Study checkmarks stay in this browser; no account or server save is used.</p>
             </aside>

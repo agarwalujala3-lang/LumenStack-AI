@@ -57,7 +57,7 @@ function extractButtons(html) {
       /data-learning-tab=/i.test(button) ||
       /data-guide-step=/i.test(button) ||
       /class=["'][^"']*diagram-tab/i.test(button) ||
-      /id=["'](theme-toggle|demo-auth-button|clear-form|copy-file|copy-mermaid|download-report|download-json|copy-docs|copy-presentation|copy-interview-prep|practice-timer-toggle|review-practice-answer|next-practice-question|learning-reset|zoom-out-diagram|zoom-reset-diagram|zoom-in-diagram)["']/i.test(button)
+      /id=["'](theme-toggle|demo-auth-button|clear-form|load-demo-analysis|learning-demo-tour-start|learning-demo-tour-prev|learning-demo-tour-next|learning-demo-tour-exit|copy-contribution-notes|clear-contribution-notes|copy-file|copy-mermaid|download-report|download-json|copy-docs|copy-presentation|copy-interview-prep|practice-timer-toggle|review-practice-answer|next-practice-question|learning-reset|zoom-out-diagram|zoom-reset-diagram|zoom-in-diagram)["']/i.test(button)
   }));
 }
 

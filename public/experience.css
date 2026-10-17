@@ -47,11 +47,77 @@ body.concept-match {
 
 body.concept-match::after,
 .app-home .ambient-layer,
-.app-home #tsparticles,
-.app-home .cursor-core,
-.app-home .cursor-aura,
-.app-home .cursor-trail {
+.app-home #tsparticles {
   display: none !important;
+}
+
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .app-home .cursor-core,
+  .app-home .cursor-aura {
+    inset: 0 auto auto 0;
+    z-index: 30050;
+    display: block;
+    opacity: 0;
+    will-change: transform;
+  }
+
+  .app-home .cursor-core {
+    width: 8px;
+    height: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: 50%;
+    background: #35c5d5;
+    box-shadow: 0 0 12px rgba(42, 191, 211, 0.55);
+    transition: opacity 120ms ease, background-color 160ms ease, transform 80ms linear;
+  }
+
+  .app-home .cursor-aura {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(33, 164, 185, 0.46);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(53, 197, 213, 0.07), rgba(53, 197, 213, 0));
+    box-shadow: 0 0 18px rgba(25, 151, 177, 0.1);
+    transition: opacity 180ms ease, width 180ms ease, height 180ms ease, border-color 180ms ease;
+  }
+
+  html.cursor-enhanced .app-home .cursor-core,
+  html.cursor-enhanced .app-home .cursor-aura {
+    opacity: 1;
+  }
+
+  .app-home .cursor-core.is-action {
+    width: 7px;
+    height: 7px;
+    background: #8a7df0;
+  }
+
+  .app-home .cursor-aura.is-action {
+    width: 42px;
+    height: 42px;
+    border-color: rgba(119, 105, 222, 0.5);
+  }
+
+  .app-home .cursor-core.is-upload {
+    background: #55b98a;
+  }
+
+  .app-home .cursor-aura.is-upload {
+    width: 46px;
+    height: 46px;
+    border-color: rgba(65, 166, 119, 0.58);
+  }
+
+  .app-home .cursor-core.is-field,
+  .app-home .cursor-aura.is-field {
+    opacity: 0;
+  }
+
+  html.cursor-enhanced input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  html.cursor-enhanced textarea,
+  html.cursor-enhanced [contenteditable="true"] {
+    cursor: text !important;
+  }
 }
 
 body.concept-match .page-shell {
@@ -605,6 +671,47 @@ body.concept-match.app-home .overview-title p {
 
 .app-home .learning-heading h2 { margin: 3px 0 8px; }
 .app-home .learning-heading .body-copy { max-width: 780px; margin: 0; }
+.app-home .learning-demo-tour {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--ls-line-strong);
+  border-left: 3px solid var(--ls-violet);
+  border-radius: 7px;
+  background: var(--ls-surface);
+}
+.app-home .learning-demo-tour[hidden] { display: none; }
+.app-home .learning-demo-tour-copy { min-width: 0; }
+.app-home .learning-demo-tour-copy .eyebrow { margin: 0 0 4px; }
+.app-home .learning-demo-tour-copy > p:last-child { margin: 0; color: var(--ls-ink); font-size: 0.82rem; line-height: 1.5; }
+.app-home .learning-demo-tour-actions { display: flex; flex: 0 0 auto; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.app-home .learning-demo-tour-step { color: var(--ls-muted); font-size: 0.72rem; }
+.app-home .learning-demo-tour-actions button[hidden] { display: none; }
+.app-home .learning-coverage { margin: 18px 0 24px; padding: 17px 0 20px; border-top: 1px solid var(--ls-line-strong); border-bottom: 1px solid var(--ls-line-strong); }
+.app-home .learning-coverage-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.app-home .learning-coverage-heading .eyebrow { margin: 0 0 4px; }
+.app-home .learning-coverage-heading h3 { margin: 0; color: var(--ls-ink); font-size: 0.96rem; }
+.app-home .learning-coverage-counts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.app-home .learning-coverage-count,
+.app-home .learning-coverage-status { display: inline-flex; align-items: center; width: fit-content; padding: 4px 7px; border: 1px solid var(--ls-line); border-radius: 4px; color: var(--ls-muted); font-size: 0.65rem; font-weight: 750; text-transform: capitalize; }
+.app-home .learning-coverage-count.status-observed,
+.app-home .learning-coverage-status.status-observed { border-color: color-mix(in srgb, var(--ls-green) 45%, transparent); color: var(--ls-green); }
+.app-home .learning-coverage-count.status-inferred,
+.app-home .learning-coverage-status.status-inferred { border-color: color-mix(in srgb, var(--ls-violet) 45%, transparent); color: var(--ls-violet); }
+.app-home .learning-coverage-count.status-not-found,
+.app-home .learning-coverage-status.status-not-found { border-color: color-mix(in srgb, var(--ls-amber) 45%, transparent); color: var(--ls-amber); }
+.app-home .learning-coverage-count.status-not-verified,
+.app-home .learning-coverage-status.status-not-verified { border-color: var(--ls-line-strong); color: var(--ls-muted); }
+.app-home .learning-coverage .learning-evidence-note { margin: 8px 0 10px; }
+.app-home .learning-coverage-rows { display: grid; }
+.app-home .learning-coverage-row { display: grid; grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.6fr); align-items: start; gap: 7px 18px; padding: 10px 0; border-top: 1px solid var(--ls-line); }
+.app-home .learning-coverage-row-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.app-home .learning-coverage-row-title strong { color: var(--ls-ink); font-size: 0.77rem; }
+.app-home .learning-coverage-row > p { margin: 0; color: var(--ls-muted); font-size: 0.75rem; line-height: 1.5; }
+.app-home .learning-coverage-row .learning-evidence { grid-column: 2; margin-top: 0; }
 .app-home .learning-progress-wrap { display: grid; gap: 7px; color: var(--ls-muted); font-size: 0.78rem; }
 .app-home .learning-progress-wrap label { color: var(--ls-ink); font-weight: 750; }
 .app-home #learning-progress { width: 100%; height: 8px; accent-color: var(--ls-cyan); }
@@ -661,6 +768,13 @@ body.concept-match.app-home .overview-title p {
 .app-home .learning-glossary dt { color: var(--ls-ink); font-weight: 700; }
 .app-home .learning-glossary dd { margin: 0; color: var(--ls-muted); }
 .app-home .learning-storage-note { margin: 0; }
+.app-home .learning-contribution-notes { padding: 12px 14px; border: 1px solid var(--ls-line); border-radius: 7px; background: var(--ls-surface); }
+.app-home .learning-contribution-notes summary { color: var(--ls-ink); font-size: 0.84rem; font-weight: 750; cursor: pointer; }
+.app-home .learning-contribution-notes > p { margin: 8px 0 12px; }
+.app-home .learning-contribution-notes label { display: block; margin: 11px 0 5px; color: var(--ls-ink); font-size: 0.73rem; font-weight: 700; }
+.app-home .learning-contribution-notes textarea { display: block; width: 100%; min-height: 72px; resize: vertical; padding: 9px; border: 1px solid var(--ls-line-strong); border-radius: 5px; background: var(--ls-editor); color: var(--ls-ink); font: inherit; font-size: 0.75rem; line-height: 1.5; }
+.app-home .learning-contribution-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.app-home .learning-contribution-notes .copy-status { margin: 7px 0 0; }
 .app-home .comparison-changes-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 18px; }
 .app-home .comparison-changes-heading h3 { margin: 0; font-size: 0.92rem; }
 .app-home .comparison-file-list { display: grid; gap: 6px; max-height: 220px; margin-top: 8px; overflow: auto; }
@@ -679,6 +793,12 @@ body.concept-match.app-home .overview-title p {
 }
 
 @media (max-width: 620px) {
+  .app-home .learning-demo-tour { align-items: flex-start; flex-direction: column; }
+  .app-home .learning-demo-tour-actions { justify-content: flex-start; }
+  .app-home .learning-coverage-heading { align-items: flex-start; flex-direction: column; }
+  .app-home .learning-coverage-counts { justify-content: flex-start; }
+  .app-home .learning-coverage-row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .app-home .learning-coverage-row .learning-evidence { grid-column: 1; }
   .app-home .learning-heading { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .app-home .learning-aside { grid-template-columns: minmax(0, 1fr); }
   .app-home .learning-talk-track { grid-row: auto; }

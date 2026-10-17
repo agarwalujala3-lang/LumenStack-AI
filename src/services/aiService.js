@@ -204,6 +204,7 @@ async function generateStreamingInsights(analysis, onToken) {
 }
 
 module.exports = {
+  buildFallbackDocumentation,
   generateInsights,
   generateStreamingInsights
 };

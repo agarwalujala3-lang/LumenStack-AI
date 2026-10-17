@@ -82,6 +82,14 @@ test("learning guide ties purpose, entrypoint, flow, and verification to indexed
   assert.match(guide.steps[1].basis, /inferred/);
   assert.match(guide.steps[3].body, /src and services/);
   assert.match(guide.steps[4].body, /npm test/);
+  assert.ok(guide.evidenceCoverage.counts.observed > 0);
+  assert.ok(guide.evidenceCoverage.rows.some((row) => row.status === "inferred"));
+  assert.ok(guide.evidenceCoverage.rows.some((row) => row.status === "not-verified"));
+  assert.equal(Object.values(guide.evidenceCoverage.counts).reduce((sum, count) => sum + count, 0), guide.evidenceCoverage.rows.length);
+  for (const item of guide.evidenceCoverage.rows.flatMap((row) => row.evidence || [])) {
+    const sourceFile = createAnalysis().sourceIndex.find((file) => file.path === item.path);
+    assert.ok(sourceFile?.content.split(/\r?\n/)[item.line - 1], `expected ${item.path}:${item.line} to exist in the indexed file`);
+  }
   assert.ok(evidence.some((item) => item.path === "src/index.js" && item.line === 2));
   for (const item of evidence) {
     const sourceFile = createAnalysis().sourceIndex.find((file) => file.path === item.path);
@@ -269,6 +277,56 @@ test("analyzer records the exact source line for local module connections", asyn
   }
 });
 
+test("analyzer remains complete on a large source tree and ignores unsupported directories", async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "lumenstack-large-repo-"));
+  try {
+    await fs.mkdir(path.join(root, "node_modules", "ignored-package"), { recursive: true });
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), '{"name":"large-fixture"}');
+    const writes = Array.from({ length: 1200 }, (_, index) => {
+      const name = `module-${String(index).padStart(4, "0")}.js`;
+      return fs.writeFile(path.join(root, "src", name), `function item${index}() { return ${index}; }\nmodule.exports = item${index};\n`);
+    });
+    writes.push(fs.writeFile(path.join(root, "notes.unsupported"), "plain text with an unsupported extension"));
+    writes.push(fs.writeFile(path.join(root, "image.wasm"), Buffer.from([0, 255, 1, 128])));
+    writes.push(fs.writeFile(path.join(root, "node_modules", "ignored-package", "index.js"), "module.exports = 'ignored';"));
+    await Promise.all(writes);
+
+    const analysis = await analyzeCodebase(root, { sourceName: "large-fixture" });
+    assert.equal(analysis.summary.codeFiles, 1200);
+    assert.equal(analysis.modules.find((module) => module.name === "src").fileCount, 1200);
+    assert.equal(analysis.sourceIndex.length, 1201);
+    assert.ok(analysis.directoryIndex.includes("notes.unsupported"));
+    assert.ok(!analysis.sourceIndex.some((file) => file.path.includes("ignored-package")));
+    assert.ok(!analysis.sourceIndex.some((file) => file.path === "image.wasm"));
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
+
+test("analyzer handles empty documentation and binary-only inputs without inventing evidence", async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "lumenstack-sparse-repo-"));
+  try {
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "README.md"), "\n  \n");
+    await fs.writeFile(path.join(root, "src", "empty.js"), "\n  \n");
+    await fs.writeFile(path.join(root, "payload.wasm"), Buffer.from([0, 255, 1, 128]));
+    await fs.writeFile(path.join(root, "unknown.xyz"), "not a supported preview or code type");
+
+    const analysis = await analyzeCodebase(root, { sourceName: "sparse-fixture" });
+    const guide = buildLearningGuide(analysis);
+    assert.equal(analysis.summary.codeFiles, 1);
+    assert.equal(analysis.summary.primaryLanguage, "JavaScript");
+    assert.equal(analysis.summary.entrypoints.length, 0);
+    assert.equal(guide.evidenceCoverage.rows.find((row) => row.id === "purpose").status, "not-found");
+    assert.equal(guide.evidenceCoverage.rows.find((row) => row.id === "entrypoint").status, "not-found");
+    assert.equal(guide.evidenceCoverage.rows.find((row) => row.id === "runtime").status, "not-verified");
+    assert.ok(!analysis.sourceIndex.some((file) => file.path.endsWith(".wasm") || file.path.endsWith(".xyz")));
+  } finally {
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
+
 test("local API returns a learnable comparison, cited chat answer, and evidence-rich export without AI", async (t) => {
   const previousApiKey = process.env.OPENAI_API_KEY;
   process.env.OPENAI_API_KEY = "";
@@ -306,6 +364,15 @@ test("local API returns a learnable comparison, cited chat answer, and evidence-
   form.append("baselineCodebase", new Blob([makeZip("base")], { type: "application/zip" }), "sample-base.zip");
   form.append("compareMode", "1");
   const baseUrl = `http://127.0.0.1:${server.address().port}`;
+  const demoResponse = await fetch(`${baseUrl}/api/demo-analysis`, { method: "POST" });
+  const demo = await demoResponse.json();
+  assert.equal(demoResponse.status, 200, JSON.stringify(demo));
+  assert.equal(demo.source.type, "demo");
+  assert.equal(demo.analysis.aiStatus, "fallback");
+  assert.equal(demo.analysis.learningGuide.evidenceCoverage.rows.find((row) => row.id === "purpose").status, "observed");
+  assert.equal(demo.analysis.learningGuide.evidenceCoverage.rows.find((row) => row.id === "runtime").status, "not-verified");
+  assert.equal(demo.source.platform, "Guided sample");
+
   const analyzeResponse = await fetch(`${baseUrl}/api/analyze`, { method: "POST", body: form });
   const result = await analyzeResponse.json();
 
@@ -340,6 +407,8 @@ test("local API returns a learnable comparison, cited chat answer, and evidence-
   const reportResponse = await fetch(`${baseUrl}/api/export/${result.analysisId}?format=markdown`);
   const report = await reportResponse.text();
   assert.match(report, /First-day learning guide/);
+  assert.match(report, /Evidence coverage/);
+  assert.match(report, /Runtime behavior and test results \(not verified\)/);
   assert.match(report, /Evidence: src\/services\/catalog\.js:1/);
   assert.match(report, /Recruiter walkthrough/);
   assert.match(report, /Infrastructure map/);

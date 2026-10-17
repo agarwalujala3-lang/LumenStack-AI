@@ -90,6 +90,7 @@ const heroDeviceTimeElement = document.getElementById("device-top-time");
 const heroDeviceStepElement = document.getElementById("device-step-indicator");
 
 let analysisId = "";
+let analysisGeneration = 0;
 let exportUrls = null;
 let currentDiagrams = {};
 let currentDiagramKey = "architecture";
@@ -98,7 +99,6 @@ let lastDocumentation = "";
 let overlayTimer = 0;
 let overlayMessageTimer = 0;
 let motionObserver = null;
-let pointerHot = false;
 let promptTimer = 0;
 let heroSliderTimer = 0;
 let heroClockTimer = 0;
@@ -106,7 +106,6 @@ let metricsTickerTimer = 0;
 let dimensionLiveTimer = 0;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-const cursorPositionStorageKey = "lumenstack-cursor-position";
 let currentTheme = "light";
 const metricsState = {
   engine: "Standby",
@@ -152,11 +151,11 @@ function resolveCursorKind(target) {
     return "upload";
   }
 
-  if (target.closest("input:not([type='file']), textarea, select")) {
+  if (target.closest("textarea, [contenteditable='true'], input:not([type='button']):not([type='submit']):not([type='reset']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file'])")) {
     return "field";
   }
 
-  if (target.closest("a, button, .diagram-tab, .theme-toggle, .toggle-row")) {
+  if (target.closest("a, button, select, input[type='checkbox'], input[type='radio'], .diagram-tab, .theme-toggle, .toggle-row")) {
     return "action";
   }
 
@@ -314,36 +313,6 @@ function configureMermaid(theme) {
 
 function sanitize(value) {
   return String(value ?? "");
-}
-
-function getStoredCursorPosition() {
-  try {
-    const raw = window.sessionStorage.getItem(cursorPositionStorageKey);
-
-    if (!raw) {
-      return null;
-    }
-
-    const parsed = JSON.parse(raw);
-    const x = Number(parsed?.x);
-    const y = Number(parsed?.y);
-
-    if (!Number.isFinite(x) || !Number.isFinite(y)) {
-      return null;
-    }
-
-    return { x, y };
-  } catch {
-    return null;
-  }
-}
-
-function storeCursorPosition(x, y) {
-  try {
-    window.sessionStorage.setItem(cursorPositionStorageKey, JSON.stringify({ x, y }));
-  } catch {
-    // Ignore sessionStorage failures.
-  }
 }
 
 async function parseJsonResponse(response, fallbackMessage) {
@@ -1374,7 +1343,7 @@ function setupParallax() {
 }
 
 function setupCursorSystem() {
-  if (prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
+  if (!cursorCore || !cursorAura || prefersReducedMotion || !window.matchMedia("(pointer: fine)").matches) {
     return;
   }
 
@@ -1382,114 +1351,63 @@ function setupCursorSystem() {
     return;
   }
 
-  body.classList.add("cursor-enhanced");
-  document.documentElement.classList.add("cursor-enhanced");
-  document.documentElement.classList.remove("cursor-bootstrap");
   window.__lumenCursorSystemActive = true;
+  const root = document.documentElement;
+  let targetX = 0;
+  let targetY = 0;
+  let auraX = 0;
+  let auraY = 0;
+  let animationFrame = 0;
 
-  const storedPosition = getStoredCursorPosition();
-  const target = storedPosition || {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2
-  };
-  const core = { ...target };
-  const aura = { ...target };
-  let lastTrace = 0;
-  let lastScrollY = window.scrollY;
+  function updateAura() {
+    auraX += (targetX - auraX) * 0.22;
+    auraY += (targetY - auraY) * 0.22;
+    cursorAura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
 
-  cursorCore.style.left = `${core.x}px`;
-  cursorCore.style.top = `${core.y}px`;
-  cursorAura.style.left = `${aura.x}px`;
-  cursorAura.style.top = `${aura.y}px`;
-
-  const initialTarget = document.elementFromPoint(target.x, target.y);
-  if (initialTarget) {
-    const kind = resolveCursorKind(initialTarget);
-    pointerHot = Boolean(kind);
-    applyCursorKind(cursorCore, cursorAura, kind);
+    if (Math.abs(targetX - auraX) > 0.15 || Math.abs(targetY - auraY) > 0.15) {
+      animationFrame = window.requestAnimationFrame(updateAura);
+    } else {
+      animationFrame = 0;
+    }
   }
-
-  function spawnTrace(x, y) {
-    const trace = createElement("span", "cursor-trace");
-    trace.style.left = `${x}px`;
-    trace.style.top = `${y}px`;
-    cursorTrail.appendChild(trace);
-    trace.addEventListener("animationend", () => trace.remove(), { once: true });
-  }
-
-  function spawnFlow(x, y, direction, intensity) {
-    const flow = createElement("span", "cursor-flow");
-    flow.style.left = `${x}px`;
-    flow.style.top = `${y}px`;
-    flow.style.height = `${Math.min(200, 84 + intensity * 0.8)}px`;
-    flow.style.setProperty("--flow-start-shift", direction > 0 ? "-18px" : "18px");
-    flow.style.setProperty("--flow-end-shift", direction > 0 ? "-44px" : "44px");
-    cursorTrail.appendChild(flow);
-    flow.addEventListener("animationend", () => flow.remove(), { once: true });
-  }
-
-  function spawnWave(x, y, intensity) {
-    const wave = createElement("span", "cursor-wave");
-    const size = Math.min(88, 36 + intensity * 0.34);
-    wave.style.left = `${x}px`;
-    wave.style.top = `${y}px`;
-    wave.style.width = `${size}px`;
-    wave.style.height = `${size}px`;
-    wave.style.setProperty("--wave-scale", `${1.4 + intensity / 220}`);
-    cursorTrail.appendChild(wave);
-    wave.addEventListener("animationend", () => wave.remove(), { once: true });
-  }
-
-  function loop() {
-    core.x += (target.x - core.x) * 0.3;
-    core.y += (target.y - core.y) * 0.3;
-    aura.x += (target.x - aura.x) * 0.16;
-    aura.y += (target.y - aura.y) * 0.16;
-
-    cursorCore.style.left = `${core.x}px`;
-    cursorCore.style.top = `${core.y}px`;
-    cursorAura.style.left = `${aura.x}px`;
-    cursorAura.style.top = `${aura.y}px`;
-
-    window.requestAnimationFrame(loop);
-  }
-
-  window.requestAnimationFrame(loop);
 
   window.addEventListener("pointermove", (event) => {
-    target.x = event.clientX;
-    target.y = event.clientY;
-    storeCursorPosition(event.clientX, event.clientY);
+    if (event.pointerType && event.pointerType !== "mouse") return;
 
-    const now = performance.now();
-    if (now - lastTrace > 38) {
-      spawnTrace(event.clientX, event.clientY);
-      lastTrace = now;
+    targetX = event.clientX;
+    targetY = event.clientY;
+    if (!animationFrame) {
+      auraX = targetX;
+      auraY = targetY;
+      cursorAura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0) translate(-50%, -50%)`;
     }
-  });
+    cursorCore.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
 
-  window.addEventListener("pointerdown", (event) => {
-    storeCursorPosition(event.clientX, event.clientY);
-  });
-
-  window.addEventListener("scroll", () => {
-    const delta = window.scrollY - lastScrollY;
-    lastScrollY = window.scrollY;
-
-    if (!delta) {
-      return;
-    }
-
-    const intensity = Math.min(140, Math.abs(delta));
-    const direction = delta > 0 ? 1 : -1;
-    spawnFlow(target.x, target.y, direction, intensity);
-    spawnWave(target.x, target.y, intensity);
-  }, { passive: true });
-
-  window.addEventListener("pointerover", (event) => {
-    const kind = resolveCursorKind(event.target);
-    pointerHot = Boolean(kind);
+    const target = document.elementFromPoint(targetX, targetY);
+    const kind = resolveCursorKind(target);
     applyCursorKind(cursorCore, cursorAura, kind);
+    root.classList.add("cursor-enhanced");
+    body.classList.add("cursor-enhanced");
+
+    if (!animationFrame) animationFrame = window.requestAnimationFrame(updateAura);
+  });
+
+  document.documentElement.addEventListener("pointerleave", (event) => {
+    if (event.pointerType && event.pointerType !== "mouse") return;
+    root.classList.remove("cursor-enhanced");
+    body.classList.remove("cursor-enhanced");
+  });
+
+  window.addEventListener("blur", () => {
+    root.classList.remove("cursor-enhanced");
+    body.classList.remove("cursor-enhanced");
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      root.classList.remove("cursor-enhanced");
+      body.classList.remove("cursor-enhanced");
+    }
   });
 }
 
@@ -1894,6 +1812,147 @@ function appendLearningEvidence(parent, evidenceItems) {
   parent.appendChild(links);
 }
 
+function renderEvidenceCoverage(coverage) {
+  const countsRoot = document.getElementById("learning-coverage-counts");
+  const rowsRoot = document.getElementById("learning-coverage-rows");
+  const labels = [
+    ["observed", "Observed"],
+    ["inferred", "Inferred"],
+    ["not-found", "Not found"],
+    ["not-verified", "Not verified"]
+  ];
+  countsRoot.replaceChildren();
+  rowsRoot.replaceChildren();
+  for (const [key, label] of labels) {
+    countsRoot.appendChild(createElement("span", `learning-coverage-count status-${key}`, `${label} ${coverage?.counts?.[key] || 0}`));
+  }
+  document.getElementById("learning-coverage-note").textContent = coverage?.note || "Evidence labels describe this static scan, not runtime behavior.";
+  for (const item of coverage?.rows || []) {
+    const row = createElement("article", "learning-coverage-row");
+    const title = createElement("div", "learning-coverage-row-title");
+    title.appendChild(createElement("strong", "", item.label));
+    title.appendChild(createElement("span", `learning-coverage-status status-${item.status}`, item.status.replaceAll("-", " ")));
+    row.append(title, createElement("p", "", item.detail));
+    appendLearningEvidence(row, item.evidence);
+    rowsRoot.appendChild(row);
+  }
+  if (!rowsRoot.children.length) rowsRoot.appendChild(createElement("p", "empty-state", "Evidence coverage will appear after repository analysis."));
+}
+
+function renderContributionNotes(source) {
+  const fields = [
+    ["built", document.getElementById("contribution-built")],
+    ["studied", document.getElementById("contribution-studied")],
+    ["next", document.getElementById("contribution-next")]
+  ];
+  const sourceKey = [source?.platformId, source?.workspaceKey || source?.repoUrl || source?.name]
+    .map((part) => String(part || "").trim().toLowerCase()).join(":");
+  const storageKey = `lumenstack-contribution:v1:${sourceKey}`;
+  const status = document.getElementById("contribution-notes-status");
+
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+    for (const [key, field] of fields) field.value = typeof saved[key] === "string" ? saved[key].slice(0, 1200) : "";
+  } catch {
+    for (const [, field] of fields) field.value = "";
+  }
+
+  const persist = () => {
+    const saved = Object.fromEntries(fields.map(([key, field]) => [key, field.value.slice(0, 1200)]));
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(saved));
+      status.textContent = "Saved in this browser only.";
+    } catch {
+      status.textContent = "Browser storage is unavailable; these notes will not persist after you leave.";
+    }
+  };
+  for (const [, field] of fields) field.oninput = persist;
+
+  document.getElementById("copy-contribution-notes").onclick = async () => {
+    const text = fields.map(([key, field]) => {
+      const label = { built: "What I built", studied: "What I studied", next: "What I would improve" }[key];
+      return field.value.trim() ? `${label}\n${field.value.trim()}` : "";
+    }).filter(Boolean).join("\n\n");
+    if (!text) {
+      status.textContent = "Add a note before copying your interview brief.";
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = "Contribution notes copied.";
+    } catch {
+      status.textContent = "Clipboard access is unavailable in this browser.";
+    }
+  };
+  document.getElementById("clear-contribution-notes").onclick = () => {
+    for (const [, field] of fields) field.value = "";
+    try {
+      window.localStorage.removeItem(storageKey);
+      status.textContent = "Notes cleared from this browser.";
+    } catch {
+      status.textContent = "Notes cleared from the form; browser storage could not be updated.";
+    }
+  };
+}
+
+const guidedSampleTourSteps = [
+  { view: "overview", target: "overview-view", text: "Start with the plain-language summary, stack, and the repository signals the scan actually found." },
+  { view: "learn", target: "learning-steps", text: "The learning path begins with purpose and entrypoint, then moves through modules, imports, and verification." },
+  { view: "learn", detail: "flow", target: "learning-workflow", text: "Follow the request path and open each cited source line. These are static links, not a recording of runtime execution." },
+  { view: "learn", detail: "interview", target: "learning-interview-panel", text: "Practice an explanation, and keep your own contributions separate from what the repository merely contains." },
+  { view: "architecture", target: "architecture-view", text: "Finish with the generated maps and file evidence. Use them as navigation aids, then verify important claims in source." }
+];
+
+let demoTourIndex = -1;
+
+function renderDemoTour(isDemo) {
+  const tour = document.getElementById("learning-demo-tour");
+  const text = document.getElementById("learning-demo-tour-text");
+  const count = document.getElementById("learning-demo-tour-step");
+  const start = document.getElementById("learning-demo-tour-start");
+  const previous = document.getElementById("learning-demo-tour-prev");
+  const next = document.getElementById("learning-demo-tour-next");
+  const close = document.getElementById("learning-demo-tour-exit");
+  tour.hidden = !isDemo;
+  demoTourIndex = -1;
+  if (!isDemo) return;
+
+  function showStep() {
+    const complete = demoTourIndex >= guidedSampleTourSteps.length;
+    const active = demoTourIndex >= 0 && !complete;
+    start.hidden = active;
+    start.textContent = complete ? "Replay tour" : "Start tour";
+    previous.hidden = !active;
+    next.hidden = !active;
+    close.hidden = demoTourIndex < 0;
+    previous.disabled = demoTourIndex <= 0;
+    next.disabled = complete;
+    count.textContent = active
+      ? `Step ${demoTourIndex + 1} of ${guidedSampleTourSteps.length}`
+      : complete ? "Tour complete" : "5 steps · about 1 minute";
+
+    if (complete) {
+      text.textContent = "Tour complete. Explore the sample freely, then analyze a repository of your own.";
+      return;
+    }
+    if (!active) {
+      text.textContent = "A quick guided path from repository overview to source evidence and a clear presentation.";
+      return;
+    }
+    const step = guidedSampleTourSteps[demoTourIndex];
+    document.querySelector(`[data-result-view="${step.view}"]`)?.click();
+    if (step.detail) document.querySelector(`[data-learning-tab="${step.detail}"]`)?.click();
+    text.textContent = step.text;
+    document.getElementById(step.target)?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
+  }
+
+  start.onclick = () => { demoTourIndex = 0; showStep(); };
+  previous.onclick = () => { demoTourIndex = Math.max(0, demoTourIndex - 1); showStep(); };
+  next.onclick = () => { demoTourIndex = Math.min(guidedSampleTourSteps.length, demoTourIndex + 1); showStep(); };
+  close.onclick = () => { demoTourIndex = -1; showStep(); };
+  showStep();
+}
+
 function renderLearningWorkflow(workflow) {
   const workflowRoot = document.getElementById("learning-workflow");
   const exampleRoot = document.getElementById("learning-flow-example");
@@ -2243,6 +2302,8 @@ function renderLearning(guide, source) {
   document.getElementById("learning-certainty").textContent = guide?.certaintyNote || "Open the linked files to verify each explanation.";
   document.getElementById("learning-scope").textContent = guide?.scopeNote || "Static analysis is a guide, not proof of runtime behavior.";
   script.textContent = guide?.presentationScript || "A presentation outline will appear after analysis.";
+  renderEvidenceCoverage(guide?.evidenceCoverage);
+  renderContributionNotes(source);
   stepsRoot.replaceChildren();
 
   function updateProgress() {
@@ -2523,6 +2584,7 @@ async function renderAnalysisPayload(payload) {
   renderLearning(payload.analysis.learningGuide, payload.source);
 
   resultsElement.classList.remove("hidden");
+  renderDemoTour(payload.source?.type === "demo");
   refreshMotionTargets(resultsElement);
   markStreamsLive();
   await setActiveDiagram("architecture");
@@ -2543,6 +2605,7 @@ async function renderAnalysisPayload(payload) {
 }
 
 async function restoreLastAnalysis() {
+  const generation = analysisGeneration;
   let savedAnalysisId = "";
   try {
     savedAnalysisId = window.localStorage.getItem("lumenstack-last-analysis-id") || "";
@@ -2557,10 +2620,13 @@ async function restoreLastAnalysis() {
       { headers: { Accept: "application/json" } },
       { retries: 0, fallbackMessage: "The previous analysis session is unavailable." }
     );
+    if (generation !== analysisGeneration) return;
     await renderAnalysisPayload(payload);
+    if (generation !== analysisGeneration) return;
     setStatus("Previous repository analysis restored. Your study progress remains on this browser.", "success");
     resultsElement.scrollIntoView({ behavior: "auto", block: "start" });
   } catch {
+    if (generation !== analysisGeneration) return;
     try {
       window.localStorage.removeItem("lumenstack-last-analysis-id");
     } catch {
@@ -2827,9 +2893,44 @@ chatForm.addEventListener("submit", async (event) => {
   }
 });
 
+const demoAnalysisButton = document.getElementById("load-demo-analysis");
+demoAnalysisButton.addEventListener("click", async () => {
+  const generation = ++analysisGeneration;
+  demoAnalysisButton.disabled = true;
+  resetAnalysisState({ preserveStoredAnalysis: true });
+  resultsElement.classList.add("hidden");
+  showOverlay("Loading the bundled sample repository.");
+  setStatus("Preparing the sample project and its source-linked walkthrough...", "loading");
+
+  try {
+    const payload = await requestJsonWithRetry("/api/demo-analysis", {
+      method: "POST",
+      headers: { Accept: "application/json" }
+    }, {
+      retries: 1,
+      retryDelayMs: 700,
+      fallbackMessage: "The guided sample could not be loaded. Try again or analyze a repository URL."
+    });
+    if (generation !== analysisGeneration) return;
+    await renderAnalysisPayload(payload);
+    setStatus("Sample loaded. LumenStack analyzed its bundled example; no external AI request was made.", "success");
+    resultsElement.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+    hideOverlay("Guided sample ready.");
+  } catch (error) {
+    if (generation !== analysisGeneration) return;
+    stopMetricsTicker();
+    setStatus(normalizeRequestError(error, "Guided sample"), "error");
+    hideOverlay("Sample loading stopped.");
+  } finally {
+    demoAnalysisButton.disabled = false;
+  }
+});
+demoAnalysisButton.disabled = false;
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  const generation = ++analysisGeneration;
   const formData = new FormData(form);
   formData.set("compareMode", compareToggle.checked ? "1" : "0");
   resetAnalysisState({ preserveStoredAnalysis: true });
@@ -2870,6 +2971,7 @@ form.addEventListener("submit", async (event) => {
       }
     );
 
+    if (generation !== analysisGeneration) return;
     await renderAnalysisPayload(payload);
 
     setStatus(
@@ -2888,6 +2990,7 @@ form.addEventListener("submit", async (event) => {
     }
     hideOverlay("Architecture window opened.");
   } catch (error) {
+    if (generation !== analysisGeneration) return;
     stopMetricsTicker();
     updateMetricsRibbon({
       engine: "Recovery",
@@ -2908,3 +3011,4 @@ document.addEventListener("lumenstack:themechange", () => {
 resetFormState();
 updateMetricsRibbon(metricsState);
 restoreLastAnalysis();
+setupCursorSystem();

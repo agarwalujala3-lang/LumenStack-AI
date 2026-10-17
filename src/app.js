@@ -6,7 +6,7 @@ const fs = require("fs");
 
 const { prepareSource, getSupportedSourcePlatforms } = require("./services/sourceService");
 const { analyzeCodebase } = require("./services/analyzerService");
-const { generateInsights, generateStreamingInsights } = require("./services/aiService");
+const { buildFallbackDocumentation, generateInsights, generateStreamingInsights } = require("./services/aiService");
 const { compareAnalyses } = require("./services/comparisonService");
 const { buildLearningGuide } = require("./services/learningGuideService");
 const { answerQuestion } = require("./services/chatService");
@@ -201,6 +201,14 @@ function buildExportMarkdown(session) {
     "",
     `> ${guide.scopeNote}`,
     "",
+    "## Evidence coverage",
+    guide.evidenceCoverage.note,
+    ...guide.evidenceCoverage.rows.flatMap((row) => [
+      `### ${row.label} (${row.status.replaceAll("-", " ")})`,
+      row.detail,
+      ...evidenceLines(row.evidence),
+      ""
+    ]),
     "## Code flow",
     guide.workflow.note,
     ...guide.workflow.stages.flatMap((stage) => [
@@ -412,8 +420,10 @@ function createApp() {
       capabilities: [
         "repository intake",
         "ZIP analysis",
+        "AI-free guided sample analysis",
         "beginner learning guide",
         "source-line citations",
+        "evidence coverage labels",
         "change impact review",
         "architecture diagrams",
         "compare reviews",
@@ -581,6 +591,47 @@ function createApp() {
         truncated: file.content.length >= 12000
       }
     });
+  });
+
+  app.post("/api/demo-analysis", async (_req, res) => {
+    try {
+      const demoRoot = path.join(__dirname, "..", ".lumenstack-demo-repo");
+      const analysis = await analyzeCodebase(demoRoot, {
+        sourceName: "Atlas Catalog API",
+        sourceType: "demo",
+        sourcePlatform: "Guided sample"
+      });
+      const insights = buildFallbackDocumentation(analysis, {
+        aiReason: "demo_sample",
+        aiMessage: "Bundled sample repository; no external AI request was made."
+      });
+      const source = {
+        name: analysis.summary.sourceName,
+        type: "demo",
+        platform: "Guided sample",
+        platformId: "demo",
+        workspaceLabel: "Atlas Catalog API · sample repository",
+        workspaceKey: "demo:atlas-catalog-api",
+        repoUrl: "",
+        ref: "sample"
+      };
+      const analysisId = createAnalysisSession({ analysis, insights, source });
+
+      res.setHeader("Cache-Control", "no-store");
+      return res.json({
+        analysisId,
+        source,
+        comparisonContext: null,
+        analysis: serializeAnalysis(analysis, insights),
+        comparison: null,
+        exportUrls: {
+          markdown: `/api/export/${analysisId}?format=markdown`,
+          json: `/api/export/${analysisId}?format=json`
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message || "The guided sample could not be loaded." });
+    }
   });
 
   app.post(

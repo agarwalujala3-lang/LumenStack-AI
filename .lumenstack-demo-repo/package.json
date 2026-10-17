@@ -1,0 +1,13 @@
+{
+  "name": "atlas-catalog-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small teaching API for browsing and searching a product catalog.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

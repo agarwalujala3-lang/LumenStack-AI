@@ -823,6 +823,113 @@ function buildChangeImpact(analysis) {
   };
 }
 
+function buildEvidenceCoverage(analysis, description, infrastructure) {
+  const files = indexedFiles(analysis);
+  const entrypoint = (analysis.summary?.entrypoints || []).find((filePath) => findFile(analysis, filePath));
+  const relationship = (analysis.relationships || []).find((item) => item.evidence?.length);
+  const testCommand = findTestCommand(analysis);
+  const testFile = files.find((file) => /(^|\/)(test|tests|spec|specs)(\/|\.)/i.test(file.path));
+  const delivery = infrastructure.find((card) => card.category === "Delivery");
+  const deployment = infrastructure.find((card) => card.category === "Deployment" && !card.id.startsWith("signal-"));
+  const rationaleTechnology = (analysis.summary?.frameworks || [])[0];
+  const technologyRationale = rationaleTechnology ? findDocumentedRationale(analysis, rationaleTechnology) : null;
+  const rows = [
+    {
+      id: "purpose",
+      label: "Project purpose",
+      status: description?.evidence ? "observed" : "not-found",
+      detail: description?.evidence
+        ? "Purpose text appears in an indexed README or project manifest."
+        : "No clear purpose statement was found in the indexed documentation or manifest; confirm it with the project owner.",
+      evidence: [description?.evidence].filter(Boolean)
+    },
+    {
+      id: "stack",
+      label: "Primary language",
+      status: analysis.summary?.primaryLanguage && analysis.summary.primaryLanguage !== "Unknown" ? "observed" : "not-found",
+      detail: analysis.summary?.primaryLanguage && analysis.summary.primaryLanguage !== "Unknown"
+        ? `Detected as ${analysis.summary.primaryLanguage} from indexed code files.`
+        : "No supported source-language signal was detected.",
+      evidence: [makeEvidence(analysis, files.find((file) => file.language === analysis.summary?.primaryLanguage)?.path)].filter(Boolean)
+    },
+    {
+      id: "entrypoint",
+      label: "Application entrypoint",
+      status: entrypoint ? "inferred" : "not-found",
+      detail: entrypoint
+        ? "Likely entrypoint inferred from filename and source patterns; verify against the documented start command."
+        : "No likely entrypoint was identified in the indexed files.",
+      evidence: entrypoint ? [makeEvidence(analysis, entrypoint)] : []
+    },
+    {
+      id: "imports",
+      label: "Local module connections",
+      status: relationship ? "observed" : "not-found",
+      detail: relationship
+        ? "At least one local source import was found. It proves a static dependency, not runtime order or network traffic."
+        : "No cross-area source import was confirmed; this does not rule out runtime or configuration relationships.",
+      evidence: relationship?.evidence?.slice(0, 2).map((item) => makeEvidence(analysis, item.path, item.line)).filter(Boolean) || []
+    },
+    {
+      id: "verification",
+      label: "Test signal",
+      status: testCommand || testFile ? "observed" : "not-found",
+      detail: testCommand
+        ? `A test command is declared (${testCommand}); this scan did not run it.`
+        : testFile
+          ? "Test-like files were found; their existence does not confirm coverage or passing results."
+          : "No test command or test-like file was confirmed in the indexed files.",
+      evidence: [
+        testCommand ? findScriptEvidence(analysis, "test") : null,
+        testFile ? makeEvidence(analysis, testFile.path) : null
+      ].filter(Boolean)
+    },
+    {
+      id: "delivery",
+      label: "CI / delivery configuration",
+      status: delivery ? "observed" : "not-found",
+      detail: delivery
+        ? `${delivery.title} configuration is indexed; it does not confirm a successful or recent run.`
+        : "No supported CI or delivery configuration was detected.",
+      evidence: delivery?.evidence || []
+    },
+    {
+      id: "deployment",
+      label: "Deployment configuration",
+      status: deployment ? "observed" : "not-found",
+      detail: deployment
+        ? `${deployment.title} configuration is indexed; it does not prove this is the active production deployment.`
+        : "No supported deployment blueprint was detected.",
+      evidence: deployment?.evidence || []
+    },
+    {
+      id: "technology-rationale",
+      label: "Documented technology rationale",
+      status: technologyRationale ? "observed" : "not-found",
+      detail: technologyRationale
+        ? "A repository document connects a technology to a selection or trade-off explanation."
+        : "The repository does not document a clear reason for the primary framework choice; explain general fit as your reasoning, not historical fact.",
+      evidence: [technologyRationale].filter(Boolean)
+    },
+    {
+      id: "runtime",
+      label: "Runtime behavior and test results",
+      status: "not-verified",
+      detail: "This is static analysis: the application was not executed and tests or deployment health were not checked."
+    }
+  ];
+  const counts = rows.reduce((result, row) => {
+    result[row.status] += 1;
+    return result;
+  }, { observed: 0, inferred: 0, "not-found": 0, "not-verified": 0 });
+
+  return {
+    note: "Evidence labels describe what this static scan could support. ‘Not found’ means not detected in indexed files, not proof that a capability is absent.",
+    counts,
+    rows
+  };
+}
+
 function buildLearningGuide(analysis) {
   const summary = analysis.summary || {};
   const files = indexedFiles(analysis);
@@ -861,6 +968,7 @@ function buildLearningGuide(analysis) {
   const interviewQuestions = buildInterviewQuestions(analysis, description, workflow, technologyChoices, infrastructure);
   const knowledgeChecks = buildKnowledgeChecks(analysis, description, entrypoint, moduleGroups, workflow);
   const changeImpact = buildChangeImpact(analysis);
+  const evidenceCoverage = buildEvidenceCoverage(analysis, description, infrastructure);
 
   const steps = [
     {
@@ -932,6 +1040,7 @@ function buildLearningGuide(analysis) {
     technologyChoices,
     interviewQuestions,
     changeImpact,
+    evidenceCoverage,
     interviewNote: "Use these as practice prompts, not memorized claims. Be clear about what you personally built, what you learned from the code, and which explanations are hypotheses.",
     presentationScript: buildPresentationScript(analysis, description, technologyChoices, infrastructure),
     certaintyNote: "Direct file and manifest evidence is linked. Entry points and folder responsibilities are analyzer inferences, not guarantees of runtime behavior.",
